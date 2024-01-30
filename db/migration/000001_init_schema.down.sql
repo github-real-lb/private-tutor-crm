@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS "payment_methods";
+DROP TABLE IF EXISTS "payments";
+DROP TABLE IF EXISTS "receipts";
+DROP TABLE IF EXISTS "invoices";
+DROP TABLE IF EXISTS "lesson_subjects";
+DROP TABLE IF EXISTS "lesson_locations";
+DROP TABLE IF EXISTS "lessons";
+DROP TABLE IF EXISTS "funnels";
+DROP TABLE IF EXISTS "colleges";
+DROP TABLE IF EXISTS "students";
