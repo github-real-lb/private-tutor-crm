@@ -1,4 +1,4 @@
-module myapp
+module github.com/github-real-lb/private-tutor-crm
 
 go 1.21.6
 

@@ -13,4 +13,7 @@ migrateup:
 migratedown:
 	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/private_tutor_db?sslmode=disable" -verbose down
 
-.PHONY: postgrs createdb  dropdb migrateup migratedown
+sqlc:
+	sqlc generate
+
+.PHONY: postgrs createdb  dropdb migrateup migratedown sqlc
