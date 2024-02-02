@@ -15,3 +15,18 @@ SELECT * FROM students
 ORDER BY last_name, first_name
 LIMIT $1
 OFFSET $2;
+
+-- name: UpdateStudent :exec
+UPDATE students
+  set   first_name = $2,
+        last_name = $3, 
+        phone_number = $4, 
+        email_address = $5, 
+        college_id = $6, 
+        funnel_id = $7, 
+        notes = $8
+WHERE student_id = $1;
+
+-- name: DeleteStudent :exec
+DELETE FROM students
+WHERE student_id = $1;
