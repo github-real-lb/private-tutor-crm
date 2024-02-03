@@ -1,45 +1,45 @@
 CREATE TABLE "students" (
   "student_id" bigserial PRIMARY KEY,
-  "first_name" varchar(50) NOT NULL,
-  "last_name" varchar(50) NOT NULL,
-  "email" varchar(100),
-  "phone_number" varchar(20),
+  "first_name" varchar NOT NULL,
+  "last_name" varchar NOT NULL,
+  "email" varchar,
+  "phone_number" varchar,
   "address" text,
-  "college_id" integer,
-  "funnel_id" integer,
-  "hourly_fee" decimal(10,2),
+  "college_id" bigint,
+  "funnel_id" bigint,
+  "hourly_fee" float,
   "notes" text,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "colleges" (
-  "college_id" serial PRIMARY KEY,
-  "name" varchar(100) NOT NULL
+  "college_id" bigserial PRIMARY KEY,
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "funnels" (
-  "funnel_id" serial PRIMARY KEY,
-  "name" varchar(100) NOT NULL
+  "funnel_id" bigserial PRIMARY KEY,
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "lessons" (
   "lesson_id" bigserial PRIMARY KEY,
   "student_id" bigint NOT NULL,
   "lesson_datetime" timestamptz NOT NULL,
-  "duration" int NOT NULL,
-  "location_id" integer NOT NULL,
-  "subject_id" integer NOT NULL,
+  "duration" bigint NOT NULL,
+  "location_id" bigint NOT NULL,
+  "subject_id" bigint NOT NULL,
   "notes" text
 );
 
 CREATE TABLE "lesson_locations" (
-  "location_id" serial PRIMARY KEY,
-  "name" varchar(100) NOT NULL
+  "location_id" bigserial PRIMARY KEY,
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "lesson_subjects" (
-  "subject_id" serial PRIMARY KEY,
-  "name" varchar(100) NOT NULL
+  "subject_id" bigserial PRIMARY KEY,
+  "name" varchar NOT NULL
 );
 
 CREATE TABLE "invoices" (
@@ -47,8 +47,8 @@ CREATE TABLE "invoices" (
   "student_id" bigint NOT NULL,
   "lesson_id" bigint NOT NULL,
   "invoice_datetime" timestamptz NOT NULL,
-  "hourly_fee" decimal(10,2) NOT NULL,
-  "amount" decimal(10,2) NOT NULL,
+  "hourly_fee" float NOT NULL,
+  "amount" float NOT NULL,
   "notes" text
 );
 
@@ -56,7 +56,7 @@ CREATE TABLE "receipts" (
   "receipt_id" bigserial PRIMARY KEY,
   "student_id" bigint NOT NULL,
   "receipt_datetime" timestamptz NOT NULL,
-  "amount" decimal(10,2) NOT NULL,
+  "amount" float NOT NULL,
   "notes" text
 );
 
@@ -64,12 +64,12 @@ CREATE TABLE "payments" (
   "payment_id" bigserial PRIMARY KEY,
   "receipt_id" bigint NOT NULL,
   "payment_datetime" timestamptz NOT NULL,
-  "amount" decimal(10,2) NOT NULL,
-  "payment_methods_id" integer NOT NULL
+  "amount" float NOT NULL,
+  "payment_methods_id" bigint NOT NULL
 );
 
 CREATE TABLE "payment_methods" (
-  "payment_method_id" serial PRIMARY KEY,
+  "payment_method_id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL
 );
 

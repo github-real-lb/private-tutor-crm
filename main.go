@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Replace the following connection string with your PostgreSQL database details
-	connectionString := "user=root password=secret dbname=private_tutor_db sslmode=disable"
+	connectionString := "user=root password=secret dbname=tutor_db sslmode=disable"
 
 	// Open a connection to the PostgreSQL server
 	db, err := sql.Open("postgres", connectionString)

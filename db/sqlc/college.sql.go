@@ -30,7 +30,7 @@ DELETE FROM colleges
 WHERE college_id = $1
 `
 
-func (q *Queries) DeleteCollege(ctx context.Context, collegeID int32) error {
+func (q *Queries) DeleteCollege(ctx context.Context, collegeID int64) error {
 	_, err := q.db.ExecContext(ctx, deleteCollege, collegeID)
 	return err
 }
@@ -40,7 +40,7 @@ SELECT college_id, name FROM colleges
 WHERE college_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetCollege(ctx context.Context, collegeID int32) (College, error) {
+func (q *Queries) GetCollege(ctx context.Context, collegeID int64) (College, error) {
 	row := q.db.QueryRowContext(ctx, getCollege, collegeID)
 	var i College
 	err := row.Scan(&i.CollegeID, &i.Name)
@@ -89,7 +89,7 @@ WHERE college_id = $1
 `
 
 type UpdateCollegeParams struct {
-	CollegeID int32  `json:"college_id"`
+	CollegeID int64  `json:"college_id"`
 	Name      string `json:"name"`
 }
 

@@ -30,7 +30,7 @@ DELETE FROM payment_methods
 WHERE payment_method_id = $1
 `
 
-func (q *Queries) DeletePaymentMethod(ctx context.Context, paymentMethodID int32) error {
+func (q *Queries) DeletePaymentMethod(ctx context.Context, paymentMethodID int64) error {
 	_, err := q.db.ExecContext(ctx, deletePaymentMethod, paymentMethodID)
 	return err
 }
@@ -40,7 +40,7 @@ SELECT payment_method_id, name FROM payment_methods
 WHERE payment_method_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetPaymentMethod(ctx context.Context, paymentMethodID int32) (PaymentMethod, error) {
+func (q *Queries) GetPaymentMethod(ctx context.Context, paymentMethodID int64) (PaymentMethod, error) {
 	row := q.db.QueryRowContext(ctx, getPaymentMethod, paymentMethodID)
 	var i PaymentMethod
 	err := row.Scan(&i.PaymentMethodID, &i.Name)
@@ -89,7 +89,7 @@ WHERE payment_method_id = $1
 `
 
 type UpdatePaymentMethodParams struct {
-	PaymentMethodID int32  `json:"payment_method_id"`
+	PaymentMethodID int64  `json:"payment_method_id"`
 	Name            string `json:"name"`
 }
 

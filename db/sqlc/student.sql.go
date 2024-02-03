@@ -20,15 +20,15 @@ RETURNING student_id, first_name, last_name, email, phone_number, address, colle
 `
 
 type CreateStudentParams struct {
-	FirstName   string         `json:"first_name"`
-	LastName    string         `json:"last_name"`
-	Email       sql.NullString `json:"email"`
-	PhoneNumber sql.NullString `json:"phone_number"`
-	Address     sql.NullString `json:"address"`
-	CollegeID   sql.NullInt32  `json:"college_id"`
-	FunnelID    sql.NullInt32  `json:"funnel_id"`
-	HourlyFee   sql.NullString `json:"hourly_fee"`
-	Notes       sql.NullString `json:"notes"`
+	FirstName   string          `json:"first_name"`
+	LastName    string          `json:"last_name"`
+	Email       sql.NullString  `json:"email"`
+	PhoneNumber sql.NullString  `json:"phone_number"`
+	Address     sql.NullString  `json:"address"`
+	CollegeID   sql.NullInt64   `json:"college_id"`
+	FunnelID    sql.NullInt64   `json:"funnel_id"`
+	HourlyFee   sql.NullFloat64 `json:"hourly_fee"`
+	Notes       sql.NullString  `json:"notes"`
 }
 
 func (q *Queries) CreateStudent(ctx context.Context, arg CreateStudentParams) (Student, error) {
@@ -156,16 +156,16 @@ WHERE student_id = $1
 `
 
 type UpdateStudentParams struct {
-	StudentID   int64          `json:"student_id"`
-	FirstName   string         `json:"first_name"`
-	LastName    string         `json:"last_name"`
-	Email       sql.NullString `json:"email"`
-	PhoneNumber sql.NullString `json:"phone_number"`
-	Address     sql.NullString `json:"address"`
-	CollegeID   sql.NullInt32  `json:"college_id"`
-	FunnelID    sql.NullInt32  `json:"funnel_id"`
-	HourlyFee   sql.NullString `json:"hourly_fee"`
-	Notes       sql.NullString `json:"notes"`
+	StudentID   int64           `json:"student_id"`
+	FirstName   string          `json:"first_name"`
+	LastName    string          `json:"last_name"`
+	Email       sql.NullString  `json:"email"`
+	PhoneNumber sql.NullString  `json:"phone_number"`
+	Address     sql.NullString  `json:"address"`
+	CollegeID   sql.NullInt64   `json:"college_id"`
+	FunnelID    sql.NullInt64   `json:"funnel_id"`
+	HourlyFee   sql.NullFloat64 `json:"hourly_fee"`
+	Notes       sql.NullString  `json:"notes"`
 }
 
 func (q *Queries) UpdateStudent(ctx context.Context, arg UpdateStudentParams) error {

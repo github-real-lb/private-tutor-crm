@@ -30,7 +30,7 @@ DELETE FROM lesson_subjects
 WHERE subject_id = $1
 `
 
-func (q *Queries) DeleteLessonSubject(ctx context.Context, subjectID int32) error {
+func (q *Queries) DeleteLessonSubject(ctx context.Context, subjectID int64) error {
 	_, err := q.db.ExecContext(ctx, deleteLessonSubject, subjectID)
 	return err
 }
@@ -40,7 +40,7 @@ SELECT subject_id, name FROM lesson_subjects
 WHERE subject_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetLessonSubject(ctx context.Context, subjectID int32) (LessonSubject, error) {
+func (q *Queries) GetLessonSubject(ctx context.Context, subjectID int64) (LessonSubject, error) {
 	row := q.db.QueryRowContext(ctx, getLessonSubject, subjectID)
 	var i LessonSubject
 	err := row.Scan(&i.SubjectID, &i.Name)
@@ -89,7 +89,7 @@ WHERE subject_id = $1
 `
 
 type UpdateLessonSubjectParams struct {
-	SubjectID int32  `json:"subject_id"`
+	SubjectID int64  `json:"subject_id"`
 	Name      string `json:"name"`
 }
 

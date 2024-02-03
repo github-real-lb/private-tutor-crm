@@ -10,12 +10,12 @@ import (
 )
 
 type College struct {
-	CollegeID int32  `json:"college_id"`
+	CollegeID int64  `json:"college_id"`
 	Name      string `json:"name"`
 }
 
 type Funnel struct {
-	FunnelID int32  `json:"funnel_id"`
+	FunnelID int64  `json:"funnel_id"`
 	Name     string `json:"name"`
 }
 
@@ -25,9 +25,9 @@ type Invoice struct {
 	LessonID        int64     `json:"lesson_id"`
 	InvoiceDatetime time.Time `json:"invoice_datetime"`
 	// hourly fee for the lesson
-	HourlyFee string `json:"hourly_fee"`
+	HourlyFee float64 `json:"hourly_fee"`
 	// total amount based on the lesson duration and the hourly fee
-	Amount string         `json:"amount"`
+	Amount float64        `json:"amount"`
 	Notes  sql.NullString `json:"notes"`
 }
 
@@ -36,19 +36,19 @@ type Lesson struct {
 	StudentID      int64     `json:"student_id"`
 	LessonDatetime time.Time `json:"lesson_datetime"`
 	// lesson duration in minutes
-	Duration   int32          `json:"duration"`
-	LocationID int32          `json:"location_id"`
-	SubjectID  int32          `json:"subject_id"`
+	Duration   int64          `json:"duration"`
+	LocationID int64          `json:"location_id"`
+	SubjectID  int64          `json:"subject_id"`
 	Notes      sql.NullString `json:"notes"`
 }
 
 type LessonLocation struct {
-	LocationID int32  `json:"location_id"`
+	LocationID int64  `json:"location_id"`
 	Name       string `json:"name"`
 }
 
 type LessonSubject struct {
-	SubjectID int32  `json:"subject_id"`
+	SubjectID int64  `json:"subject_id"`
 	Name      string `json:"name"`
 }
 
@@ -56,12 +56,12 @@ type Payment struct {
 	PaymentID        int64     `json:"payment_id"`
 	ReceiptID        int64     `json:"receipt_id"`
 	PaymentDatetime  time.Time `json:"payment_datetime"`
-	Amount           string    `json:"amount"`
-	PaymentMethodsID int32     `json:"payment_methods_id"`
+	Amount           float64   `json:"amount"`
+	PaymentMethodsID int64     `json:"payment_methods_id"`
 }
 
 type PaymentMethod struct {
-	PaymentMethodID int32  `json:"payment_method_id"`
+	PaymentMethodID int64  `json:"payment_method_id"`
 	Name            string `json:"name"`
 }
 
@@ -70,7 +70,7 @@ type Receipt struct {
 	StudentID       int64     `json:"student_id"`
 	ReceiptDatetime time.Time `json:"receipt_datetime"`
 	// total amount of all payments
-	Amount string         `json:"amount"`
+	Amount float64        `json:"amount"`
 	Notes  sql.NullString `json:"notes"`
 }
 
@@ -81,10 +81,10 @@ type Student struct {
 	Email       sql.NullString `json:"email"`
 	PhoneNumber sql.NullString `json:"phone_number"`
 	Address     sql.NullString `json:"address"`
-	CollegeID   sql.NullInt32  `json:"college_id"`
-	FunnelID    sql.NullInt32  `json:"funnel_id"`
+	CollegeID   sql.NullInt64  `json:"college_id"`
+	FunnelID    sql.NullInt64  `json:"funnel_id"`
 	// hourly fee for the student
-	HourlyFee sql.NullString `json:"hourly_fee"`
-	Notes     sql.NullString `json:"notes"`
-	CreatedAt time.Time      `json:"created_at"`
+	HourlyFee sql.NullFloat64 `json:"hourly_fee"`
+	Notes     sql.NullString  `json:"notes"`
+	CreatedAt time.Time       `json:"created_at"`
 }

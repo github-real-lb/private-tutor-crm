@@ -30,7 +30,7 @@ DELETE FROM lesson_locations
 WHERE location_id = $1
 `
 
-func (q *Queries) DeleteLessonLocation(ctx context.Context, locationID int32) error {
+func (q *Queries) DeleteLessonLocation(ctx context.Context, locationID int64) error {
 	_, err := q.db.ExecContext(ctx, deleteLessonLocation, locationID)
 	return err
 }
@@ -40,7 +40,7 @@ SELECT location_id, name FROM lesson_locations
 WHERE location_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetLessonLocation(ctx context.Context, locationID int32) (LessonLocation, error) {
+func (q *Queries) GetLessonLocation(ctx context.Context, locationID int64) (LessonLocation, error) {
 	row := q.db.QueryRowContext(ctx, getLessonLocation, locationID)
 	var i LessonLocation
 	err := row.Scan(&i.LocationID, &i.Name)
@@ -89,7 +89,7 @@ WHERE location_id = $1
 `
 
 type UpdateLessonLocationParams struct {
-	LocationID int32  `json:"location_id"`
+	LocationID int64  `json:"location_id"`
 	Name       string `json:"name"`
 }
 

@@ -30,7 +30,7 @@ DELETE FROM funnels
 WHERE funnel_id = $1
 `
 
-func (q *Queries) DeleteFunnel(ctx context.Context, funnelID int32) error {
+func (q *Queries) DeleteFunnel(ctx context.Context, funnelID int64) error {
 	_, err := q.db.ExecContext(ctx, deleteFunnel, funnelID)
 	return err
 }
@@ -40,7 +40,7 @@ SELECT funnel_id, name FROM funnels
 WHERE funnel_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetFunnel(ctx context.Context, funnelID int32) (Funnel, error) {
+func (q *Queries) GetFunnel(ctx context.Context, funnelID int64) (Funnel, error) {
 	row := q.db.QueryRowContext(ctx, getFunnel, funnelID)
 	var i Funnel
 	err := row.Scan(&i.FunnelID, &i.Name)
@@ -89,7 +89,7 @@ WHERE funnel_id = $1
 `
 
 type UpdateFunnelParams struct {
-	FunnelID int32  `json:"funnel_id"`
+	FunnelID int64  `json:"funnel_id"`
 	Name     string `json:"name"`
 }
 
