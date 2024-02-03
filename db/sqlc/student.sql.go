@@ -12,31 +12,35 @@ import (
 
 const createStudent = `-- name: CreateStudent :one
 INSERT INTO students (
-  first_name, last_name, phone_number, email_address, college_id, funnel_id, notes
+  first_name, last_name, email, phone_number, address, college_id, funnel_id, hourly_fee, notes 
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7
+  $1, $2, $3, $4, $5, $6, $7, $8, $9
 )
-RETURNING student_id, first_name, last_name, phone_number, email_address, college_id, funnel_id, notes, created_at
+RETURNING student_id, first_name, last_name, email, phone_number, address, college_id, funnel_id, hourly_fee, notes, created_at
 `
 
 type CreateStudentParams struct {
-	FirstName    string         `json:"first_name"`
-	LastName     sql.NullString `json:"last_name"`
-	PhoneNumber  sql.NullString `json:"phone_number"`
-	EmailAddress sql.NullString `json:"email_address"`
-	CollegeID    sql.NullInt32  `json:"college_id"`
-	FunnelID     sql.NullInt32  `json:"funnel_id"`
-	Notes        sql.NullString `json:"notes"`
+	FirstName   string         `json:"first_name"`
+	LastName    string         `json:"last_name"`
+	Email       sql.NullString `json:"email"`
+	PhoneNumber sql.NullString `json:"phone_number"`
+	Address     sql.NullString `json:"address"`
+	CollegeID   sql.NullInt32  `json:"college_id"`
+	FunnelID    sql.NullInt32  `json:"funnel_id"`
+	HourlyFee   sql.NullString `json:"hourly_fee"`
+	Notes       sql.NullString `json:"notes"`
 }
 
 func (q *Queries) CreateStudent(ctx context.Context, arg CreateStudentParams) (Student, error) {
 	row := q.db.QueryRowContext(ctx, createStudent,
 		arg.FirstName,
 		arg.LastName,
+		arg.Email,
 		arg.PhoneNumber,
-		arg.EmailAddress,
+		arg.Address,
 		arg.CollegeID,
 		arg.FunnelID,
+		arg.HourlyFee,
 		arg.Notes,
 	)
 	var i Student
@@ -44,10 +48,12 @@ func (q *Queries) CreateStudent(ctx context.Context, arg CreateStudentParams) (S
 		&i.StudentID,
 		&i.FirstName,
 		&i.LastName,
+		&i.Email,
 		&i.PhoneNumber,
-		&i.EmailAddress,
+		&i.Address,
 		&i.CollegeID,
 		&i.FunnelID,
+		&i.HourlyFee,
 		&i.Notes,
 		&i.CreatedAt,
 	)
@@ -65,7 +71,7 @@ func (q *Queries) DeleteStudent(ctx context.Context, studentID int64) error {
 }
 
 const getStudent = `-- name: GetStudent :one
-SELECT student_id, first_name, last_name, phone_number, email_address, college_id, funnel_id, notes, created_at FROM students
+SELECT student_id, first_name, last_name, email, phone_number, address, college_id, funnel_id, hourly_fee, notes, created_at FROM students
 WHERE student_id = $1 LIMIT 1
 `
 
@@ -76,10 +82,12 @@ func (q *Queries) GetStudent(ctx context.Context, studentID int64) (Student, err
 		&i.StudentID,
 		&i.FirstName,
 		&i.LastName,
+		&i.Email,
 		&i.PhoneNumber,
-		&i.EmailAddress,
+		&i.Address,
 		&i.CollegeID,
 		&i.FunnelID,
+		&i.HourlyFee,
 		&i.Notes,
 		&i.CreatedAt,
 	)
@@ -87,7 +95,7 @@ func (q *Queries) GetStudent(ctx context.Context, studentID int64) (Student, err
 }
 
 const listStudents = `-- name: ListStudents :many
-SELECT student_id, first_name, last_name, phone_number, email_address, college_id, funnel_id, notes, created_at FROM students
+SELECT student_id, first_name, last_name, email, phone_number, address, college_id, funnel_id, hourly_fee, notes, created_at FROM students
 ORDER BY last_name, first_name
 LIMIT $1
 OFFSET $2
@@ -111,10 +119,12 @@ func (q *Queries) ListStudents(ctx context.Context, arg ListStudentsParams) ([]S
 			&i.StudentID,
 			&i.FirstName,
 			&i.LastName,
+			&i.Email,
 			&i.PhoneNumber,
-			&i.EmailAddress,
+			&i.Address,
 			&i.CollegeID,
 			&i.FunnelID,
+			&i.HourlyFee,
 			&i.Notes,
 			&i.CreatedAt,
 		); err != nil {
@@ -135,23 +145,27 @@ const updateStudent = `-- name: UpdateStudent :exec
 UPDATE students
   set   first_name = $2,
         last_name = $3, 
-        phone_number = $4, 
-        email_address = $5, 
-        college_id = $6, 
-        funnel_id = $7, 
-        notes = $8
+        email = $4,
+        phone_number = $5, 
+        address =  $6,
+        college_id = $7,
+        funnel_id = $8, 
+        hourly_fee = $9, 
+        notes = $10
 WHERE student_id = $1
 `
 
 type UpdateStudentParams struct {
-	StudentID    int64          `json:"student_id"`
-	FirstName    string         `json:"first_name"`
-	LastName     sql.NullString `json:"last_name"`
-	PhoneNumber  sql.NullString `json:"phone_number"`
-	EmailAddress sql.NullString `json:"email_address"`
-	CollegeID    sql.NullInt32  `json:"college_id"`
-	FunnelID     sql.NullInt32  `json:"funnel_id"`
-	Notes        sql.NullString `json:"notes"`
+	StudentID   int64          `json:"student_id"`
+	FirstName   string         `json:"first_name"`
+	LastName    string         `json:"last_name"`
+	Email       sql.NullString `json:"email"`
+	PhoneNumber sql.NullString `json:"phone_number"`
+	Address     sql.NullString `json:"address"`
+	CollegeID   sql.NullInt32  `json:"college_id"`
+	FunnelID    sql.NullInt32  `json:"funnel_id"`
+	HourlyFee   sql.NullString `json:"hourly_fee"`
+	Notes       sql.NullString `json:"notes"`
 }
 
 func (q *Queries) UpdateStudent(ctx context.Context, arg UpdateStudentParams) error {
@@ -159,10 +173,12 @@ func (q *Queries) UpdateStudent(ctx context.Context, arg UpdateStudentParams) er
 		arg.StudentID,
 		arg.FirstName,
 		arg.LastName,
+		arg.Email,
 		arg.PhoneNumber,
-		arg.EmailAddress,
+		arg.Address,
 		arg.CollegeID,
 		arg.FunnelID,
+		arg.HourlyFee,
 		arg.Notes,
 	)
 	return err

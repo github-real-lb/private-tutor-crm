@@ -1,4 +1,4 @@
-module github.com/github-real-lb/private-tutor-crm
+module github.com/github-real-lb/tutor-management-web
 
 go 1.21.6
 

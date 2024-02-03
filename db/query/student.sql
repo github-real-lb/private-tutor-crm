@@ -1,8 +1,8 @@
 -- name: CreateStudent :one
 INSERT INTO students (
-  first_name, last_name, phone_number, email_address, college_id, funnel_id, notes
+  first_name, last_name, email, phone_number, address, college_id, funnel_id, hourly_fee, notes 
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7
+  $1, $2, $3, $4, $5, $6, $7, $8, $9
 )
 RETURNING *;
 
@@ -20,11 +20,13 @@ OFFSET $2;
 UPDATE students
   set   first_name = $2,
         last_name = $3, 
-        phone_number = $4, 
-        email_address = $5, 
-        college_id = $6, 
-        funnel_id = $7, 
-        notes = $8
+        email = $4,
+        phone_number = $5, 
+        address =  $6,
+        college_id = $7,
+        funnel_id = $8, 
+        hourly_fee = $9, 
+        notes = $10
 WHERE student_id = $1;
 
 -- name: DeleteStudent :exec

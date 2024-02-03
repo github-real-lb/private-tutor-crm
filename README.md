@@ -1,5 +1,5 @@
-# Private Tutor CRM
-This is a repo for a Customer Relationship Management System (CRM) of a private tutor.
+# Tutor Management Web
+This is a repo for a web-app of private tutor management system.
 
 Backend API will allow for:
 1. Managing students contact details
