@@ -2,24 +2,28 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"testing"
+	"time"
 
 	"github.com/github-real-lb/tutor-management-web/util"
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateStudent(t *testing.T) {
+// createRandomStudent tests adding a new random student to the database, and returns the Student data type.
+// Fields with Foreign Keys are set to null
+func createRandomStudent(t *testing.T) Student {
 	// CreateStudentParams with Null values
 	arg := CreateStudentParams{
 		FirstName:   util.RandomName(),
 		LastName:    util.RandomName(),
-		Email:       util.NullNullSting(),
-		PhoneNumber: util.NullNullSting(),
-		Address:     util.NullNullSting(),
-		CollegeID:   util.NullNullInt64(),
-		FunnelID:    util.NullNullInt64(),
-		HourlyFee:   util.NullNullFloat64(),
-		Notes:       util.NullNullSting(),
+		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
+		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
+		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
+		CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
+		FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
+		HourlyFee:   sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
+		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
 	student, err := testQueries.CreateStudent(context.Background(), arg)
@@ -39,9 +43,100 @@ func TestCreateStudent(t *testing.T) {
 	require.NotZero(t, student.StudentID)
 	require.NotZero(t, student.CreatedAt)
 
+	return student
+}
+
+func TestCreateStudent(t *testing.T) {
+	createRandomStudent(t)
+
 	// add record to college
 
 	// add record to funnel
 
 	// CreateStudentParams without Null values
+}
+
+func TestGetStudent(t *testing.T) {
+	student1 := createRandomStudent(t)
+	student2, err := testQueries.GetStudent(context.Background(), student1.StudentID)
+	require.NoError(t, err)
+	require.NotEmpty(t, student2)
+
+	require.Equal(t, student1.StudentID, student2.StudentID)
+	require.Equal(t, student1.FirstName, student2.FirstName)
+	require.Equal(t, student1.LastName, student2.LastName)
+	require.Equal(t, student1.Email, student2.Email)
+	require.Equal(t, student1.PhoneNumber, student2.PhoneNumber)
+	require.Equal(t, student1.Address, student2.Address)
+	require.Equal(t, student1.CollegeID, student2.CollegeID)
+	require.Equal(t, student1.FunnelID, student2.FunnelID)
+	require.Equal(t, student1.HourlyFee, student2.HourlyFee)
+	require.Equal(t, student1.Notes, student2.Notes)
+	require.WithinDuration(t, student1.CreatedAt, student2.CreatedAt, time.Second)
+}
+
+func TestUpdateStudent(t *testing.T) {
+	student1 := createRandomStudent(t)
+
+	arg := UpdateStudentParams{
+		StudentID:   student1.StudentID,
+		FirstName:   util.RandomName(),
+		LastName:    util.RandomName(),
+		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
+		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
+		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
+		//CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
+		//FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
+		HourlyFee: sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
+		Notes:     sql.NullString{String: util.RandomNote(), Valid: true},
+	}
+
+	err := testQueries.UpdateStudent(context.Background(), arg)
+	require.NoError(t, err)
+
+	student2, err := testQueries.GetStudent(context.Background(), student1.StudentID)
+	require.NoError(t, err)
+	require.NotEmpty(t, student2)
+
+	require.Equal(t, arg.StudentID, student2.StudentID)
+	require.Equal(t, arg.FirstName, student2.FirstName)
+	require.Equal(t, arg.LastName, student2.LastName)
+	require.Equal(t, arg.Email, student2.Email)
+	require.Equal(t, arg.PhoneNumber, student2.PhoneNumber)
+	require.Equal(t, arg.Address, student2.Address)
+	require.Equal(t, student1.CollegeID, student2.CollegeID)
+	require.Equal(t, student1.FunnelID, student2.FunnelID)
+	require.Equal(t, arg.HourlyFee, student2.HourlyFee)
+	require.Equal(t, arg.Notes, student2.Notes)
+	require.WithinDuration(t, student1.CreatedAt, student2.CreatedAt, time.Second)
+}
+
+func TestDeleteStudent(t *testing.T) {
+	student1 := createRandomStudent(t)
+	err := testQueries.DeleteStudent(context.Background(), student1.StudentID)
+	require.NoError(t, err)
+
+	student2, err := testQueries.GetStudent(context.Background(), student1.StudentID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, student2)
+}
+
+func TestListStudents(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		createRandomStudent(t)
+	}
+
+	arg := ListStudentsParams{
+		Limit:  5,
+		Offset: 5,
+	}
+
+	students, err := testQueries.ListStudents(context.Background(), arg)
+	require.NoError(t, err)
+	require.Len(t, students, 5)
+
+	for _, student := range students {
+		require.NotEmpty(t, student)
+	}
 }

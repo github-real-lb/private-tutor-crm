@@ -1,7 +1,6 @@
 package util
 
 import (
-	"database/sql"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -50,57 +49,6 @@ func RandomString(n int) string {
 	return sb.String()
 }
 
-// RandomNullInt64 generates a random integer between min and max.
-// Valid determines if NullInt64 is null (false) or not (true).
-func RandomNullInt64(min, max int64, valid bool) sql.NullInt64 {
-	return sql.NullInt64{
-		Int64: RandomInt64(min, max),
-		Valid: valid,
-	}
-}
-
-// RandomNullFloat64 generates a random decimal between min and max.
-// Valid determines if NullFloat64 is null (false) or not (true).
-func RandomNullFloat64(min, max float64, valid bool) sql.NullFloat64 {
-	return sql.NullFloat64{
-		Float64: RandomFloat64(min, max),
-		Valid:   valid,
-	}
-}
-
-// RandomNullString generates a random string of lenght n.
-// Valid determines if NullString is null (false) or not (true).
-func RandomNullString(n int, valid bool) sql.NullString {
-	return sql.NullString{
-		String: RandomString(n),
-		Valid:  valid,
-	}
-}
-
-// NullNullInt64 generates a null NullInt64
-func NullNullInt64() sql.NullInt64 {
-	return sql.NullInt64{
-		Int64: 0,
-		Valid: false,
-	}
-}
-
-// NullNullFloat64 generates a null NullFloat64
-func NullNullFloat64() sql.NullFloat64 {
-	return sql.NullFloat64{
-		Float64: 0.0,
-		Valid:   false,
-	}
-}
-
-// NullNullSting generates a null NullString
-func NullNullSting() sql.NullString {
-	return sql.NullString{
-		String: "",
-		Valid:  false,
-	}
-}
-
 // RandomName generates a random first or last name of 8 characters long
 func RandomName() string {
 	return RandomString(8)
@@ -128,4 +76,16 @@ func RandomAddress() string {
 		RandomString(8), RandomInt64(10, 99),
 		RandomString(8), RandomInt64(10000, 99999),
 		RandomString(8))
+}
+
+// RandomHourlyFee generates a random hourly fee between 85.0 to 300.0
+func RandomHourlyFee() float64 {
+	return RandomFloat64(85.0, 300.0)
+}
+
+// RandomNote generates a random note
+func RandomNote() string {
+	return fmt.Sprint("This is a random note:\n",
+		RandomString(10), "\n",
+		RandomString(10))
 }
