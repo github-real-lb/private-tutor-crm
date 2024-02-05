@@ -11,17 +11,23 @@ import (
 )
 
 // createRandomStudent tests adding a new random student to the database, and returns the Student data type.
-// Fields with Foreign Keys are set to null
 func createRandomStudent(t *testing.T) Student {
-	// CreateStudentParams with Null values
+	college, err := testQueries.CreateCollege(context.Background(), util.RandomName())
+	require.NoError(t, err)
+	require.NotEmpty(t, college)
+
+	funnel, err := testQueries.CreateFunnel(context.Background(), util.RandomName())
+	require.NoError(t, err)
+	require.NotEmpty(t, funnel)
+
 	arg := CreateStudentParams{
 		FirstName:   util.RandomName(),
 		LastName:    util.RandomName(),
 		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
 		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
 		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
-		CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
-		FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
+		CollegeID:   sql.NullInt64{Int64: college.CollegeID, Valid: true},
+		FunnelID:    sql.NullInt64{Int64: funnel.FunnelID, Valid: true},
 		HourlyFee:   sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
 		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}
@@ -45,15 +51,8 @@ func createRandomStudent(t *testing.T) Student {
 
 	return student
 }
-
 func TestCreateStudent(t *testing.T) {
 	createRandomStudent(t)
-
-	// add record to college
-
-	// add record to funnel
-
-	// CreateStudentParams without Null values
 }
 
 func TestGetStudent(t *testing.T) {
@@ -77,6 +76,8 @@ func TestGetStudent(t *testing.T) {
 
 func TestUpdateStudent(t *testing.T) {
 	student1 := createRandomStudent(t)
+	college := createRandomCollege(t)
+	funnel := createRandomFunnel(t)
 
 	arg := UpdateStudentParams{
 		StudentID:   student1.StudentID,
@@ -85,10 +86,10 @@ func TestUpdateStudent(t *testing.T) {
 		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
 		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
 		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
-		//CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
-		//FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
-		HourlyFee: sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
-		Notes:     sql.NullString{String: util.RandomNote(), Valid: true},
+		CollegeID:   sql.NullInt64{Int64: college.CollegeID, Valid: true},
+		FunnelID:    sql.NullInt64{Int64: funnel.FunnelID, Valid: true},
+		HourlyFee:   sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
+		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
 	err := testQueries.UpdateStudent(context.Background(), arg)
@@ -104,8 +105,8 @@ func TestUpdateStudent(t *testing.T) {
 	require.Equal(t, arg.Email, student2.Email)
 	require.Equal(t, arg.PhoneNumber, student2.PhoneNumber)
 	require.Equal(t, arg.Address, student2.Address)
-	require.Equal(t, student1.CollegeID, student2.CollegeID)
-	require.Equal(t, student1.FunnelID, student2.FunnelID)
+	require.Equal(t, arg.CollegeID, student2.CollegeID)
+	require.Equal(t, arg.FunnelID, student2.FunnelID)
 	require.Equal(t, arg.HourlyFee, student2.HourlyFee)
 	require.Equal(t, arg.Notes, student2.Notes)
 	require.WithinDuration(t, student1.CreatedAt, student2.CreatedAt, time.Second)

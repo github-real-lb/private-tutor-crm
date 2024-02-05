@@ -49,6 +49,13 @@ func RandomString(n int) string {
 	return sb.String()
 }
 
+// RandomDatetime generates a random datetime for the past year.
+func RandomDatetime() time.Time {
+	standardYear := time.Hour * 24 * 365
+	randomDuration := time.Duration(r.Int63n(int64(standardYear)))
+	return time.Now().Add(-randomDuration)
+}
+
 // RandomName generates a random first or last name of 8 characters long
 func RandomName() string {
 	return RandomString(8)

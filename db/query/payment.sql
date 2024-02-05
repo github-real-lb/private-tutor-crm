@@ -1,6 +1,6 @@
 -- name: CreatePayment :one
 INSERT INTO payments (
-  receipt_id, payment_datetime, amount, payment_methods_id
+  receipt_id, payment_datetime, amount, payment_method_id
 ) VALUES (
   $1, $2, $3, $4
 )
@@ -21,7 +21,7 @@ UPDATE payments
   set   receipt_id = $2,
         payment_datetime = $3, 
         amount = $4,
-        payment_methods_id = $5
+        payment_method_id = $5
 WHERE payment_id = $1;
 
 -- name: DeletePayment :exec

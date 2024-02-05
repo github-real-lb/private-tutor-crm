@@ -12,18 +12,18 @@ import (
 
 const createPayment = `-- name: CreatePayment :one
 INSERT INTO payments (
-  receipt_id, payment_datetime, amount, payment_methods_id
+  receipt_id, payment_datetime, amount, payment_method_id
 ) VALUES (
   $1, $2, $3, $4
 )
-RETURNING payment_id, receipt_id, payment_datetime, amount, payment_methods_id
+RETURNING payment_id, receipt_id, payment_datetime, amount, payment_method_id
 `
 
 type CreatePaymentParams struct {
-	ReceiptID        int64     `json:"receipt_id"`
-	PaymentDatetime  time.Time `json:"payment_datetime"`
-	Amount           float64   `json:"amount"`
-	PaymentMethodsID int64     `json:"payment_methods_id"`
+	ReceiptID       int64     `json:"receipt_id"`
+	PaymentDatetime time.Time `json:"payment_datetime"`
+	Amount          float64   `json:"amount"`
+	PaymentMethodID int64     `json:"payment_method_id"`
 }
 
 func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error) {
@@ -31,7 +31,7 @@ func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (P
 		arg.ReceiptID,
 		arg.PaymentDatetime,
 		arg.Amount,
-		arg.PaymentMethodsID,
+		arg.PaymentMethodID,
 	)
 	var i Payment
 	err := row.Scan(
@@ -39,7 +39,7 @@ func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (P
 		&i.ReceiptID,
 		&i.PaymentDatetime,
 		&i.Amount,
-		&i.PaymentMethodsID,
+		&i.PaymentMethodID,
 	)
 	return i, err
 }
@@ -55,7 +55,7 @@ func (q *Queries) DeletePayment(ctx context.Context, paymentID int64) error {
 }
 
 const getPayment = `-- name: GetPayment :one
-SELECT payment_id, receipt_id, payment_datetime, amount, payment_methods_id FROM payments
+SELECT payment_id, receipt_id, payment_datetime, amount, payment_method_id FROM payments
 WHERE payment_id = $1 LIMIT 1
 `
 
@@ -67,13 +67,13 @@ func (q *Queries) GetPayment(ctx context.Context, paymentID int64) (Payment, err
 		&i.ReceiptID,
 		&i.PaymentDatetime,
 		&i.Amount,
-		&i.PaymentMethodsID,
+		&i.PaymentMethodID,
 	)
 	return i, err
 }
 
 const listPayments = `-- name: ListPayments :many
-SELECT payment_id, receipt_id, payment_datetime, amount, payment_methods_id FROM payments
+SELECT payment_id, receipt_id, payment_datetime, amount, payment_method_id FROM payments
 ORDER BY receipt_id, payment_datetime
 LIMIT $1
 OFFSET $2
@@ -98,7 +98,7 @@ func (q *Queries) ListPayments(ctx context.Context, arg ListPaymentsParams) ([]P
 			&i.ReceiptID,
 			&i.PaymentDatetime,
 			&i.Amount,
-			&i.PaymentMethodsID,
+			&i.PaymentMethodID,
 		); err != nil {
 			return nil, err
 		}
@@ -118,16 +118,16 @@ UPDATE payments
   set   receipt_id = $2,
         payment_datetime = $3, 
         amount = $4,
-        payment_methods_id = $5
+        payment_method_id = $5
 WHERE payment_id = $1
 `
 
 type UpdatePaymentParams struct {
-	PaymentID        int64     `json:"payment_id"`
-	ReceiptID        int64     `json:"receipt_id"`
-	PaymentDatetime  time.Time `json:"payment_datetime"`
-	Amount           float64   `json:"amount"`
-	PaymentMethodsID int64     `json:"payment_methods_id"`
+	PaymentID       int64     `json:"payment_id"`
+	ReceiptID       int64     `json:"receipt_id"`
+	PaymentDatetime time.Time `json:"payment_datetime"`
+	Amount          float64   `json:"amount"`
+	PaymentMethodID int64     `json:"payment_method_id"`
 }
 
 func (q *Queries) UpdatePayment(ctx context.Context, arg UpdatePaymentParams) error {
@@ -136,7 +136,7 @@ func (q *Queries) UpdatePayment(ctx context.Context, arg UpdatePaymentParams) er
 		arg.ReceiptID,
 		arg.PaymentDatetime,
 		arg.Amount,
-		arg.PaymentMethodsID,
+		arg.PaymentMethodID,
 	)
 	return err
 }

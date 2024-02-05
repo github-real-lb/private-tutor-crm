@@ -53,11 +53,11 @@ type LessonSubject struct {
 }
 
 type Payment struct {
-	PaymentID        int64     `json:"payment_id"`
-	ReceiptID        int64     `json:"receipt_id"`
-	PaymentDatetime  time.Time `json:"payment_datetime"`
-	Amount           float64   `json:"amount"`
-	PaymentMethodsID int64     `json:"payment_methods_id"`
+	PaymentID       int64     `json:"payment_id"`
+	ReceiptID       int64     `json:"receipt_id"`
+	PaymentDatetime time.Time `json:"payment_datetime"`
+	Amount          float64   `json:"amount"`
+	PaymentMethodID int64     `json:"payment_method_id"`
 }
 
 type PaymentMethod struct {

@@ -65,7 +65,7 @@ CREATE TABLE "payments" (
   "receipt_id" bigint NOT NULL,
   "payment_datetime" timestamptz NOT NULL,
   "amount" float NOT NULL,
-  "payment_methods_id" bigint NOT NULL
+  "payment_method_id" bigint NOT NULL
 );
 
 CREATE TABLE "payment_methods" (
@@ -155,4 +155,4 @@ ALTER TABLE "receipts" ADD FOREIGN KEY ("student_id") REFERENCES "students" ("st
 
 ALTER TABLE "payments" ADD FOREIGN KEY ("receipt_id") REFERENCES "receipts" ("receipt_id");
 
-ALTER TABLE "payments" ADD FOREIGN KEY ("payment_methods_id") REFERENCES "payment_methods" ("payment_method_id");
+ALTER TABLE "payments" ADD FOREIGN KEY ("payment_method_id") REFERENCES "payment_methods" ("payment_method_id");
