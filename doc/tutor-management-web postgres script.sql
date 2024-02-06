@@ -24,7 +24,6 @@ CREATE TABLE "funnels" (
 
 CREATE TABLE "lessons" (
   "lesson_id" bigserial PRIMARY KEY,
-  "student_id" bigint NOT NULL,
   "lesson_datetime" timestamptz NOT NULL,
   "duration" bigint NOT NULL,
   "location_id" bigint NOT NULL,
@@ -46,10 +45,12 @@ CREATE TABLE "invoices" (
   "invoice_id" bigserial PRIMARY KEY,
   "student_id" bigint NOT NULL,
   "lesson_id" bigint NOT NULL,
-  "invoice_datetime" timestamptz NOT NULL,
   "hourly_fee" float NOT NULL,
+  "duration" bigint NOT NULL,
+  "discount" float NOT NULL,
   "amount" float NOT NULL,
-  "notes" text
+  "notes" text,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "receipts" (
@@ -87,21 +88,15 @@ CREATE INDEX ON "colleges" ("name");
 
 CREATE INDEX ON "funnels" ("name");
 
-CREATE INDEX ON "lessons" ("student_id");
-
-CREATE INDEX ON "lessons" ("student_id", "lesson_datetime");
-
 CREATE INDEX ON "lessons" ("lesson_datetime");
-
-CREATE INDEX ON "lessons" ("lesson_datetime", "student_id");
 
 CREATE INDEX ON "lessons" ("location_id");
 
-CREATE INDEX ON "lessons" ("location_id", "lesson_datetime", "student_id");
+CREATE INDEX ON "lessons" ("location_id", "lesson_datetime");
 
 CREATE INDEX ON "lessons" ("subject_id");
 
-CREATE INDEX ON "lessons" ("subject_id", "student_id");
+CREATE INDEX ON "lessons" ("subject_id", "lesson_datetime");
 
 CREATE INDEX ON "lesson_locations" ("name");
 
@@ -111,9 +106,7 @@ CREATE INDEX ON "invoices" ("student_id");
 
 CREATE INDEX ON "invoices" ("lesson_id");
 
-CREATE INDEX ON "invoices" ("invoice_datetime");
-
-CREATE INDEX ON "invoices" ("invoice_datetime", "student_id");
+CREATE INDEX ON "invoices" ("student_id", "lesson_id");
 
 CREATE INDEX ON "receipts" ("student_id");
 
@@ -133,15 +126,15 @@ COMMENT ON COLUMN "lessons"."duration" IS 'lesson duration in minutes';
 
 COMMENT ON COLUMN "invoices"."hourly_fee" IS 'hourly fee for the lesson';
 
-COMMENT ON COLUMN "invoices"."amount" IS 'total amount based on the lesson duration and the hourly fee';
+COMMENT ON COLUMN "invoices"."duration" IS 'lesson duration in minutes';
+
+COMMENT ON COLUMN "invoices"."amount" IS 'total amount based on lesson duration, hourly fee and discount';
 
 COMMENT ON COLUMN "receipts"."amount" IS 'total amount of all payments';
 
 ALTER TABLE "students" ADD FOREIGN KEY ("college_id") REFERENCES "colleges" ("college_id");
 
 ALTER TABLE "students" ADD FOREIGN KEY ("funnel_id") REFERENCES "funnels" ("funnel_id");
-
-ALTER TABLE "lessons" ADD FOREIGN KEY ("student_id") REFERENCES "students" ("student_id");
 
 ALTER TABLE "lessons" ADD FOREIGN KEY ("location_id") REFERENCES "lesson_locations" ("location_id");
 

@@ -12,12 +12,10 @@ import (
 
 // createRandomLesson tests adding a new random lesson to the database, and returns the Lesson data type.
 func createRandomLesson(t *testing.T) Lesson {
-	student := createRandomStudent(t)
 	lessonLocation := createRandomLessonLocation(t)
 	lessonSubject := createRandomLessonSubject(t)
 
 	arg := CreateLessonParams{
-		StudentID:      student.StudentID,
 		LessonDatetime: util.RandomDatetime(),
 		Duration:       util.RandomInt64(30, 240),
 		LocationID:     lessonLocation.LocationID,
@@ -29,7 +27,6 @@ func createRandomLesson(t *testing.T) Lesson {
 	require.NoError(t, err)
 	require.NotEmpty(t, lesson)
 
-	require.Equal(t, arg.StudentID, lesson.StudentID)
 	require.WithinDuration(t, arg.LessonDatetime, lesson.LessonDatetime, time.Second)
 	require.Equal(t, arg.Duration, lesson.Duration)
 	require.Equal(t, arg.LocationID, lesson.LocationID)
@@ -52,7 +49,6 @@ func TestGetLesson(t *testing.T) {
 	require.NotEmpty(t, lesson2)
 
 	require.Equal(t, lesson1.LessonID, lesson2.LessonID)
-	require.Equal(t, lesson1.StudentID, lesson2.StudentID)
 	require.WithinDuration(t, lesson1.LessonDatetime, lesson2.LessonDatetime, time.Second)
 	require.Equal(t, lesson1.Duration, lesson2.Duration)
 	require.Equal(t, lesson1.LocationID, lesson2.LocationID)
@@ -62,13 +58,11 @@ func TestGetLesson(t *testing.T) {
 
 func TestUpdateLesson(t *testing.T) {
 	lesson1 := createRandomLesson(t)
-	student := createRandomStudent(t)
 	lessonLocation := createRandomLessonLocation(t)
 	lessonSubject := createRandomLessonSubject(t)
 
 	arg := UpdateLessonParams{
 		LessonID:       lesson1.LessonID,
-		StudentID:      student.StudentID,
 		LessonDatetime: util.RandomDatetime(),
 		Duration:       util.RandomInt64(30, 240),
 		LocationID:     lessonLocation.LocationID,
@@ -83,7 +77,6 @@ func TestUpdateLesson(t *testing.T) {
 	require.NotEmpty(t, lesson2)
 
 	require.Equal(t, arg.LessonID, lesson2.LessonID)
-	require.Equal(t, arg.StudentID, lesson2.StudentID)
 	require.WithinDuration(t, arg.LessonDatetime, lesson2.LessonDatetime, time.Second)
 	require.Equal(t, arg.Duration, lesson2.Duration)
 	require.Equal(t, arg.LocationID, lesson2.LocationID)

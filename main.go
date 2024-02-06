@@ -8,8 +8,8 @@ import (
 
 func main() {
 	for i := 0; i < 10; i++ {
-		randomDateTime := util.RandomDatetime()
-		fmt.Println(randomDateTime)
+		randomDiscount := util.RandomFloat64(0.0, 0.99)
+		fmt.Println(randomDiscount)
 	}
 
 }

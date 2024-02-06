@@ -1,8 +1,8 @@
 -- name: CreateInvoice :one
 INSERT INTO invoices (
-  student_id, lesson_id, invoice_datetime, hourly_fee, amount, notes
+  student_id, lesson_id, hourly_fee, duration, discount, amount, notes
 ) VALUES (
-  $1, $2, $3, $4, $5, $6
+  $1, $2, $3, $4, $5, $6, $7
 )
 RETURNING *;
 
@@ -12,7 +12,7 @@ WHERE invoice_id = $1 LIMIT 1;
 
 -- name: ListInvoices :many
 SELECT * FROM invoices
-ORDER BY student_id, invoice_datetime
+ORDER BY student_id, created_at
 LIMIT $1
 OFFSET $2;
 
@@ -20,10 +20,11 @@ OFFSET $2;
 UPDATE invoices
   set   student_id = $2,
         lesson_id = $3, 
-        invoice_datetime = $4,
-        hourly_fee = $5, 
-        amount =  $6,
-        notes = $7
+        hourly_fee = $4,
+        duration = $5, 
+        discount = $6,
+        amount =  $7,
+        notes = $8
 WHERE invoice_id = $1;
 
 -- name: DeleteInvoice :exec

@@ -8,33 +8,34 @@ package db
 import (
 	"context"
 	"database/sql"
-	"time"
 )
 
 const createInvoice = `-- name: CreateInvoice :one
 INSERT INTO invoices (
-  student_id, lesson_id, invoice_datetime, hourly_fee, amount, notes
+  student_id, lesson_id, hourly_fee, duration, discount, amount, notes
 ) VALUES (
-  $1, $2, $3, $4, $5, $6
+  $1, $2, $3, $4, $5, $6, $7
 )
-RETURNING invoice_id, student_id, lesson_id, invoice_datetime, hourly_fee, amount, notes
+RETURNING invoice_id, student_id, lesson_id, hourly_fee, duration, discount, amount, notes, created_at
 `
 
 type CreateInvoiceParams struct {
-	StudentID       int64          `json:"student_id"`
-	LessonID        int64          `json:"lesson_id"`
-	InvoiceDatetime time.Time      `json:"invoice_datetime"`
-	HourlyFee       float64        `json:"hourly_fee"`
-	Amount          float64        `json:"amount"`
-	Notes           sql.NullString `json:"notes"`
+	StudentID int64          `json:"student_id"`
+	LessonID  int64          `json:"lesson_id"`
+	HourlyFee float64        `json:"hourly_fee"`
+	Duration  int64          `json:"duration"`
+	Discount  float64        `json:"discount"`
+	Amount    float64        `json:"amount"`
+	Notes     sql.NullString `json:"notes"`
 }
 
 func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (Invoice, error) {
 	row := q.db.QueryRowContext(ctx, createInvoice,
 		arg.StudentID,
 		arg.LessonID,
-		arg.InvoiceDatetime,
 		arg.HourlyFee,
+		arg.Duration,
+		arg.Discount,
 		arg.Amount,
 		arg.Notes,
 	)
@@ -43,10 +44,12 @@ func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (I
 		&i.InvoiceID,
 		&i.StudentID,
 		&i.LessonID,
-		&i.InvoiceDatetime,
 		&i.HourlyFee,
+		&i.Duration,
+		&i.Discount,
 		&i.Amount,
 		&i.Notes,
+		&i.CreatedAt,
 	)
 	return i, err
 }
@@ -62,7 +65,7 @@ func (q *Queries) DeleteInvoice(ctx context.Context, invoiceID int64) error {
 }
 
 const getInvoice = `-- name: GetInvoice :one
-SELECT invoice_id, student_id, lesson_id, invoice_datetime, hourly_fee, amount, notes FROM invoices
+SELECT invoice_id, student_id, lesson_id, hourly_fee, duration, discount, amount, notes, created_at FROM invoices
 WHERE invoice_id = $1 LIMIT 1
 `
 
@@ -73,17 +76,19 @@ func (q *Queries) GetInvoice(ctx context.Context, invoiceID int64) (Invoice, err
 		&i.InvoiceID,
 		&i.StudentID,
 		&i.LessonID,
-		&i.InvoiceDatetime,
 		&i.HourlyFee,
+		&i.Duration,
+		&i.Discount,
 		&i.Amount,
 		&i.Notes,
+		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const listInvoices = `-- name: ListInvoices :many
-SELECT invoice_id, student_id, lesson_id, invoice_datetime, hourly_fee, amount, notes FROM invoices
-ORDER BY student_id, invoice_datetime
+SELECT invoice_id, student_id, lesson_id, hourly_fee, duration, discount, amount, notes, created_at FROM invoices
+ORDER BY student_id, created_at
 LIMIT $1
 OFFSET $2
 `
@@ -106,10 +111,12 @@ func (q *Queries) ListInvoices(ctx context.Context, arg ListInvoicesParams) ([]I
 			&i.InvoiceID,
 			&i.StudentID,
 			&i.LessonID,
-			&i.InvoiceDatetime,
 			&i.HourlyFee,
+			&i.Duration,
+			&i.Discount,
 			&i.Amount,
 			&i.Notes,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -128,21 +135,23 @@ const updateInvoice = `-- name: UpdateInvoice :exec
 UPDATE invoices
   set   student_id = $2,
         lesson_id = $3, 
-        invoice_datetime = $4,
-        hourly_fee = $5, 
-        amount =  $6,
-        notes = $7
+        hourly_fee = $4,
+        duration = $5, 
+        discount = $6,
+        amount =  $7,
+        notes = $8
 WHERE invoice_id = $1
 `
 
 type UpdateInvoiceParams struct {
-	InvoiceID       int64          `json:"invoice_id"`
-	StudentID       int64          `json:"student_id"`
-	LessonID        int64          `json:"lesson_id"`
-	InvoiceDatetime time.Time      `json:"invoice_datetime"`
-	HourlyFee       float64        `json:"hourly_fee"`
-	Amount          float64        `json:"amount"`
-	Notes           sql.NullString `json:"notes"`
+	InvoiceID int64          `json:"invoice_id"`
+	StudentID int64          `json:"student_id"`
+	LessonID  int64          `json:"lesson_id"`
+	HourlyFee float64        `json:"hourly_fee"`
+	Duration  int64          `json:"duration"`
+	Discount  float64        `json:"discount"`
+	Amount    float64        `json:"amount"`
+	Notes     sql.NullString `json:"notes"`
 }
 
 func (q *Queries) UpdateInvoice(ctx context.Context, arg UpdateInvoiceParams) error {
@@ -150,8 +159,9 @@ func (q *Queries) UpdateInvoice(ctx context.Context, arg UpdateInvoiceParams) er
 		arg.InvoiceID,
 		arg.StudentID,
 		arg.LessonID,
-		arg.InvoiceDatetime,
 		arg.HourlyFee,
+		arg.Duration,
+		arg.Discount,
 		arg.Amount,
 		arg.Notes,
 	)

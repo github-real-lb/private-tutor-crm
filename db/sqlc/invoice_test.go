@@ -16,12 +16,13 @@ func createRandomInvoice(t *testing.T) Invoice {
 	lesson := createRandomLesson(t)
 
 	arg := CreateInvoiceParams{
-		StudentID:       student.StudentID,
-		LessonID:        lesson.LessonID,
-		InvoiceDatetime: util.RandomDatetime(),
-		HourlyFee:       util.RandomFloat64(85.0, 300.0),
-		Amount:          util.RandomFloat64(85.0, 1200.0),
-		Notes:           sql.NullString{String: util.RandomNote(), Valid: true},
+		StudentID: student.StudentID,
+		LessonID:  lesson.LessonID,
+		HourlyFee: util.RandomFloat64(85.0, 300.0),
+		Duration:  util.RandomInt64(30, 240),
+		Discount:  util.RandomDiscount(),
+		Amount:    util.RandomFloat64(85.0, 1200.0),
+		Notes:     sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
 	invoice, err := testQueries.CreateInvoice(context.Background(), arg)
@@ -30,12 +31,14 @@ func createRandomInvoice(t *testing.T) Invoice {
 
 	require.Equal(t, arg.StudentID, invoice.StudentID)
 	require.Equal(t, arg.LessonID, invoice.LessonID)
-	require.WithinDuration(t, arg.InvoiceDatetime, invoice.InvoiceDatetime, time.Second)
 	require.Equal(t, arg.HourlyFee, invoice.HourlyFee)
+	require.Equal(t, arg.Duration, invoice.Duration)
+	require.Equal(t, arg.Discount, invoice.Discount)
 	require.Equal(t, arg.Amount, invoice.Amount)
 	require.Equal(t, arg.Notes, invoice.Notes)
 
 	require.NotZero(t, invoice.InvoiceID)
+	require.NotZero(t, invoice.CreatedAt)
 
 	return invoice
 }
@@ -53,10 +56,12 @@ func TestGetInvoice(t *testing.T) {
 	require.Equal(t, invoice1.InvoiceID, invoice2.InvoiceID)
 	require.Equal(t, invoice1.StudentID, invoice2.StudentID)
 	require.Equal(t, invoice1.LessonID, invoice2.LessonID)
-	require.WithinDuration(t, invoice1.InvoiceDatetime, invoice2.InvoiceDatetime, time.Second)
 	require.Equal(t, invoice1.HourlyFee, invoice2.HourlyFee)
+	require.Equal(t, invoice1.Duration, invoice2.Duration)
+	require.Equal(t, invoice1.Discount, invoice2.Discount)
 	require.Equal(t, invoice1.Amount, invoice2.Amount)
 	require.Equal(t, invoice1.Notes, invoice2.Notes)
+	require.WithinDuration(t, invoice1.CreatedAt, invoice2.CreatedAt, time.Second)
 }
 
 func TestUpdateInvoice(t *testing.T) {
@@ -65,13 +70,14 @@ func TestUpdateInvoice(t *testing.T) {
 	lesson := createRandomLesson(t)
 
 	arg := UpdateInvoiceParams{
-		InvoiceID:       invoice1.InvoiceID,
-		StudentID:       student.StudentID,
-		LessonID:        lesson.LessonID,
-		InvoiceDatetime: util.RandomDatetime(),
-		HourlyFee:       util.RandomFloat64(85.0, 300.0),
-		Amount:          util.RandomFloat64(85.0, 1200.0),
-		Notes:           sql.NullString{String: util.RandomNote(), Valid: true},
+		InvoiceID: invoice1.InvoiceID,
+		StudentID: student.StudentID,
+		LessonID:  lesson.LessonID,
+		HourlyFee: util.RandomFloat64(85.0, 300.0),
+		Duration:  util.RandomInt64(30, 240),
+		Discount:  util.RandomDiscount(),
+		Amount:    util.RandomFloat64(85.0, 1200.0),
+		Notes:     sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 	err := testQueries.UpdateInvoice(context.Background(), arg)
 	require.NoError(t, err)
@@ -83,10 +89,12 @@ func TestUpdateInvoice(t *testing.T) {
 	require.Equal(t, arg.InvoiceID, invoice2.InvoiceID)
 	require.Equal(t, arg.StudentID, invoice2.StudentID)
 	require.Equal(t, arg.LessonID, invoice2.LessonID)
-	require.WithinDuration(t, arg.InvoiceDatetime, invoice2.InvoiceDatetime, time.Second)
+	require.Equal(t, arg.Duration, invoice2.Duration)
+	require.Equal(t, arg.Discount, invoice2.Discount)
 	require.Equal(t, arg.HourlyFee, invoice2.HourlyFee)
 	require.Equal(t, arg.Amount, invoice2.Amount)
 	require.Equal(t, arg.Notes, invoice2.Notes)
+	require.WithinDuration(t, invoice1.CreatedAt, invoice2.CreatedAt, time.Second)
 }
 
 func TestDeleteInvoice(t *testing.T) {

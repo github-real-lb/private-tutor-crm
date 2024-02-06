@@ -23,10 +23,12 @@ func RandomInt64(min, max int64) int64 {
 
 // RandomFloat64 generates a random decimal between min and max.
 func RandomFloat64(min, max float64) float64 {
-	delta := max - min
-	i := r.Int63n(int64(delta))
-	f := r.Float64()
+	var i int64 = 0
+	if delta := max - min; delta >= 1.0 {
+		i = r.Int63n(int64(delta))
+	}
 
+	f := r.Float64()
 	if n := min + float64(i) + f; n > max {
 		return max
 	} else {
@@ -95,4 +97,9 @@ func RandomNote() string {
 	return fmt.Sprint("This is a random note:\n",
 		RandomString(10), "\n",
 		RandomString(10))
+}
+
+// RandomDiscount generates a random discount % between 0.0 (0%) to 0.99 (99%)
+func RandomDiscount() float64 {
+	return RandomFloat64(0.0, 0.99)
 }

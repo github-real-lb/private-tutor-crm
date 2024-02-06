@@ -20,20 +20,22 @@ type Funnel struct {
 }
 
 type Invoice struct {
-	InvoiceID       int64     `json:"invoice_id"`
-	StudentID       int64     `json:"student_id"`
-	LessonID        int64     `json:"lesson_id"`
-	InvoiceDatetime time.Time `json:"invoice_datetime"`
+	InvoiceID int64 `json:"invoice_id"`
+	StudentID int64 `json:"student_id"`
+	LessonID  int64 `json:"lesson_id"`
 	// hourly fee for the lesson
 	HourlyFee float64 `json:"hourly_fee"`
-	// total amount based on the lesson duration and the hourly fee
-	Amount float64        `json:"amount"`
-	Notes  sql.NullString `json:"notes"`
+	// lesson duration in minutes
+	Duration int64   `json:"duration"`
+	Discount float64 `json:"discount"`
+	// total amount based on lesson duration, hourly fee and discount
+	Amount    float64        `json:"amount"`
+	Notes     sql.NullString `json:"notes"`
+	CreatedAt time.Time      `json:"created_at"`
 }
 
 type Lesson struct {
 	LessonID       int64     `json:"lesson_id"`
-	StudentID      int64     `json:"student_id"`
 	LessonDatetime time.Time `json:"lesson_datetime"`
 	// lesson duration in minutes
 	Duration   int64          `json:"duration"`

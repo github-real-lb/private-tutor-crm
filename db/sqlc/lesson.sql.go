@@ -13,15 +13,14 @@ import (
 
 const createLesson = `-- name: CreateLesson :one
 INSERT INTO lessons (
-  student_id, lesson_datetime, duration, location_id, subject_id, notes
+  lesson_datetime, duration, location_id, subject_id, notes
 ) VALUES (
-  $1, $2, $3, $4, $5, $6
+  $1, $2, $3, $4, $5
 )
-RETURNING lesson_id, student_id, lesson_datetime, duration, location_id, subject_id, notes
+RETURNING lesson_id, lesson_datetime, duration, location_id, subject_id, notes
 `
 
 type CreateLessonParams struct {
-	StudentID      int64          `json:"student_id"`
 	LessonDatetime time.Time      `json:"lesson_datetime"`
 	Duration       int64          `json:"duration"`
 	LocationID     int64          `json:"location_id"`
@@ -31,7 +30,6 @@ type CreateLessonParams struct {
 
 func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Lesson, error) {
 	row := q.db.QueryRowContext(ctx, createLesson,
-		arg.StudentID,
 		arg.LessonDatetime,
 		arg.Duration,
 		arg.LocationID,
@@ -41,7 +39,6 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 	var i Lesson
 	err := row.Scan(
 		&i.LessonID,
-		&i.StudentID,
 		&i.LessonDatetime,
 		&i.Duration,
 		&i.LocationID,
@@ -62,7 +59,7 @@ func (q *Queries) DeleteLesson(ctx context.Context, lessonID int64) error {
 }
 
 const getLesson = `-- name: GetLesson :one
-SELECT lesson_id, student_id, lesson_datetime, duration, location_id, subject_id, notes FROM lessons
+SELECT lesson_id, lesson_datetime, duration, location_id, subject_id, notes FROM lessons
 WHERE lesson_id = $1 LIMIT 1
 `
 
@@ -71,7 +68,6 @@ func (q *Queries) GetLesson(ctx context.Context, lessonID int64) (Lesson, error)
 	var i Lesson
 	err := row.Scan(
 		&i.LessonID,
-		&i.StudentID,
 		&i.LessonDatetime,
 		&i.Duration,
 		&i.LocationID,
@@ -82,8 +78,8 @@ func (q *Queries) GetLesson(ctx context.Context, lessonID int64) (Lesson, error)
 }
 
 const listLessons = `-- name: ListLessons :many
-SELECT lesson_id, student_id, lesson_datetime, duration, location_id, subject_id, notes FROM lessons
-ORDER BY student_id, lesson_datetime
+SELECT lesson_id, lesson_datetime, duration, location_id, subject_id, notes FROM lessons
+ORDER BY lesson_datetime
 LIMIT $1
 OFFSET $2
 `
@@ -104,7 +100,6 @@ func (q *Queries) ListLessons(ctx context.Context, arg ListLessonsParams) ([]Les
 		var i Lesson
 		if err := rows.Scan(
 			&i.LessonID,
-			&i.StudentID,
 			&i.LessonDatetime,
 			&i.Duration,
 			&i.LocationID,
@@ -126,18 +121,16 @@ func (q *Queries) ListLessons(ctx context.Context, arg ListLessonsParams) ([]Les
 
 const updateLesson = `-- name: UpdateLesson :exec
 UPDATE lessons
-  set   student_id = $2,
-        lesson_datetime = $3, 
-        duration = $4,
-        location_id = $5, 
-        subject_id =  $6,
-        notes = $7
+  set   lesson_datetime = $2, 
+        duration = $3,
+        location_id = $4, 
+        subject_id =  $5,
+        notes = $6
 WHERE lesson_id = $1
 `
 
 type UpdateLessonParams struct {
 	LessonID       int64          `json:"lesson_id"`
-	StudentID      int64          `json:"student_id"`
 	LessonDatetime time.Time      `json:"lesson_datetime"`
 	Duration       int64          `json:"duration"`
 	LocationID     int64          `json:"location_id"`
@@ -148,7 +141,6 @@ type UpdateLessonParams struct {
 func (q *Queries) UpdateLesson(ctx context.Context, arg UpdateLessonParams) error {
 	_, err := q.db.ExecContext(ctx, updateLesson,
 		arg.LessonID,
-		arg.StudentID,
 		arg.LessonDatetime,
 		arg.Duration,
 		arg.LocationID,
