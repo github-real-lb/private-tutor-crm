@@ -99,7 +99,27 @@ func RandomNote() string {
 		RandomString(10))
 }
 
+// RandomLessonDuration returns random int64 between 30 and 240 minutes
+func RandomLessonDuration() int64 {
+	return RandomInt64(30, 240)
+}
+
+// RandomLessonHourlyFee returns random float64 between 85.0 and 300.0
+func RandomLessonHourlyFee() float64 {
+	return RandomFloat64(85.0, 300.0)
+}
+
 // RandomDiscount generates a random discount % between 0.0 (0%) to 0.99 (99%)
 func RandomDiscount() float64 {
 	return RandomFloat64(0.0, 0.99)
+}
+
+// RandomInvoiceAmount returns random float64 between 85.0 and 1200.0
+func RandomInvoiceAmount() float64 {
+	return RandomFloat64(85.0, 1200.0)
+}
+
+// RandomPaymentAmount returns random float64 between 85.0 and 1200.0
+func RandomPaymentAmount() float64 {
+	return RandomFloat64(85.0, 1200.0)
 }

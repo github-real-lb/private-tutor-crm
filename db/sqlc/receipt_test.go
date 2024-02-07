@@ -17,7 +17,7 @@ func createRandomReceipt(t *testing.T) Receipt {
 	arg := CreateReceiptParams{
 		StudentID:       student.StudentID,
 		ReceiptDatetime: util.RandomDatetime(),
-		Amount:          util.RandomFloat64(85.0, 1200.0),
+		Amount:          util.RandomPaymentAmount(),
 		Notes:           sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
@@ -60,7 +60,7 @@ func TestUpdateReceipt(t *testing.T) {
 		ReceiptID:       receipt1.ReceiptID,
 		StudentID:       student.StudentID,
 		ReceiptDatetime: util.RandomDatetime(),
-		Amount:          util.RandomFloat64(85.0, 1200.0),
+		Amount:          util.RandomPaymentAmount(),
 		Notes:           sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 	err := testQueries.UpdateReceipt(context.Background(), arg)

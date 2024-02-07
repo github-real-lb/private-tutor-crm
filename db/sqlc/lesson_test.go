@@ -17,7 +17,7 @@ func createRandomLesson(t *testing.T) Lesson {
 
 	arg := CreateLessonParams{
 		LessonDatetime: util.RandomDatetime(),
-		Duration:       util.RandomInt64(30, 240),
+		Duration:       util.RandomLessonDuration(),
 		LocationID:     lessonLocation.LocationID,
 		SubjectID:      lessonSubject.SubjectID,
 		Notes:          sql.NullString{String: util.RandomNote(), Valid: true},
@@ -64,7 +64,7 @@ func TestUpdateLesson(t *testing.T) {
 	arg := UpdateLessonParams{
 		LessonID:       lesson1.LessonID,
 		LessonDatetime: util.RandomDatetime(),
-		Duration:       util.RandomInt64(30, 240),
+		Duration:       util.RandomLessonDuration(),
 		LocationID:     lessonLocation.LocationID,
 		SubjectID:      lessonSubject.SubjectID,
 		Notes:          sql.NullString{String: util.RandomNote(), Valid: true},

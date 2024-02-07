@@ -18,10 +18,10 @@ func createRandomInvoice(t *testing.T) Invoice {
 	arg := CreateInvoiceParams{
 		StudentID: student.StudentID,
 		LessonID:  lesson.LessonID,
-		HourlyFee: util.RandomFloat64(85.0, 300.0),
-		Duration:  util.RandomInt64(30, 240),
+		HourlyFee: util.RandomLessonHourlyFee(),
+		Duration:  util.RandomLessonDuration(),
 		Discount:  util.RandomDiscount(),
-		Amount:    util.RandomFloat64(85.0, 1200.0),
+		Amount:    util.RandomInvoiceAmount(),
 		Notes:     sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
@@ -73,10 +73,10 @@ func TestUpdateInvoice(t *testing.T) {
 		InvoiceID: invoice1.InvoiceID,
 		StudentID: student.StudentID,
 		LessonID:  lesson.LessonID,
-		HourlyFee: util.RandomFloat64(85.0, 300.0),
-		Duration:  util.RandomInt64(30, 240),
+		HourlyFee: util.RandomLessonHourlyFee(),
+		Duration:  util.RandomLessonDuration(),
 		Discount:  util.RandomDiscount(),
-		Amount:    util.RandomFloat64(85.0, 1200.0),
+		Amount:    util.RandomInvoiceAmount(),
 		Notes:     sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 	err := testQueries.UpdateInvoice(context.Background(), arg)

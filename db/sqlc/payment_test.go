@@ -18,7 +18,7 @@ func createRandomPayment(t *testing.T) Payment {
 	arg := CreatePaymentParams{
 		ReceiptID:       receipt.ReceiptID,
 		PaymentDatetime: util.RandomDatetime(),
-		Amount:          util.RandomFloat64(85.0, 1200.0),
+		Amount:          util.RandomPaymentAmount(),
 		PaymentMethodID: paymentMethod.PaymentMethodID,
 	}
 
@@ -62,7 +62,7 @@ func TestUpdatePayment(t *testing.T) {
 		PaymentID:       payment1.PaymentID,
 		ReceiptID:       receipt.ReceiptID,
 		PaymentDatetime: util.RandomDatetime(),
-		Amount:          util.RandomFloat64(85.0, 1200.0),
+		Amount:          util.RandomPaymentAmount(),
 		PaymentMethodID: paymentMethod.PaymentMethodID,
 	}
 	err := testQueries.UpdatePayment(context.Background(), arg)

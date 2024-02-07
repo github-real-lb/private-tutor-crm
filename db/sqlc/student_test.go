@@ -28,7 +28,7 @@ func createRandomStudent(t *testing.T) Student {
 		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
 		CollegeID:   sql.NullInt64{Int64: college.CollegeID, Valid: true},
 		FunnelID:    sql.NullInt64{Int64: funnel.FunnelID, Valid: true},
-		HourlyFee:   sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
+		HourlyFee:   sql.NullFloat64{Float64: util.RandomLessonHourlyFee(), Valid: true},
 		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
@@ -88,7 +88,7 @@ func TestUpdateStudent(t *testing.T) {
 		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
 		CollegeID:   sql.NullInt64{Int64: college.CollegeID, Valid: true},
 		FunnelID:    sql.NullInt64{Int64: funnel.FunnelID, Valid: true},
-		HourlyFee:   sql.NullFloat64{Float64: util.RandomFloat64(85.0, 300.0), Valid: true},
+		HourlyFee:   sql.NullFloat64{Float64: util.RandomLessonHourlyFee(), Valid: true},
 		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
