@@ -61,9 +61,11 @@ func TestLessonInvoicingTx(t *testing.T) {
 		err := <-errs
 		require.NoError(t, err)
 
-		//check Lesson
 		result := <-results
 		require.NotEmpty(t, result)
+
+		//check Lesson
+		require.NotZero(t, result.Lesson.LessonID)
 
 		_, err = testQueries.GetLesson(context.Background(), result.Lesson.LessonID)
 		require.NoError(t, err)
@@ -75,10 +77,11 @@ func TestLessonInvoicingTx(t *testing.T) {
 		// check each Invoice in Invoices
 		for _, invoice := range result.Invoices {
 			require.NotEmpty(t, invoice)
+			require.Equal(t, invoice.LessonID, result.Lesson.LessonID)
+			require.True(t, invoice.Duration <= result.Lesson.Duration)
 
 			_, err = testQueries.GetInvoice(context.Background(), invoice.InvoiceID)
 			require.NoError(t, err)
-			require.Equal(t, invoice.LessonID, result.Lesson.LessonID)
 		}
 	}
 }
@@ -137,10 +140,11 @@ func TestPaymentsReceivingTx(t *testing.T) {
 		err := <-errs
 		require.NoError(t, err)
 
-		// check Receipt
 		result := <-results
 		require.NotEmpty(t, result)
 
+		// check Receipt
+		require.NotEmpty(t, result.Receipt)
 		_, err = testQueries.GetReceipt(context.Background(), result.Receipt.ReceiptID)
 		require.NoError(t, err)
 
@@ -149,12 +153,17 @@ func TestPaymentsReceivingTx(t *testing.T) {
 		require.Equal(t, len(result.Payments), nPayments)
 
 		// check each Payment in Payments
+		amount := 0.0
 		for _, payment := range result.Payments {
 			require.NotEmpty(t, payment)
+			require.Equal(t, payment.ReceiptID, result.Receipt.ReceiptID)
 
 			_, err = testQueries.GetPayment(context.Background(), payment.PaymentID)
 			require.NoError(t, err)
-			require.Equal(t, payment.ReceiptID, result.Receipt.ReceiptID)
+
+			amount += payment.Amount
 		}
+
+		require.Equal(t, result.Receipt.Amount, amount)
 	}
 }
