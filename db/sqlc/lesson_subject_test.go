@@ -55,7 +55,11 @@ func TestUpdateLessonSubject(t *testing.T) {
 
 func TestDeleteLessonSubject(t *testing.T) {
 	lessonSubject1 := createRandomLessonSubject(t)
-	testQueries.DeleteLessonSubject(context.Background(), lessonSubject1.SubjectID)
+	require.NotEmpty(t, lessonSubject1)
+	require.NotZero(t, lessonSubject1.SubjectID)
+
+	err := testQueries.DeleteLessonSubject(context.Background(), lessonSubject1.SubjectID)
+	require.NoError(t, err)
 
 	lessonSubject2, err := testQueries.GetLessonSubject(context.Background(), lessonSubject1.SubjectID)
 	require.Error(t, err)

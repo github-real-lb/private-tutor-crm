@@ -55,7 +55,11 @@ func TestUpdateFunnel(t *testing.T) {
 
 func TestDeleteFunnel(t *testing.T) {
 	funnel1 := createRandomFunnel(t)
-	testQueries.DeleteFunnel(context.Background(), funnel1.FunnelID)
+	require.NotEmpty(t, funnel1)
+	require.NotZero(t, funnel1.FunnelID)
+
+	err := testQueries.DeleteFunnel(context.Background(), funnel1.FunnelID)
+	require.NoError(t, err)
 
 	funnel2, err := testQueries.GetFunnel(context.Background(), funnel1.FunnelID)
 	require.Error(t, err)

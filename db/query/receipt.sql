@@ -24,6 +24,11 @@ UPDATE receipts
         notes = $5
 WHERE receipt_id = $1;
 
+-- name: UpdateReceiptAmount :exec
+UPDATE receipts
+  set   amount = $2
+WHERE receipt_id = $1;
+
 -- name: DeleteReceipt :exec
 DELETE FROM receipts
 WHERE receipt_id = $1;

@@ -55,7 +55,11 @@ func TestUpdateCollege(t *testing.T) {
 
 func TestDeleteCollege(t *testing.T) {
 	college1 := createRandomCollege(t)
-	testQueries.DeleteCollege(context.Background(), college1.CollegeID)
+	require.NotEmpty(t, college1)
+	require.NotZero(t, college1.CollegeID)
+
+	err := testQueries.DeleteCollege(context.Background(), college1.CollegeID)
+	require.NoError(t, err)
 
 	college2, err := testQueries.GetCollege(context.Background(), college1.CollegeID)
 	require.Error(t, err)

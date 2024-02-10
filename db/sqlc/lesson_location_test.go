@@ -55,7 +55,11 @@ func TestUpdateLessonLocation(t *testing.T) {
 
 func TestDeleteLessonLocation(t *testing.T) {
 	lessonLocation1 := createRandomLessonLocation(t)
-	testQueries.DeleteLessonLocation(context.Background(), lessonLocation1.LocationID)
+	require.NotEmpty(t, lessonLocation1)
+	require.NotZero(t, lessonLocation1.LocationID)
+
+	err := testQueries.DeleteLessonLocation(context.Background(), lessonLocation1.LocationID)
+	require.NoError(t, err)
 
 	lessonLocation2, err := testQueries.GetLessonLocation(context.Background(), lessonLocation1.LocationID)
 	require.Error(t, err)

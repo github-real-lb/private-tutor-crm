@@ -27,3 +27,7 @@ WHERE payment_id = $1;
 -- name: DeletePayment :exec
 DELETE FROM payments
 WHERE payment_id = $1;
+
+-- name: DeletePayments :exec
+DELETE FROM payments
+WHERE receipt_id = $1;

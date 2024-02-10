@@ -81,12 +81,41 @@ func TestUpdatePayment(t *testing.T) {
 
 func TestDeletePayment(t *testing.T) {
 	payment1 := createRandomPayment(t)
-	testQueries.DeletePayment(context.Background(), payment1.PaymentID)
+	err := testQueries.DeletePayment(context.Background(), payment1.PaymentID)
+	require.NoError(t, err)
 
 	payment2, err := testQueries.GetPayment(context.Background(), payment1.PaymentID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, payment2)
+}
+
+func TestDeletePayments(t *testing.T) {
+	payment1 := createRandomPayment(t)
+	payment2 := createRandomPayment(t)
+
+	// update payment2 to have the same receiptID as payment1
+	arg := UpdatePaymentParams{
+		PaymentID:       payment2.PaymentID,
+		ReceiptID:       payment1.ReceiptID,
+		PaymentDatetime: payment2.PaymentDatetime,
+		Amount:          payment2.Amount,
+		PaymentMethodID: payment2.PaymentMethodID,
+	}
+	err := testQueries.UpdatePayment(context.Background(), arg)
+	require.NoError(t, err)
+
+	testQueries.DeletePayments(context.Background(), payment1.ReceiptID)
+
+	payment, err := testQueries.GetPayment(context.Background(), payment1.PaymentID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, payment)
+
+	payment, err = testQueries.GetPayment(context.Background(), payment1.PaymentID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, payment)
 }
 
 func TestListPayments(t *testing.T) {

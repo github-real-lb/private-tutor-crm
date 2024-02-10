@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// createRandomReceipt tests adding a new random receipt to the database, and returns the Receipt data type.
+// createRandomReceipt adds a new random receipt to the database, and returns the Receipt data type.
 func createRandomReceipt(t *testing.T) Receipt {
 	student := createRandomStudent(t)
 
@@ -77,9 +77,31 @@ func TestUpdateReceipt(t *testing.T) {
 	require.Equal(t, arg.Notes, receipt2.Notes)
 }
 
+func TestUpdateReceiptAmount(t *testing.T) {
+	receipt1 := createRandomReceipt(t)
+
+	arg := UpdateReceiptAmountParams{
+		ReceiptID: receipt1.ReceiptID,
+		Amount:    util.RandomPaymentAmount(),
+	}
+	err := testQueries.UpdateReceiptAmount(context.Background(), arg)
+	require.NoError(t, err)
+
+	receipt2, err := testQueries.GetReceipt(context.Background(), arg.ReceiptID)
+	require.NoError(t, err)
+	require.NotEmpty(t, receipt2)
+
+	require.Equal(t, arg.ReceiptID, receipt2.ReceiptID)
+	require.Equal(t, arg.Amount, receipt2.Amount)
+}
+
 func TestDeleteReceipt(t *testing.T) {
 	receipt1 := createRandomReceipt(t)
-	testQueries.DeleteReceipt(context.Background(), receipt1.ReceiptID)
+	require.NotEmpty(t, receipt1)
+	require.NotZero(t, receipt1.ReceiptID)
+
+	err := testQueries.DeleteReceipt(context.Background(), receipt1.ReceiptID)
+	require.NoError(t, err)
 
 	receipt2, err := testQueries.GetReceipt(context.Background(), receipt1.ReceiptID)
 	require.Error(t, err)

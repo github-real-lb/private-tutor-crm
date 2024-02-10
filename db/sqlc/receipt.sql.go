@@ -141,3 +141,19 @@ func (q *Queries) UpdateReceipt(ctx context.Context, arg UpdateReceiptParams) er
 	)
 	return err
 }
+
+const updateReceiptAmount = `-- name: UpdateReceiptAmount :exec
+UPDATE receipts
+  set   amount = $2
+WHERE receipt_id = $1
+`
+
+type UpdateReceiptAmountParams struct {
+	ReceiptID int64   `json:"receipt_id"`
+	Amount    float64 `json:"amount"`
+}
+
+func (q *Queries) UpdateReceiptAmount(ctx context.Context, arg UpdateReceiptAmountParams) error {
+	_, err := q.db.ExecContext(ctx, updateReceiptAmount, arg.ReceiptID, arg.Amount)
+	return err
+}

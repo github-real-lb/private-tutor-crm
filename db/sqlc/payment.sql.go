@@ -54,6 +54,16 @@ func (q *Queries) DeletePayment(ctx context.Context, paymentID int64) error {
 	return err
 }
 
+const deletePayments = `-- name: DeletePayments :exec
+DELETE FROM payments
+WHERE receipt_id = $1
+`
+
+func (q *Queries) DeletePayments(ctx context.Context, receiptID int64) error {
+	_, err := q.db.ExecContext(ctx, deletePayments, receiptID)
+	return err
+}
+
 const getPayment = `-- name: GetPayment :one
 SELECT payment_id, receipt_id, payment_datetime, amount, payment_method_id FROM payments
 WHERE payment_id = $1 LIMIT 1

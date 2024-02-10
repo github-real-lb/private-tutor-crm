@@ -99,7 +99,11 @@ func TestUpdateInvoice(t *testing.T) {
 
 func TestDeleteInvoice(t *testing.T) {
 	invoice1 := createRandomInvoice(t)
-	testQueries.DeleteInvoice(context.Background(), invoice1.InvoiceID)
+	require.NotEmpty(t, invoice1)
+	require.NotZero(t, invoice1.InvoiceID)
+
+	err := testQueries.DeleteInvoice(context.Background(), invoice1.InvoiceID)
+	require.NoError(t, err)
 
 	invoice2, err := testQueries.GetInvoice(context.Background(), invoice1.InvoiceID)
 	require.Error(t, err)
