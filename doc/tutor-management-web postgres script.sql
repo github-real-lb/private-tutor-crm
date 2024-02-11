@@ -45,12 +45,12 @@ CREATE TABLE "invoices" (
   "invoice_id" bigserial PRIMARY KEY,
   "student_id" bigint NOT NULL,
   "lesson_id" bigint NOT NULL,
+  "invoice_datetime" timestamptz NOT NULL,
   "hourly_fee" float NOT NULL,
   "duration" bigint NOT NULL,
   "discount" float NOT NULL,
   "amount" float NOT NULL,
-  "notes" text,
-  "created_at" timestamptz NOT NULL DEFAULT (now())
+  "notes" text
 );
 
 CREATE TABLE "receipts" (
@@ -104,19 +104,31 @@ CREATE INDEX ON "lesson_subjects" ("name");
 
 CREATE INDEX ON "invoices" ("student_id");
 
-CREATE INDEX ON "invoices" ("lesson_id");
+CREATE INDEX ON "invoices" ("student_id", "invoice_datetime");
 
 CREATE INDEX ON "invoices" ("student_id", "lesson_id");
 
+CREATE INDEX ON "invoices" ("student_id", "lesson_id", "invoice_datetime");
+
+CREATE INDEX ON "invoices" ("lesson_id");
+
+CREATE INDEX ON "invoices" ("lesson_id", "invoice_datetime");
+
+CREATE INDEX ON "invoices" ("lesson_id", "student_id");
+
+CREATE INDEX ON "invoices" ("lesson_id", "student_id", "invoice_datetime");
+
 CREATE INDEX ON "receipts" ("student_id");
 
-CREATE INDEX ON "receipts" ("receipt_datetime");
+CREATE INDEX ON "receipts" ("student_id", "receipt_datetime");
 
-CREATE INDEX ON "receipts" ("receipt_datetime", "student_id");
+CREATE INDEX ON "receipts" ("receipt_datetime");
 
 CREATE INDEX ON "payments" ("receipt_id");
 
 CREATE INDEX ON "payments" ("payment_datetime");
+
+CREATE INDEX ON "payments" ("receipt_id", "payment_datetime");
 
 CREATE INDEX ON "payment_methods" ("name");
 

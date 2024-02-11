@@ -11,8 +11,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// createRandomReceiptTx adds a new random receipt with 'n' payments to the database, and returns the ReceiptPayments data type.
-func createRandomReceiptTx(t *testing.T, nPayments int) ReceiptWithPayments {
+// createRandomReceiptWithPaymentsTx adds a new random receipt with 'n' payments to the database.
+// It returns the ReceiptWithPayments data type.
+func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithPayments {
 	store := NewStore(testDB)
 	student := createRandomStudent(t)
 	paymentMethod := createRandomPaymentMethod(t)
@@ -33,7 +34,7 @@ func createRandomReceiptTx(t *testing.T, nPayments int) ReceiptWithPayments {
 		arg.ReceiptPaymentsParams = append(arg.ReceiptPaymentsParams, paymentArg)
 	}
 
-	result, err := store.CreateReceiptTx(context.Background(), arg)
+	result, err := store.CreateReceiptWithPaymentsTx(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, result)
 
@@ -75,8 +76,9 @@ func createRandomReceiptTx(t *testing.T, nPayments int) ReceiptWithPayments {
 	return result
 }
 
-// createRandomReceiptsTx adds 'n' random receipts to the database, and returns the StudentReceipts data type.
-func createRandomReceiptsTx(t *testing.T, nReceipts int) StudentReceiptsWithPayments {
+// createRandomStudentReceiptsWithPaymentsTx adds a single Student with 'n' random ReceiptsWithPayments to the database.
+// It returns the StudentReceiptsWithPayments data type.
+func createRandomStudentReceiptsWithPaymentsTx(t *testing.T, nReceipts int) StudentReceiptsWithPayments {
 	var result StudentReceiptsWithPayments
 	nPayments := 2 // number of payments created for each receipt
 
@@ -103,7 +105,7 @@ func createRandomReceiptsTx(t *testing.T, nReceipts int) StudentReceiptsWithPaym
 			arg.ReceiptPaymentsParams = append(arg.ReceiptPaymentsParams, paymentArg)
 		}
 
-		receiptWithPayments, err := store.CreateReceiptTx(context.Background(), arg)
+		receiptWithPayments, err := store.CreateReceiptWithPaymentsTx(context.Background(), arg)
 		require.NoError(t, err)
 		require.NotEmpty(t, receiptWithPayments)
 
@@ -148,15 +150,15 @@ func createRandomReceiptsTx(t *testing.T, nReceipts int) StudentReceiptsWithPaym
 	return result
 }
 
-func TestCreateReceiptTx(t *testing.T) {
-	createRandomReceiptTx(t, 2)
+func TestCreateReceiptWithPaymentsTx(t *testing.T) {
+	createRandomReceiptWithPaymentsTx(t, 2)
 }
 
-func TestGetReceiptTx(t *testing.T) {
+func TestGetReceiptWithPaymentsTx(t *testing.T) {
 	store := NewStore(testDB)
-	receiptWithPayments1 := createRandomReceiptTx(t, 5)
+	receiptWithPayments1 := createRandomReceiptWithPaymentsTx(t, 5)
 
-	receiptWithPayments2, err := store.GetReceiptTx(context.Background(), receiptWithPayments1.Receipt.ReceiptID)
+	receiptWithPayments2, err := store.GetReceiptWithPaymentsTx(context.Background(), receiptWithPayments1.Receipt.ReceiptID)
 	require.NoError(t, err)
 	require.NotEmpty(t, receiptWithPayments2)
 
@@ -183,13 +185,13 @@ func TestGetReceiptTx(t *testing.T) {
 	}
 }
 
-func TestGetReceiptsTxByStudent(t *testing.T) {
+func TestGetReceiptsWithPaymentsByStudentTx(t *testing.T) {
 	store := NewStore(testDB)
 
 	nReceipts := 5
-	studentReceiptsWithPayments1 := createRandomReceiptsTx(t, nReceipts)
+	studentReceiptsWithPayments1 := createRandomStudentReceiptsWithPaymentsTx(t, nReceipts)
 
-	studentReceiptsWithPayments2, err := store.GetReceiptsTxByStudent(context.Background(), studentReceiptsWithPayments1.StudentID, nReceipts+1, 0)
+	studentReceiptsWithPayments2, err := store.GetReceiptsWithPaymentsByStudentTx(context.Background(), studentReceiptsWithPayments1.StudentID, nReceipts+1, 0)
 	require.NoError(t, err)
 	require.NotEmpty(t, studentReceiptsWithPayments2)
 	require.Equal(t, studentReceiptsWithPayments2.StudentID, studentReceiptsWithPayments1.StudentID)
@@ -230,15 +232,15 @@ func TestGetReceiptsTxByStudent(t *testing.T) {
 	}
 }
 
-func TestDeleteReceiptTx(t *testing.T) {
+func TestDeleteReceiptWithPaymentsTx(t *testing.T) {
 	store := NewStore(testDB)
 
-	receiptWithPayments := createRandomReceiptTx(t, 2)
+	receiptWithPayments := createRandomReceiptWithPaymentsTx(t, 2)
 	require.NotEmpty(t, receiptWithPayments)
 	require.NotEmpty(t, receiptWithPayments.Receipt)
 	require.NotZero(t, receiptWithPayments.Receipt.ReceiptID)
 
-	err := store.DeleteReceiptTx(context.Background(), receiptWithPayments.Receipt.ReceiptID)
+	err := store.DeleteReceiptWithPaymentsTx(context.Background(), receiptWithPayments.Receipt.ReceiptID)
 	require.NoError(t, err)
 
 	// check receipt deleted

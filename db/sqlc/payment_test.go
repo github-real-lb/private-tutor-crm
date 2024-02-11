@@ -99,13 +99,16 @@ func TestGetPayments(t *testing.T) {
 	sort.Sort(payments1)
 
 	for i := 0; i < n; i++ {
-		require.NotEmpty(t, payments1[i])
+		payment1 := payments1[i]
+		payment2 := payments2[i]
 
-		require.Equal(t, payments1[i].PaymentID, payments2[i].PaymentID)
-		require.Equal(t, payments1[i].ReceiptID, payments2[i].ReceiptID)
-		require.WithinDuration(t, payments1[i].PaymentDatetime, payments2[i].PaymentDatetime, time.Second)
-		require.Equal(t, payments1[i].Amount, payments2[i].Amount)
-		require.Equal(t, payments1[i].PaymentMethodID, payments2[i].PaymentMethodID)
+		require.NotEmpty(t, payment2)
+
+		require.Equal(t, payment1.PaymentID, payment2.PaymentID)
+		require.Equal(t, payment1.ReceiptID, payment2.ReceiptID)
+		require.WithinDuration(t, payment1.PaymentDatetime, payment2.PaymentDatetime, time.Second)
+		require.Equal(t, payment1.Amount, payment2.Amount)
+		require.Equal(t, payment1.PaymentMethodID, payment2.PaymentMethodID)
 	}
 }
 
@@ -155,8 +158,8 @@ func TestDeletePayments(t *testing.T) {
 	err := testQueries.DeletePayments(context.Background(), payments[0].ReceiptID)
 	require.NoError(t, err)
 
-	for _, payment := range payments {
-		payment, err := testQueries.GetPayment(context.Background(), payment.PaymentID)
+	for _, v := range payments {
+		payment, err := testQueries.GetPayment(context.Background(), v.PaymentID)
 		require.Error(t, err)
 		require.EqualError(t, err, sql.ErrNoRows.Error())
 		require.Empty(t, payment)

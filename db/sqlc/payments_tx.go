@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-// Payments is used for all payments of a single receipt
 type Payments []Payment
 
 // Implement the sort.Interface methods for the Payments type
@@ -57,9 +56,9 @@ type CreateReceiptTxParams struct {
 	ReceiptPaymentsParams []CreateReceiptTxPaymentParams `json:"receipt_payments_params"`
 }
 
-// CreateReceiptTx creates a Receipt and all the Payments releated to it.
+// CreateReceiptWithPaymentsTx creates a Receipt and all the Payments releated to it.
 // Receipt amount is calculated end updated based on all payments.
-func (store *Store) CreateReceiptTx(ctx context.Context, arg CreateReceiptTxParams) (ReceiptWithPayments, error) {
+func (store *Store) CreateReceiptWithPaymentsTx(ctx context.Context, arg CreateReceiptTxParams) (ReceiptWithPayments, error) {
 	var result ReceiptWithPayments
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -107,8 +106,8 @@ func (store *Store) CreateReceiptTx(ctx context.Context, arg CreateReceiptTxPara
 	return result, err
 }
 
-// DeleteReceiptTx deletes a Receipt and all the Payments releated to it.
-func (store *Store) DeleteReceiptTx(ctx context.Context, receiptID int64) error {
+// DeleteReceiptWithPaymentsTx deletes a Receipt and all the Payments releated to it.
+func (store *Store) DeleteReceiptWithPaymentsTx(ctx context.Context, receiptID int64) error {
 	err := store.execTx(ctx, func(q *Queries) error {
 		err := q.DeletePayments(ctx, receiptID)
 		if err != nil {
@@ -126,9 +125,9 @@ func (store *Store) DeleteReceiptTx(ctx context.Context, receiptID int64) error 
 	return err
 }
 
-// GetReceiptTx gets a Receipt and all the Payments releated to it.
+// GetReceiptWithPaymentsTx gets a Receipt and all the Payments releated to it.
 
-func (store *Store) GetReceiptTx(ctx context.Context, receiptID int64) (ReceiptWithPayments, error) {
+func (store *Store) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int64) (ReceiptWithPayments, error) {
 	var result ReceiptWithPayments
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -150,10 +149,10 @@ func (store *Store) GetReceiptTx(ctx context.Context, receiptID int64) (ReceiptW
 	return result, err
 }
 
-// GetReceiptsTxByStudent gets all Receipts of a single student, and all the Payments releated to each receipt.
+// GetReceiptsWithPaymentsByStudentTx gets all Receipts of a single student, and all the Payments releated to each receipt.
 // limit is used to determine the number of rows (row_count) returned by the query.
 // offset is used to skip a number of rows before beginning to return the rows.
-func (store *Store) GetReceiptsTxByStudent(ctx context.Context, studentID int64, limit, offset int) (StudentReceiptsWithPayments, error) {
+func (store *Store) GetReceiptsWithPaymentsByStudentTx(ctx context.Context, studentID int64, limit, offset int) (StudentReceiptsWithPayments, error) {
 	var result StudentReceiptsWithPayments
 	result.StudentID = studentID
 

@@ -6,6 +6,20 @@ import (
 	"time"
 )
 
+type Invoices []Invoice
+
+// Implement the sort.Interface methods for the Invoices type
+func (inv Invoices) Len() int           { return len(inv) }
+func (inv Invoices) Swap(i, j int)      { inv[i], inv[j] = inv[j], inv[i] }
+func (inv Invoices) Less(i, j int) bool { return inv[i].InvoiceDatetime.Before(inv[j].InvoiceDatetime) }
+
+type Lessons []Lesson
+
+// Implement the sort.Interface methods for the Lessons type
+func (l Lessons) Len() int           { return len(l) }
+func (l Lessons) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
+func (l Lessons) Less(i, j int) bool { return l[i].LessonDatetime.Before(l[j].LessonDatetime) }
+
 // CreateLessonTxInvoiceParams contains the input paramaters of a single invoice, for the CreateLessonTx function.
 type CreateLessonTxInvoiceParams struct {
 	StudentID int64          `json:"student_id"`
