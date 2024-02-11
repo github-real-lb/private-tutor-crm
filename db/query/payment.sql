@@ -10,6 +10,11 @@ RETURNING *;
 SELECT * FROM payments
 WHERE payment_id = $1 LIMIT 1;
 
+-- name: GetPayments :many
+SELECT * FROM payments
+WHERE receipt_id = $1 
+ORDER BY receipt_id, payment_datetime;
+
 -- name: ListPayments :many
 SELECT * FROM payments
 ORDER BY receipt_id, payment_datetime

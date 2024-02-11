@@ -73,6 +73,49 @@ func (q *Queries) GetReceipt(ctx context.Context, receiptID int64) (Receipt, err
 	return i, err
 }
 
+const getReceiptsByStudent = `-- name: GetReceiptsByStudent :many
+SELECT receipt_id, student_id, receipt_datetime, amount, notes FROM receipts
+WHERE student_id = $1
+ORDER BY receipt_datetime
+LIMIT $2
+OFFSET $3
+`
+
+type GetReceiptsByStudentParams struct {
+	StudentID int64 `json:"student_id"`
+	Limit     int32 `json:"limit"`
+	Offset    int32 `json:"offset"`
+}
+
+func (q *Queries) GetReceiptsByStudent(ctx context.Context, arg GetReceiptsByStudentParams) ([]Receipt, error) {
+	rows, err := q.db.QueryContext(ctx, getReceiptsByStudent, arg.StudentID, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Receipt
+	for rows.Next() {
+		var i Receipt
+		if err := rows.Scan(
+			&i.ReceiptID,
+			&i.StudentID,
+			&i.ReceiptDatetime,
+			&i.Amount,
+			&i.Notes,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listReceipts = `-- name: ListReceipts :many
 SELECT receipt_id, student_id, receipt_datetime, amount, notes FROM receipts
 ORDER BY student_id, receipt_datetime

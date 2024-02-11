@@ -82,6 +82,41 @@ func (q *Queries) GetPayment(ctx context.Context, paymentID int64) (Payment, err
 	return i, err
 }
 
+const getPayments = `-- name: GetPayments :many
+SELECT payment_id, receipt_id, payment_datetime, amount, payment_method_id FROM payments
+WHERE receipt_id = $1 
+ORDER BY receipt_id, payment_datetime
+`
+
+func (q *Queries) GetPayments(ctx context.Context, receiptID int64) ([]Payment, error) {
+	rows, err := q.db.QueryContext(ctx, getPayments, receiptID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Payment
+	for rows.Next() {
+		var i Payment
+		if err := rows.Scan(
+			&i.PaymentID,
+			&i.ReceiptID,
+			&i.PaymentDatetime,
+			&i.Amount,
+			&i.PaymentMethodID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listPayments = `-- name: ListPayments :many
 SELECT payment_id, receipt_id, payment_datetime, amount, payment_method_id FROM payments
 ORDER BY receipt_id, payment_datetime

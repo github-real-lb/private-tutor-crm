@@ -114,8 +114,6 @@ func TestUpdateStudent(t *testing.T) {
 
 func TestDeleteStudent(t *testing.T) {
 	student1 := createRandomStudent(t)
-	require.NotEmpty(t, student1)
-	require.NotZero(t, student1.StudentID)
 
 	err := testQueries.DeleteStudent(context.Background(), student1.StudentID)
 	require.NoError(t, err)

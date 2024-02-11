@@ -97,8 +97,6 @@ func TestUpdateReceiptAmount(t *testing.T) {
 
 func TestDeleteReceipt(t *testing.T) {
 	receipt1 := createRandomReceipt(t)
-	require.NotEmpty(t, receipt1)
-	require.NotZero(t, receipt1.ReceiptID)
 
 	err := testQueries.DeleteReceipt(context.Background(), receipt1.ReceiptID)
 	require.NoError(t, err)

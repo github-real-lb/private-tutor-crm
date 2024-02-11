@@ -10,6 +10,13 @@ RETURNING *;
 SELECT * FROM receipts
 WHERE receipt_id = $1 LIMIT 1;
 
+-- name: GetReceiptsByStudent :many
+SELECT * FROM receipts
+WHERE student_id = $1
+ORDER BY receipt_datetime
+LIMIT $2
+OFFSET $3;
+
 -- name: ListReceipts :many
 SELECT * FROM receipts
 ORDER BY student_id, receipt_datetime

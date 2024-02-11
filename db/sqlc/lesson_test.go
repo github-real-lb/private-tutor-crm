@@ -86,8 +86,6 @@ func TestUpdateLesson(t *testing.T) {
 
 func TestDeleteLesson(t *testing.T) {
 	lesson1 := createRandomLesson(t)
-	require.NotEmpty(t, lesson1)
-	require.NotZero(t, lesson1.LessonID)
 
 	err := testQueries.DeleteLesson(context.Background(), lesson1.LessonID)
 	require.NoError(t, err)

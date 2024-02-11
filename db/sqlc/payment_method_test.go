@@ -55,8 +55,6 @@ func TestUpdatePaymentMethod(t *testing.T) {
 
 func TestDeletePaymentMethod(t *testing.T) {
 	paymentMethod1 := createRandomPaymentMethod(t)
-	require.NotEmpty(t, paymentMethod1)
-	require.NotZero(t, paymentMethod1.PaymentMethodID)
 
 	err := testQueries.DeletePaymentMethod(context.Background(), paymentMethod1.PaymentMethodID)
 	require.NoError(t, err)
