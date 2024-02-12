@@ -12,7 +12,6 @@ import (
 )
 
 // createRandomReceiptWithPaymentsTx adds a new random receipt with 'n' payments to the database.
-// It returns the ReceiptWithPayments data type.
 func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithPayments {
 	store := NewStore(testDB)
 	student := createRandomStudent(t)
@@ -44,11 +43,12 @@ func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithP
 
 	receipt, err := testQueries.GetReceipt(context.Background(), result.Receipt.ReceiptID)
 	require.NoError(t, err)
+	require.NotEmpty(t, receipt)
 
-	require.Equal(t, receipt.ReceiptID, result.Receipt.ReceiptID)
-	require.Equal(t, receipt.StudentID, result.Receipt.StudentID)
-	require.WithinDuration(t, receipt.ReceiptDatetime, result.Receipt.ReceiptDatetime, time.Second)
-	require.Equal(t, receipt.Notes, result.Receipt.Notes)
+	require.Equal(t, result.Receipt.ReceiptID, receipt.ReceiptID)
+	require.Equal(t, result.Receipt.StudentID, receipt.StudentID)
+	require.WithinDuration(t, result.Receipt.ReceiptDatetime, receipt.ReceiptDatetime, time.Second)
+	require.Equal(t, result.Receipt.Notes, receipt.Notes)
 
 	// check Payments
 	require.NotEmpty(t, result.Payments)
@@ -58,15 +58,17 @@ func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithP
 	amount := 0.0
 	for _, v := range result.Payments {
 		require.NotEmpty(t, v)
+		require.NotZero(t, v.PaymentID)
 
 		payment, err := testQueries.GetPayment(context.Background(), v.PaymentID)
 		require.NoError(t, err)
+		require.NotEmpty(t, payment)
 
-		require.Equal(t, payment.PaymentID, v.PaymentID)
-		require.Equal(t, payment.ReceiptID, v.ReceiptID)
-		require.WithinDuration(t, payment.PaymentDatetime, v.PaymentDatetime, time.Second)
-		require.Equal(t, payment.Amount, v.Amount)
-		require.Equal(t, payment.PaymentMethodID, v.PaymentMethodID)
+		require.Equal(t, v.PaymentID, payment.PaymentID)
+		require.Equal(t, v.ReceiptID, payment.ReceiptID)
+		require.WithinDuration(t, v.PaymentDatetime, payment.PaymentDatetime, time.Second)
+		require.Equal(t, v.Amount, payment.Amount)
+		require.Equal(t, v.PaymentMethodID, payment.PaymentMethodID)
 
 		amount += payment.Amount
 	}
@@ -77,7 +79,6 @@ func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithP
 }
 
 // createRandomStudentReceiptsWithPaymentsTx adds a single Student with 'n' random ReceiptsWithPayments to the database.
-// It returns the StudentReceiptsWithPayments data type.
 func createRandomStudentReceiptsWithPaymentsTx(t *testing.T, nReceipts int) StudentReceiptsWithPayments {
 	var result StudentReceiptsWithPayments
 	nPayments := 2 // number of payments created for each receipt
@@ -115,6 +116,7 @@ func createRandomStudentReceiptsWithPaymentsTx(t *testing.T, nReceipts int) Stud
 
 		receipt, err := testQueries.GetReceipt(context.Background(), receiptWithPayments.Receipt.ReceiptID)
 		require.NoError(t, err)
+		require.NotEmpty(t, receipt)
 
 		require.Equal(t, receipt.ReceiptID, receiptWithPayments.Receipt.ReceiptID)
 		require.Equal(t, receipt.StudentID, receiptWithPayments.Receipt.StudentID)
@@ -129,9 +131,11 @@ func createRandomStudentReceiptsWithPaymentsTx(t *testing.T, nReceipts int) Stud
 		amount := 0.0
 		for _, v := range receiptWithPayments.Payments {
 			require.NotEmpty(t, v)
+			require.NotZero(t, v.PaymentID)
 
 			payment, err := testQueries.GetPayment(context.Background(), v.PaymentID)
 			require.NoError(t, err)
+			require.NotEmpty(t, payment)
 
 			require.Equal(t, payment.PaymentID, v.PaymentID)
 			require.Equal(t, payment.ReceiptID, v.ReceiptID)
@@ -162,26 +166,56 @@ func TestGetReceiptWithPaymentsTx(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, receiptWithPayments2)
 
-	//check ReceiptWithPayments
+	//check Receipt
 	require.NotEmpty(t, receiptWithPayments2.Receipt)
-	require.Equal(t, receiptWithPayments1.Receipt.ReceiptID, receiptWithPayments2.Receipt.ReceiptID)
-	require.Equal(t, receiptWithPayments1.Receipt.StudentID, receiptWithPayments2.Receipt.StudentID)
-	require.WithinDuration(t, receiptWithPayments1.Receipt.ReceiptDatetime, receiptWithPayments2.Receipt.ReceiptDatetime, time.Second)
-	require.Equal(t, receiptWithPayments1.Receipt.Amount, receiptWithPayments2.Receipt.Amount)
-	require.Equal(t, receiptWithPayments1.Receipt.Notes, receiptWithPayments2.Receipt.Notes)
+
+	receipt1 := receiptWithPayments1.Receipt
+	receipt2 := receiptWithPayments2.Receipt
+
+	require.Equal(t, receipt1.ReceiptID, receipt2.ReceiptID)
+	require.Equal(t, receipt1.StudentID, receipt2.StudentID)
+	require.WithinDuration(t, receipt1.ReceiptDatetime, receipt2.ReceiptDatetime, time.Second)
+	require.Equal(t, receipt1.Amount, receipt2.Amount)
+	require.Equal(t, receipt1.Notes, receipt2.Notes)
 
 	// check Payments
 	require.NotEmpty(t, receiptWithPayments2.Payments)
 	require.Equal(t, len(receiptWithPayments2.Payments), len(receiptWithPayments1.Payments))
 
 	// check each Payment in Payments
-	for i, payment := range receiptWithPayments2.Payments {
-		require.NotEmpty(t, payment)
-		require.Equal(t, payment.PaymentID, receiptWithPayments1.Payments[i].PaymentID)
-		require.Equal(t, payment.ReceiptID, receiptWithPayments1.Payments[i].ReceiptID)
-		require.WithinDuration(t, payment.PaymentDatetime, receiptWithPayments1.Payments[i].PaymentDatetime, time.Second)
-		require.Equal(t, payment.Amount, receiptWithPayments1.Payments[i].Amount)
-		require.Equal(t, payment.PaymentMethodID, receiptWithPayments1.Payments[i].PaymentMethodID)
+	for i, payment2 := range receiptWithPayments2.Payments {
+		require.NotEmpty(t, payment2)
+
+		payment1 := receiptWithPayments1.Payments[i]
+
+		require.Equal(t, payment1.PaymentID, payment2.PaymentID)
+		require.Equal(t, payment1.ReceiptID, payment2.ReceiptID)
+		require.WithinDuration(t, payment1.PaymentDatetime, payment2.PaymentDatetime, time.Second)
+		require.Equal(t, payment1.Amount, payment2.Amount)
+		require.Equal(t, payment1.PaymentMethodID, payment2.PaymentMethodID)
+	}
+}
+
+func TestDeleteReceiptWithPaymentsTx(t *testing.T) {
+	store := NewStore(testDB)
+
+	receiptWithPayments := createRandomReceiptWithPaymentsTx(t, 2)
+
+	err := store.DeleteReceiptWithPaymentsTx(context.Background(), receiptWithPayments.Receipt.ReceiptID)
+	require.NoError(t, err)
+
+	// check receipt deleted
+	receipt, err := testQueries.GetReceipt(context.Background(), receiptWithPayments.Receipt.ReceiptID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, receipt)
+
+	// check payments deleted
+	for _, v := range receiptWithPayments.Payments {
+		payment, err := testQueries.GetPayment(context.Background(), v.PaymentID)
+		require.Error(t, err)
+		require.EqualError(t, err, sql.ErrNoRows.Error())
+		require.Empty(t, payment)
 	}
 }
 
@@ -230,31 +264,4 @@ func TestGetReceiptsWithPaymentsByStudentTx(t *testing.T) {
 			require.Equal(t, payment2.PaymentMethodID, payment1.PaymentMethodID)
 		}
 	}
-}
-
-func TestDeleteReceiptWithPaymentsTx(t *testing.T) {
-	store := NewStore(testDB)
-
-	receiptWithPayments := createRandomReceiptWithPaymentsTx(t, 2)
-	require.NotEmpty(t, receiptWithPayments)
-	require.NotEmpty(t, receiptWithPayments.Receipt)
-	require.NotZero(t, receiptWithPayments.Receipt.ReceiptID)
-
-	err := store.DeleteReceiptWithPaymentsTx(context.Background(), receiptWithPayments.Receipt.ReceiptID)
-	require.NoError(t, err)
-
-	// check receipt deleted
-	receipt, err := testQueries.GetReceipt(context.Background(), receiptWithPayments.Receipt.ReceiptID)
-	require.Error(t, err)
-	require.EqualError(t, err, sql.ErrNoRows.Error())
-	require.Empty(t, receipt)
-
-	// check payments deleted
-	for _, v := range receiptWithPayments.Payments {
-		payment, err := testQueries.GetPayment(context.Background(), v.PaymentID)
-		require.Error(t, err)
-		require.EqualError(t, err, sql.ErrNoRows.Error())
-		require.Empty(t, payment)
-	}
-
 }

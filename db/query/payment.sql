@@ -33,6 +33,6 @@ WHERE payment_id = $1;
 DELETE FROM payments
 WHERE payment_id = $1;
 
--- name: DeletePayments :exec
+-- name: DeletePaymentsByReceipt :exec
 DELETE FROM payments
 WHERE receipt_id = $1;

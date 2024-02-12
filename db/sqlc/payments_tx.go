@@ -41,14 +41,14 @@ type StudentReceiptsWithPayments struct {
 	ReceiptsWithPayments ReceiptsWithPayments `json:"receipts_with_payments"`
 }
 
-// CreateReceiptTxPaymentParams contains the input paramaters of a single payment, for the CreateReceiptTx function.
+// CreateReceiptTxPaymentParams contains the input paramaters of a single payment, for the CreateReceiptWithPaymentsTx function.
 type CreateReceiptTxPaymentParams struct {
 	PaymentDatetime time.Time `json:"payment_datetime"`
 	Amount          float64   `json:"amount"`
 	PaymentMethodID int64     `json:"payment_method_id"`
 }
 
-// CreateReceiptTxParams contains the input paramaters of a single reciept and its payments, for the CreateReceiptTx function.
+// CreateReceiptTxParams contains the input paramaters of a single reciept and its payments, for the CreateReceiptWithPaymentsTx function.
 type CreateReceiptTxParams struct {
 	StudentID             int64                          `json:"student_id"`
 	ReceiptDatetime       time.Time                      `json:"receipt_datetime"`
@@ -106,25 +106,6 @@ func (store *Store) CreateReceiptWithPaymentsTx(ctx context.Context, arg CreateR
 	return result, err
 }
 
-// DeleteReceiptWithPaymentsTx deletes a Receipt and all the Payments releated to it.
-func (store *Store) DeleteReceiptWithPaymentsTx(ctx context.Context, receiptID int64) error {
-	err := store.execTx(ctx, func(q *Queries) error {
-		err := q.DeletePayments(ctx, receiptID)
-		if err != nil {
-			return err
-		}
-
-		err = q.DeleteReceipt(ctx, receiptID)
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	return err
-}
-
 // GetReceiptWithPaymentsTx gets a Receipt and all the Payments releated to it.
 
 func (store *Store) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int64) (ReceiptWithPayments, error) {
@@ -147,6 +128,25 @@ func (store *Store) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int6
 	})
 
 	return result, err
+}
+
+// DeleteReceiptWithPaymentsTx deletes a Receipt and all the Payments releated to it.
+func (store *Store) DeleteReceiptWithPaymentsTx(ctx context.Context, receiptID int64) error {
+	err := store.execTx(ctx, func(q *Queries) error {
+		err := q.DeletePaymentsByReceipt(ctx, receiptID)
+		if err != nil {
+			return err
+		}
+
+		err = q.DeleteReceipt(ctx, receiptID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return err
 }
 
 // GetReceiptsWithPaymentsByStudentTx gets all Receipts of a single student, and all the Payments releated to each receipt.

@@ -20,7 +20,13 @@ func (l Lessons) Len() int           { return len(l) }
 func (l Lessons) Swap(i, j int)      { l[i], l[j] = l[j], l[i] }
 func (l Lessons) Less(i, j int) bool { return l[i].LessonDatetime.Before(l[j].LessonDatetime) }
 
-// CreateLessonTxInvoiceParams contains the input paramaters of a single invoice, for the CreateLessonTx function.
+// LessonWithInvoices is used for a single lesson and all the Invoices issued for participating students.
+type LessonWithInvoices struct {
+	Lesson   Lesson   `json:"lesson"`
+	Invoices Invoices `json:"invoices"`
+}
+
+// CreateLessonTxInvoiceParams contains the input paramaters of a single invoice, for the CreateLessonWithInvoicesTx function.
 type CreateLessonTxInvoiceParams struct {
 	StudentID int64          `json:"student_id"`
 	HourlyFee float64        `json:"hourly_fee"`
@@ -30,7 +36,7 @@ type CreateLessonTxInvoiceParams struct {
 	Notes     sql.NullString `json:"notes"`
 }
 
-// CreateLessonTxParams contains the input paramaters of a single lesson and its Invoices, for the CreateLessonTx function.
+// CreateLessonTxParams contains the input paramaters of a single lesson and its Invoices, for the CreateLessonWithInvoicesTx function.
 type CreateLessonTxParams struct {
 	LessonDatetime       time.Time                     `json:"lesson_datetime"`
 	Duration             int64                         `json:"duration"`
@@ -40,16 +46,9 @@ type CreateLessonTxParams struct {
 	LessonInvoicesParams []CreateLessonTxInvoiceParams `json:"lesson_invoices_params"`
 }
 
-// LessonTxResult is the result lesson and its invoices, for any lesson transaction.
-type LessonTxResult struct {
-	Lesson   Lesson    `json:"lesson"`
-	Invoices []Invoice `json:"invoices"`
-}
-
-// CreateLessonTx creates a lesson that took place,
-// and invoices for all the students that took part in the lesson.
-func (store *Store) CreateLessonTx(ctx context.Context, arg CreateLessonTxParams) (LessonTxResult, error) {
-	var result LessonTxResult
+// CreateLessonTx creates a lesson held and invoices for all the students that took part in the lesson.
+func (store *Store) CreateLessonWithInvoicesTx(ctx context.Context, arg CreateLessonTxParams) (LessonWithInvoices, error) {
+	var result LessonWithInvoices
 
 	err := store.execTx(ctx, func(q *Queries) error {
 		var err error
@@ -90,4 +89,46 @@ func (store *Store) CreateLessonTx(ctx context.Context, arg CreateLessonTxParams
 	})
 
 	return result, err
+}
+
+// GetLessonWithInvoicesTx gets a Lesson and all the Invoices releated to it.
+func (store *Store) GetLessonWithInvoicesTx(ctx context.Context, lessonID int64) (LessonWithInvoices, error) {
+	var result LessonWithInvoices
+
+	err := store.execTx(ctx, func(q *Queries) error {
+		var err error
+
+		result.Lesson, err = q.GetLesson(ctx, lessonID)
+		if err != nil {
+			return err
+		}
+
+		result.Invoices, err = q.GetInvoicesByLesson(ctx, lessonID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return result, err
+}
+
+// DeleteLessonWithInvoicesTx deletes a Lesson and all the Invoices releated to it.
+func (store *Store) DeleteLessonWithInvoicesTx(ctx context.Context, lessonID int64) error {
+	err := store.execTx(ctx, func(q *Queries) error {
+		err := q.DeleteInvoicesByLesson(ctx, lessonID)
+		if err != nil {
+			return err
+		}
+
+		err = q.DeleteLesson(ctx, lessonID)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	return err
 }

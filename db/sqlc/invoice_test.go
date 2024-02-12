@@ -31,6 +31,8 @@ func createRandomInvoice(t *testing.T) Invoice {
 	require.NoError(t, err)
 	require.NotEmpty(t, invoice)
 
+	require.NotZero(t, invoice.InvoiceID)
+
 	require.Equal(t, arg.StudentID, invoice.StudentID)
 	require.Equal(t, arg.LessonID, invoice.LessonID)
 	require.WithinDuration(t, arg.InvoiceDatetime, invoice.InvoiceDatetime, time.Second)
@@ -39,8 +41,6 @@ func createRandomInvoice(t *testing.T) Invoice {
 	require.Equal(t, arg.Discount, invoice.Discount)
 	require.Equal(t, arg.Amount, invoice.Amount)
 	require.Equal(t, arg.Notes, invoice.Notes)
-
-	require.NotZero(t, invoice.InvoiceID)
 
 	return invoice
 }

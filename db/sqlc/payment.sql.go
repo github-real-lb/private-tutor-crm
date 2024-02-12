@@ -54,13 +54,13 @@ func (q *Queries) DeletePayment(ctx context.Context, paymentID int64) error {
 	return err
 }
 
-const deletePayments = `-- name: DeletePayments :exec
+const deletePaymentsByReceipt = `-- name: DeletePaymentsByReceipt :exec
 DELETE FROM payments
 WHERE receipt_id = $1
 `
 
-func (q *Queries) DeletePayments(ctx context.Context, receiptID int64) error {
-	_, err := q.db.ExecContext(ctx, deletePayments, receiptID)
+func (q *Queries) DeletePaymentsByReceipt(ctx context.Context, receiptID int64) error {
+	_, err := q.db.ExecContext(ctx, deletePaymentsByReceipt, receiptID)
 	return err
 }
 

@@ -27,12 +27,12 @@ func createRandomPayment(t *testing.T) Payment {
 	require.NoError(t, err)
 	require.NotEmpty(t, payment)
 
+	require.NotZero(t, payment.PaymentID)
+
 	require.Equal(t, arg.ReceiptID, payment.ReceiptID)
 	require.WithinDuration(t, arg.PaymentDatetime, payment.PaymentDatetime, time.Second)
 	require.Equal(t, arg.Amount, payment.Amount)
 	require.Equal(t, arg.PaymentMethodID, payment.PaymentMethodID)
-
-	require.NotZero(t, payment.PaymentID)
 
 	return payment
 }
@@ -155,7 +155,7 @@ func TestDeletePayments(t *testing.T) {
 
 	payments := createRandomPayments(t, n)
 
-	err := testQueries.DeletePayments(context.Background(), payments[0].ReceiptID)
+	err := testQueries.DeletePaymentsByReceipt(context.Background(), payments[0].ReceiptID)
 	require.NoError(t, err)
 
 	for _, v := range payments {

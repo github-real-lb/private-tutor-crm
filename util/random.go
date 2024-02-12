@@ -109,9 +109,9 @@ func RandomLessonHourlyFee() float64 {
 	return RandomFloat64(85.0, 300.0)
 }
 
-// RandomDiscount generates a random discount % between 0.0 (0%) to 0.99 (99%)
+// RandomDiscount generates a random discount % between 0.0 (0%) to 0.30 (30%)
 func RandomDiscount() float64 {
-	return RandomFloat64(0.0, 0.99)
+	return RandomFloat64(0.0, 0.30)
 }
 
 // RandomInvoiceAmount returns random float64 between 85.0 and 1200.0

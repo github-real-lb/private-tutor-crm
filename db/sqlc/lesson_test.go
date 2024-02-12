@@ -27,13 +27,13 @@ func createRandomLesson(t *testing.T) Lesson {
 	require.NoError(t, err)
 	require.NotEmpty(t, lesson)
 
+	require.NotZero(t, lesson.LessonID)
+
 	require.WithinDuration(t, arg.LessonDatetime, lesson.LessonDatetime, time.Second)
 	require.Equal(t, arg.Duration, lesson.Duration)
 	require.Equal(t, arg.LocationID, lesson.LocationID)
 	require.Equal(t, arg.SubjectID, lesson.SubjectID)
 	require.Equal(t, arg.Notes, lesson.Notes)
-
-	require.NotZero(t, lesson.LessonID)
 
 	return lesson
 }

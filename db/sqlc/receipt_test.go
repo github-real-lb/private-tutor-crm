@@ -25,12 +25,12 @@ func createRandomReceipt(t *testing.T) Receipt {
 	require.NoError(t, err)
 	require.NotEmpty(t, receipt)
 
+	require.NotZero(t, receipt.ReceiptID)
+
 	require.Equal(t, arg.StudentID, receipt.StudentID)
 	require.WithinDuration(t, arg.ReceiptDatetime, receipt.ReceiptDatetime, time.Second)
 	require.Equal(t, arg.Amount, receipt.Amount)
 	require.Equal(t, arg.Notes, receipt.Notes)
-
-	require.NotZero(t, receipt.ReceiptID)
 
 	return receipt
 }
