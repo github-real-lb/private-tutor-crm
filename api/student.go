@@ -49,3 +49,30 @@ func (server *Server) createStudent(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, student)
 }
+
+type getStudentRequest struct {
+	ID int64 `uri:"id" binding:"required,min=1"`
+}
+
+func (server *Server) getStudent(ctx *gin.Context) {
+	var req getStudentRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		return
+	}
+
+	student, err := server.store.GetStudent(ctx, req.ID)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, student)
+}
