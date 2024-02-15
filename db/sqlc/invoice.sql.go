@@ -111,7 +111,7 @@ func (q *Queries) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([]In
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Invoice
+	items := []Invoice{}
 	for rows.Next() {
 		var i Invoice
 		if err := rows.Scan(
@@ -150,7 +150,7 @@ func (q *Queries) GetInvoicesByStudent(ctx context.Context, studentID int64) ([]
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Invoice
+	items := []Invoice{}
 	for rows.Next() {
 		var i Invoice
 		if err := rows.Scan(
@@ -195,7 +195,7 @@ func (q *Queries) ListInvoices(ctx context.Context, arg ListInvoicesParams) ([]I
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Invoice
+	items := []Invoice{}
 	for rows.Next() {
 		var i Invoice
 		if err := rows.Scan(

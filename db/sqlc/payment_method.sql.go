@@ -65,7 +65,7 @@ func (q *Queries) ListPaymentMethods(ctx context.Context, arg ListPaymentMethods
 		return nil, err
 	}
 	defer rows.Close()
-	var items []PaymentMethod
+	items := []PaymentMethod{}
 	for rows.Next() {
 		var i PaymentMethod
 		if err := rows.Scan(&i.PaymentMethodID, &i.Name); err != nil {

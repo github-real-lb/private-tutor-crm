@@ -93,7 +93,7 @@ func (q *Queries) GetReceiptsByStudent(ctx context.Context, arg GetReceiptsByStu
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Receipt
+	items := []Receipt{}
 	for rows.Next() {
 		var i Receipt
 		if err := rows.Scan(
@@ -134,7 +134,7 @@ func (q *Queries) ListReceipts(ctx context.Context, arg ListReceiptsParams) ([]R
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Receipt
+	items := []Receipt{}
 	for rows.Next() {
 		var i Receipt
 		if err := rows.Scan(

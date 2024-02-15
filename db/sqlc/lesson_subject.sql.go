@@ -65,7 +65,7 @@ func (q *Queries) ListLessonSubjects(ctx context.Context, arg ListLessonSubjects
 		return nil, err
 	}
 	defer rows.Close()
-	var items []LessonSubject
+	items := []LessonSubject{}
 	for rows.Next() {
 		var i LessonSubject
 		if err := rows.Scan(&i.SubjectID, &i.Name); err != nil {

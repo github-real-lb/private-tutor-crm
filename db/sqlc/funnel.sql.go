@@ -65,7 +65,7 @@ func (q *Queries) ListFunnels(ctx context.Context, arg ListFunnelsParams) ([]Fun
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Funnel
+	items := []Funnel{}
 	for rows.Next() {
 		var i Funnel
 		if err := rows.Scan(&i.FunnelID, &i.Name); err != nil {

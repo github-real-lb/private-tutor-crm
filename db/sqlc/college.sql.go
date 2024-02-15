@@ -65,7 +65,7 @@ func (q *Queries) ListColleges(ctx context.Context, arg ListCollegesParams) ([]C
 		return nil, err
 	}
 	defer rows.Close()
-	var items []College
+	items := []College{}
 	for rows.Next() {
 		var i College
 		if err := rows.Scan(&i.CollegeID, &i.Name); err != nil {

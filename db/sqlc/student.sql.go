@@ -112,7 +112,7 @@ func (q *Queries) ListStudents(ctx context.Context, arg ListStudentsParams) ([]S
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Student
+	items := []Student{}
 	for rows.Next() {
 		var i Student
 		if err := rows.Scan(
