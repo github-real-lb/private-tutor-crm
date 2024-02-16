@@ -58,7 +58,7 @@ type CreateReceiptTxParams struct {
 
 // CreateReceiptWithPaymentsTx creates a Receipt and all the Payments releated to it.
 // Receipt amount is calculated end updated based on all payments.
-func (store *Store) CreateReceiptWithPaymentsTx(ctx context.Context, arg CreateReceiptTxParams) (ReceiptWithPayments, error) {
+func (store *SQLStore) CreateReceiptWithPaymentsTx(ctx context.Context, arg CreateReceiptTxParams) (ReceiptWithPayments, error) {
 	var result ReceiptWithPayments
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -108,7 +108,7 @@ func (store *Store) CreateReceiptWithPaymentsTx(ctx context.Context, arg CreateR
 
 // GetReceiptWithPaymentsTx gets a Receipt and all the Payments releated to it.
 
-func (store *Store) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int64) (ReceiptWithPayments, error) {
+func (store *SQLStore) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int64) (ReceiptWithPayments, error) {
 	var result ReceiptWithPayments
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -131,7 +131,7 @@ func (store *Store) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int6
 }
 
 // DeleteReceiptWithPaymentsTx deletes a Receipt and all the Payments releated to it.
-func (store *Store) DeleteReceiptWithPaymentsTx(ctx context.Context, receiptID int64) error {
+func (store *SQLStore) DeleteReceiptWithPaymentsTx(ctx context.Context, receiptID int64) error {
 	err := store.execTx(ctx, func(q *Queries) error {
 		err := q.DeletePaymentsByReceipt(ctx, receiptID)
 		if err != nil {
@@ -152,7 +152,7 @@ func (store *Store) DeleteReceiptWithPaymentsTx(ctx context.Context, receiptID i
 // GetReceiptsWithPaymentsByStudentTx gets all Receipts of a single student, and all the Payments releated to each receipt.
 // limit is used to determine the number of rows (row_count) returned by the query.
 // offset is used to skip a number of rows before beginning to return the rows.
-func (store *Store) GetReceiptsWithPaymentsByStudentTx(ctx context.Context, studentID int64, limit, offset int) (StudentReceiptsWithPayments, error) {
+func (store *SQLStore) GetReceiptsWithPaymentsByStudentTx(ctx context.Context, studentID int64, limit, offset int) (StudentReceiptsWithPayments, error) {
 	var result StudentReceiptsWithPayments
 	result.StudentID = studentID
 

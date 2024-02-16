@@ -7,29 +7,29 @@ import (
 
 // Server serves all HTTP requests for the Tutor Management service.
 type Server struct {
-	store  *db.Store
+	store  db.Store
 	router *gin.Engine
 }
 
 // NewServer creates a new HTTP server and setup routing.
-func NewServer(store *db.Store) *Server {
-	server := &Server{store: store}
+func NewServer(store db.Store) *Server {
+	// creating the server type with a gin router
 	router := gin.Default()
+	server := &Server{
+		store:  store,
+		router: router}
 
-	// College HTTP Handlers
+	// adding the colleges HTTP handlers to the router
 	router.POST("/colleges", server.createCollege)
 	router.GET("/colleges/:id", server.getCollege)
 	router.GET("/colleges", server.listColleges)
 	router.PUT("/colleges", server.updateCollege)
 
-	// Student HTTP Handlers
+	// adding the students HTTP handlers to the router
 	router.POST("/students", server.createStudent)
 	router.GET("/students/:id", server.getStudent)
 	router.GET("/students", server.listStudents)
 	router.PUT("/students", server.updateStudent)
-	//router.DELETE("/students/:id", server.deleteStudent) - Transaction
-
-	server.router = router
 
 	return server
 }

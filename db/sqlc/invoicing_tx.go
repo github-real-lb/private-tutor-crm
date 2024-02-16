@@ -47,7 +47,7 @@ type CreateLessonTxParams struct {
 }
 
 // CreateLessonTx creates a lesson held and invoices for all the students that took part in the lesson.
-func (store *Store) CreateLessonWithInvoicesTx(ctx context.Context, arg CreateLessonTxParams) (LessonWithInvoices, error) {
+func (store *SQLStore) CreateLessonWithInvoicesTx(ctx context.Context, arg CreateLessonTxParams) (LessonWithInvoices, error) {
 	var result LessonWithInvoices
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -92,7 +92,7 @@ func (store *Store) CreateLessonWithInvoicesTx(ctx context.Context, arg CreateLe
 }
 
 // GetLessonWithInvoicesTx gets a Lesson and all the Invoices releated to it.
-func (store *Store) GetLessonWithInvoicesTx(ctx context.Context, lessonID int64) (LessonWithInvoices, error) {
+func (store *SQLStore) GetLessonWithInvoicesTx(ctx context.Context, lessonID int64) (LessonWithInvoices, error) {
 	var result LessonWithInvoices
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -115,7 +115,7 @@ func (store *Store) GetLessonWithInvoicesTx(ctx context.Context, lessonID int64)
 }
 
 // DeleteLessonWithInvoicesTx deletes a Lesson and all the Invoices releated to it.
-func (store *Store) DeleteLessonWithInvoicesTx(ctx context.Context, lessonID int64) error {
+func (store *SQLStore) DeleteLessonWithInvoicesTx(ctx context.Context, lessonID int64) error {
 	err := store.execTx(ctx, func(q *Queries) error {
 		err := q.DeleteInvoicesByLesson(ctx, lessonID)
 		if err != nil {
