@@ -60,7 +60,7 @@ func RandomDatetime() time.Time {
 
 // RandomName generates a random first or last name of 8 characters long
 func RandomName() string {
-	return Initcap(RandomString(8))
+	return RandomString(8)
 }
 
 // RandomName generates a random e-mail
