@@ -25,4 +25,7 @@ test:
 server:
 	go run main.go
 
-.PHONY: postgrs start createdb  dropdb migrateup migratedown sqlc test server
+mock:
+	mockgen -destination db/mock/store.go -package mockdb  github.com/github-real-lb/tutor-management-web/db/sqlc Store
+
+.PHONY: postgrs start createdb  dropdb migrateup migratedown sqlc test server mock

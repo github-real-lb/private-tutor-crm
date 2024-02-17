@@ -63,7 +63,6 @@ func (server *Server) getStudent(ctx *gin.Context) {
 	}
 
 	student, err := server.store.GetStudent(ctx, req.ID)
-
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResonse(err))
@@ -96,7 +95,6 @@ func (server *Server) listStudents(ctx *gin.Context) {
 	}
 
 	students, err := server.store.ListStudents(ctx, arg)
-
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
 		return
@@ -140,7 +138,6 @@ func (server *Server) updateStudent(ctx *gin.Context) {
 	}
 
 	err := server.store.UpdateStudent(ctx, arg)
-
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
 		return
