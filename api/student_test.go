@@ -38,8 +38,8 @@ func TestGetStudentAPI(t *testing.T) {
 	}
 }
 
-func randomStudent() db.Student {
-	return db.Student{
+func randomStudent() *db.Student {
+	return &db.Student{
 		StudentID:   util.RandomInt64(1, 1000),
 		FirstName:   util.RandomName(),
 		LastName:    util.RandomName(),
@@ -54,7 +54,7 @@ func randomStudent() db.Student {
 }
 
 // getStudentTestCases generate a collection of tests for the getStudent API
-func getStudentTestCases(student db.Student) []getTestCase {
+func getStudentTestCases(student *db.Student) []getTestCase {
 	var testCases []getTestCase
 
 	// StatusOK API response test case
@@ -81,7 +81,7 @@ func getStudentTestCases(student db.Student) []getTestCase {
 			store.EXPECT().
 				GetStudent(gomock.Any(), student.StudentID).
 				Times(1).
-				Return(db.Student{}, sql.ErrNoRows)
+				Return(&db.Student{}, sql.ErrNoRows)
 		},
 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 			require.Equal(t, http.StatusNotFound, recorder.Code)
@@ -96,7 +96,7 @@ func getStudentTestCases(student db.Student) []getTestCase {
 			store.EXPECT().
 				GetStudent(gomock.Any(), student.StudentID).
 				Times(1).
-				Return(db.Student{}, sql.ErrConnDone)
+				Return(&db.Student{}, sql.ErrConnDone)
 		},
 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 			require.Equal(t, http.StatusInternalServerError, recorder.Code)

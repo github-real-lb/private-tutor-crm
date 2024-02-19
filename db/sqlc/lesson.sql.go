@@ -28,7 +28,7 @@ type CreateLessonParams struct {
 	Notes          sql.NullString `json:"notes"`
 }
 
-func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Lesson, error) {
+func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (*Lesson, error) {
 	row := q.db.QueryRowContext(ctx, createLesson,
 		arg.LessonDatetime,
 		arg.Duration,
@@ -45,7 +45,7 @@ func (q *Queries) CreateLesson(ctx context.Context, arg CreateLessonParams) (Les
 		&i.SubjectID,
 		&i.Notes,
 	)
-	return i, err
+	return &i, err
 }
 
 const deleteLesson = `-- name: DeleteLesson :exec
@@ -63,7 +63,7 @@ SELECT lesson_id, lesson_datetime, duration, location_id, subject_id, notes FROM
 WHERE lesson_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetLesson(ctx context.Context, lessonID int64) (Lesson, error) {
+func (q *Queries) GetLesson(ctx context.Context, lessonID int64) (*Lesson, error) {
 	row := q.db.QueryRowContext(ctx, getLesson, lessonID)
 	var i Lesson
 	err := row.Scan(
@@ -74,7 +74,7 @@ func (q *Queries) GetLesson(ctx context.Context, lessonID int64) (Lesson, error)
 		&i.SubjectID,
 		&i.Notes,
 	)
-	return i, err
+	return &i, err
 }
 
 const listLessons = `-- name: ListLessons :many
@@ -89,13 +89,13 @@ type ListLessonsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListLessons(ctx context.Context, arg ListLessonsParams) ([]Lesson, error) {
+func (q *Queries) ListLessons(ctx context.Context, arg ListLessonsParams) ([]*Lesson, error) {
 	rows, err := q.db.QueryContext(ctx, listLessons, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Lesson{}
+	items := []*Lesson{}
 	for rows.Next() {
 		var i Lesson
 		if err := rows.Scan(
@@ -108,7 +108,7 @@ func (q *Queries) ListLessons(ctx context.Context, arg ListLessonsParams) ([]Les
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

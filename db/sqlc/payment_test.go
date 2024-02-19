@@ -12,15 +12,15 @@ import (
 )
 
 // createRandomPayment adds a new random payment, and returns the Payment data type.
-func createRandomPayment(t *testing.T) Payment {
+func createRandomPayment(t *testing.T) *Payment {
 	receipt := createRandomReceipt(t)
-	paymentMethod := createRandomPaymentMethod(t)
+	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
 
 	arg := CreatePaymentParams{
 		ReceiptID:       receipt.ReceiptID,
 		PaymentDatetime: util.RandomDatetime(),
 		Amount:          util.RandomPaymentAmount(),
-		PaymentMethodID: paymentMethod.PaymentMethodID,
+		PaymentMethodID: paymentMethod.GetID(),
 	}
 
 	payment, err := testQueries.CreatePayment(context.Background(), arg)
@@ -39,17 +39,17 @@ func createRandomPayment(t *testing.T) Payment {
 
 // createRandomPayments adds 'n' random payments with the same ReceiptID, and returns the Payments type.
 func createRandomPayments(t *testing.T, n int) Payments {
-	var payments []Payment
+	var payments Payments
 
 	receipt := createRandomReceipt(t)
-	paymentMethod := createRandomPaymentMethod(t)
+	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
 
 	for i := 0; i < n; i++ {
 		arg := CreatePaymentParams{
 			ReceiptID:       receipt.ReceiptID,
 			PaymentDatetime: util.RandomDatetime(),
 			Amount:          util.RandomPaymentAmount(),
-			PaymentMethodID: paymentMethod.PaymentMethodID,
+			PaymentMethodID: paymentMethod.GetID(),
 		}
 
 		payment, err := testQueries.CreatePayment(context.Background(), arg)
@@ -115,14 +115,14 @@ func TestGetPayments(t *testing.T) {
 func TestUpdatePayment(t *testing.T) {
 	payment1 := createRandomPayment(t)
 	receipt := createRandomReceipt(t)
-	paymentMethod := createRandomPaymentMethod(t)
+	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
 
 	arg := UpdatePaymentParams{
 		PaymentID:       payment1.PaymentID,
 		ReceiptID:       receipt.ReceiptID,
 		PaymentDatetime: util.RandomDatetime(),
 		Amount:          util.RandomPaymentAmount(),
-		PaymentMethodID: paymentMethod.PaymentMethodID,
+		PaymentMethodID: paymentMethod.GetID(),
 	}
 	err := testQueries.UpdatePayment(context.Background(), arg)
 	require.NoError(t, err)

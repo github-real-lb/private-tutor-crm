@@ -14,10 +14,11 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestGetCollegeAPI(t *testing.T) {
-	college := randomCollege()
+func TestGetReferenceStructsAPI(t *testing.T) {
+	ref := randomReferenceStruct(db.ReferenceCollege)
+	// TODO: loop through all references map and check all APIs once done.
 
-	testCases := getCollegeTestCases(college)
+	testCases := getReferenceStructTestCases(ref)
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -38,42 +39,54 @@ func TestGetCollegeAPI(t *testing.T) {
 
 }
 
-func randomCollege() db.College {
-	return db.College{
-		CollegeID: util.RandomInt64(1, 1000),
-		Name:      util.RandomName(),
+func randomReferenceStruct(key db.ReferenceStructName) db.ReferenceStruct {
+	ref, ok := db.ReferenceStructMap[key]
+	if !ok {
+		return nil
 	}
+
+	ref.SetID(util.RandomInt64(1, 1000))
+	ref.SetName(util.RandomName())
+
+	return ref
 }
 
 // getCollegeTestCases generate a collection of tests for the getCollege API
-func getCollegeTestCases(college db.College) []getTestCase {
+func getReferenceStructTestCases(ref db.ReferenceStruct) []getTestCase {
 	var testCases []getTestCase
+
+	if ref == nil {
+		return nil
+	}
+
+	refID := ref.GetID()
+	refStructName := ref.GetReferenceStructName()
 
 	// StatusOK API response test case
 	testCases = append(testCases, getTestCase{
 		name: "OK",
-		id:   college.CollegeID,
+		id:   refID,
 		buildStub: func(store *mockdb.MockStore) {
 			store.EXPECT().
-				GetCollege(gomock.Any(), college.CollegeID).
+				GetCollege(gomock.Any(), refID).
 				Times(1).
-				Return(college, nil)
+				Return(ref, nil)
 		},
 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 			require.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, college)
+			requireBodyMatchStruct(t, recorder.Body, ref)
 		},
 	})
 
 	// Record Not Found API response test case
 	testCases = append(testCases, getTestCase{
 		name: "NotFound",
-		id:   college.CollegeID,
+		id:   refID,
 		buildStub: func(store *mockdb.MockStore) {
 			store.EXPECT().
-				GetCollege(gomock.Any(), college.CollegeID).
+				GetCollege(gomock.Any(), refID).
 				Times(1).
-				Return(db.College{}, sql.ErrNoRows)
+				Return(db.ReferenceStructMap[refStructName], sql.ErrNoRows)
 		},
 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 			require.Equal(t, http.StatusNotFound, recorder.Code)
@@ -83,12 +96,12 @@ func getCollegeTestCases(college db.College) []getTestCase {
 	// Server Internal Error API response test case
 	testCases = append(testCases, getTestCase{
 		name: "InternalError",
-		id:   college.CollegeID,
+		id:   refID,
 		buildStub: func(store *mockdb.MockStore) {
 			store.EXPECT().
-				GetCollege(gomock.Any(), college.CollegeID).
+				GetCollege(gomock.Any(), refID).
 				Times(1).
-				Return(db.College{}, sql.ErrConnDone)
+				Return(db.ReferenceStructMap[refStructName], sql.ErrConnDone)
 		},
 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 			require.Equal(t, http.StatusInternalServerError, recorder.Code)

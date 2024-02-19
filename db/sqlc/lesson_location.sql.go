@@ -18,11 +18,11 @@ INSERT INTO lesson_locations (
 RETURNING location_id, name
 `
 
-func (q *Queries) CreateLessonLocation(ctx context.Context, name string) (LessonLocation, error) {
+func (q *Queries) CreateLessonLocation(ctx context.Context, name string) (*LessonLocation, error) {
 	row := q.db.QueryRowContext(ctx, createLessonLocation, name)
 	var i LessonLocation
 	err := row.Scan(&i.LocationID, &i.Name)
-	return i, err
+	return &i, err
 }
 
 const deleteLessonLocation = `-- name: DeleteLessonLocation :exec
@@ -40,11 +40,11 @@ SELECT location_id, name FROM lesson_locations
 WHERE location_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetLessonLocation(ctx context.Context, locationID int64) (LessonLocation, error) {
+func (q *Queries) GetLessonLocation(ctx context.Context, locationID int64) (*LessonLocation, error) {
 	row := q.db.QueryRowContext(ctx, getLessonLocation, locationID)
 	var i LessonLocation
 	err := row.Scan(&i.LocationID, &i.Name)
-	return i, err
+	return &i, err
 }
 
 const listLessonLocations = `-- name: ListLessonLocations :many
@@ -59,19 +59,19 @@ type ListLessonLocationsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListLessonLocations(ctx context.Context, arg ListLessonLocationsParams) ([]LessonLocation, error) {
+func (q *Queries) ListLessonLocations(ctx context.Context, arg ListLessonLocationsParams) ([]*LessonLocation, error) {
 	rows, err := q.db.QueryContext(ctx, listLessonLocations, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []LessonLocation{}
+	items := []*LessonLocation{}
 	for rows.Next() {
 		var i LessonLocation
 		if err := rows.Scan(&i.LocationID, &i.Name); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

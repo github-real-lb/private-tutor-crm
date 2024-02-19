@@ -15,7 +15,7 @@ import (
 func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithPayments {
 	store := NewStore(testDB)
 	student := createRandomStudent(t)
-	paymentMethod := createRandomPaymentMethod(t)
+	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
 
 	arg := CreateReceiptTxParams{
 		StudentID:       student.StudentID,
@@ -27,7 +27,7 @@ func createRandomReceiptWithPaymentsTx(t *testing.T, nPayments int) ReceiptWithP
 		paymentArg := CreateReceiptTxPaymentParams{
 			PaymentDatetime: arg.ReceiptDatetime,
 			Amount:          util.RandomPaymentAmount(),
-			PaymentMethodID: paymentMethod.PaymentMethodID,
+			PaymentMethodID: paymentMethod.GetID(),
 		}
 
 		arg.ReceiptPaymentsParams = append(arg.ReceiptPaymentsParams, paymentArg)
@@ -85,7 +85,7 @@ func createRandomStudentReceiptsWithPaymentsTx(t *testing.T, nReceipts int) Stud
 
 	store := NewStore(testDB)
 	student := createRandomStudent(t)
-	paymentMethod := createRandomPaymentMethod(t)
+	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
 
 	result.StudentID = student.StudentID
 
@@ -100,7 +100,7 @@ func createRandomStudentReceiptsWithPaymentsTx(t *testing.T, nReceipts int) Stud
 			paymentArg := CreateReceiptTxPaymentParams{
 				PaymentDatetime: arg.ReceiptDatetime,
 				Amount:          util.RandomPaymentAmount(),
-				PaymentMethodID: paymentMethod.PaymentMethodID,
+				PaymentMethodID: paymentMethod.GetID(),
 			}
 
 			arg.ReceiptPaymentsParams = append(arg.ReceiptPaymentsParams, paymentArg)

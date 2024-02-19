@@ -12,7 +12,7 @@ import (
 )
 
 // createRandomInvoice tests adding a new random invoice to the database, and returns the Invoice data type.
-func createRandomInvoice(t *testing.T) Invoice {
+func createRandomInvoice(t *testing.T) *Invoice {
 	student := createRandomStudent(t)
 	lesson := createRandomLesson(t)
 
@@ -70,7 +70,7 @@ func TestGetInvoice(t *testing.T) {
 // createRandomInvoicesByLesson tests adding 'n' random invoices for different students participating in a single lesson.
 // It returns the Invoices type.
 func createRandomInvoicesByLesson(t *testing.T, n int) Invoices {
-	var invoices []Invoice
+	var invoices Invoices
 	lesson := createRandomLesson(t)
 
 	for i := 0; i < n; i++ {
@@ -137,7 +137,7 @@ func TestGetInvoicesByLesson(t *testing.T) {
 // createRandomInvoicesByStudent tests adding 'n' random invoices for a single student participating in different lessons.
 // It returns the Invoices type.
 func createRandomInvoicesByStudent(t *testing.T, n int) Invoices {
-	var invoices []Invoice
+	var invoices Invoices
 	student := createRandomStudent(t)
 
 	for i := 0; i < n; i++ {

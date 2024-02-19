@@ -41,10 +41,10 @@ func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 }
 
 // CreateCollege mocks base method.
-func (m *MockStore) CreateCollege(arg0 context.Context, arg1 string) (db.College, error) {
+func (m *MockStore) CreateCollege(arg0 context.Context, arg1 string) (*db.College, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateCollege", arg0, arg1)
-	ret0, _ := ret[0].(db.College)
+	ret0, _ := ret[0].(*db.College)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -56,10 +56,10 @@ func (mr *MockStoreMockRecorder) CreateCollege(arg0, arg1 any) *gomock.Call {
 }
 
 // CreateFunnel mocks base method.
-func (m *MockStore) CreateFunnel(arg0 context.Context, arg1 string) (db.Funnel, error) {
+func (m *MockStore) CreateFunnel(arg0 context.Context, arg1 string) (*db.Funnel, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateFunnel", arg0, arg1)
-	ret0, _ := ret[0].(db.Funnel)
+	ret0, _ := ret[0].(*db.Funnel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -71,10 +71,10 @@ func (mr *MockStoreMockRecorder) CreateFunnel(arg0, arg1 any) *gomock.Call {
 }
 
 // CreateInvoice mocks base method.
-func (m *MockStore) CreateInvoice(arg0 context.Context, arg1 db.CreateInvoiceParams) (db.Invoice, error) {
+func (m *MockStore) CreateInvoice(arg0 context.Context, arg1 db.CreateInvoiceParams) (*db.Invoice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateInvoice", arg0, arg1)
-	ret0, _ := ret[0].(db.Invoice)
+	ret0, _ := ret[0].(*db.Invoice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -86,10 +86,10 @@ func (mr *MockStoreMockRecorder) CreateInvoice(arg0, arg1 any) *gomock.Call {
 }
 
 // CreateLesson mocks base method.
-func (m *MockStore) CreateLesson(arg0 context.Context, arg1 db.CreateLessonParams) (db.Lesson, error) {
+func (m *MockStore) CreateLesson(arg0 context.Context, arg1 db.CreateLessonParams) (*db.Lesson, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateLesson", arg0, arg1)
-	ret0, _ := ret[0].(db.Lesson)
+	ret0, _ := ret[0].(*db.Lesson)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -101,10 +101,10 @@ func (mr *MockStoreMockRecorder) CreateLesson(arg0, arg1 any) *gomock.Call {
 }
 
 // CreateLessonLocation mocks base method.
-func (m *MockStore) CreateLessonLocation(arg0 context.Context, arg1 string) (db.LessonLocation, error) {
+func (m *MockStore) CreateLessonLocation(arg0 context.Context, arg1 string) (*db.LessonLocation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateLessonLocation", arg0, arg1)
-	ret0, _ := ret[0].(db.LessonLocation)
+	ret0, _ := ret[0].(*db.LessonLocation)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -116,10 +116,10 @@ func (mr *MockStoreMockRecorder) CreateLessonLocation(arg0, arg1 any) *gomock.Ca
 }
 
 // CreateLessonSubject mocks base method.
-func (m *MockStore) CreateLessonSubject(arg0 context.Context, arg1 string) (db.LessonSubject, error) {
+func (m *MockStore) CreateLessonSubject(arg0 context.Context, arg1 string) (*db.LessonSubject, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateLessonSubject", arg0, arg1)
-	ret0, _ := ret[0].(db.LessonSubject)
+	ret0, _ := ret[0].(*db.LessonSubject)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -146,10 +146,10 @@ func (mr *MockStoreMockRecorder) CreateLessonWithInvoicesTx(arg0, arg1 any) *gom
 }
 
 // CreatePayment mocks base method.
-func (m *MockStore) CreatePayment(arg0 context.Context, arg1 db.CreatePaymentParams) (db.Payment, error) {
+func (m *MockStore) CreatePayment(arg0 context.Context, arg1 db.CreatePaymentParams) (*db.Payment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePayment", arg0, arg1)
-	ret0, _ := ret[0].(db.Payment)
+	ret0, _ := ret[0].(*db.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -161,10 +161,10 @@ func (mr *MockStoreMockRecorder) CreatePayment(arg0, arg1 any) *gomock.Call {
 }
 
 // CreatePaymentMethod mocks base method.
-func (m *MockStore) CreatePaymentMethod(arg0 context.Context, arg1 string) (db.PaymentMethod, error) {
+func (m *MockStore) CreatePaymentMethod(arg0 context.Context, arg1 string) (*db.PaymentMethod, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePaymentMethod", arg0, arg1)
-	ret0, _ := ret[0].(db.PaymentMethod)
+	ret0, _ := ret[0].(*db.PaymentMethod)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -176,10 +176,10 @@ func (mr *MockStoreMockRecorder) CreatePaymentMethod(arg0, arg1 any) *gomock.Cal
 }
 
 // CreateReceipt mocks base method.
-func (m *MockStore) CreateReceipt(arg0 context.Context, arg1 db.CreateReceiptParams) (db.Receipt, error) {
+func (m *MockStore) CreateReceipt(arg0 context.Context, arg1 db.CreateReceiptParams) (*db.Receipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateReceipt", arg0, arg1)
-	ret0, _ := ret[0].(db.Receipt)
+	ret0, _ := ret[0].(*db.Receipt)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -206,10 +206,10 @@ func (mr *MockStoreMockRecorder) CreateReceiptWithPaymentsTx(arg0, arg1 any) *go
 }
 
 // CreateStudent mocks base method.
-func (m *MockStore) CreateStudent(arg0 context.Context, arg1 db.CreateStudentParams) (db.Student, error) {
+func (m *MockStore) CreateStudent(arg0 context.Context, arg1 db.CreateStudentParams) (*db.Student, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateStudent", arg0, arg1)
-	ret0, _ := ret[0].(db.Student)
+	ret0, _ := ret[0].(*db.Student)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -417,10 +417,10 @@ func (mr *MockStoreMockRecorder) DeleteStudent(arg0, arg1 any) *gomock.Call {
 }
 
 // GetCollege mocks base method.
-func (m *MockStore) GetCollege(arg0 context.Context, arg1 int64) (db.College, error) {
+func (m *MockStore) GetCollege(arg0 context.Context, arg1 int64) (*db.College, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCollege", arg0, arg1)
-	ret0, _ := ret[0].(db.College)
+	ret0, _ := ret[0].(*db.College)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -432,10 +432,10 @@ func (mr *MockStoreMockRecorder) GetCollege(arg0, arg1 any) *gomock.Call {
 }
 
 // GetFunnel mocks base method.
-func (m *MockStore) GetFunnel(arg0 context.Context, arg1 int64) (db.Funnel, error) {
+func (m *MockStore) GetFunnel(arg0 context.Context, arg1 int64) (*db.Funnel, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFunnel", arg0, arg1)
-	ret0, _ := ret[0].(db.Funnel)
+	ret0, _ := ret[0].(*db.Funnel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -447,10 +447,10 @@ func (mr *MockStoreMockRecorder) GetFunnel(arg0, arg1 any) *gomock.Call {
 }
 
 // GetInvoice mocks base method.
-func (m *MockStore) GetInvoice(arg0 context.Context, arg1 int64) (db.Invoice, error) {
+func (m *MockStore) GetInvoice(arg0 context.Context, arg1 int64) (*db.Invoice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetInvoice", arg0, arg1)
-	ret0, _ := ret[0].(db.Invoice)
+	ret0, _ := ret[0].(*db.Invoice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -462,10 +462,10 @@ func (mr *MockStoreMockRecorder) GetInvoice(arg0, arg1 any) *gomock.Call {
 }
 
 // GetInvoicesByLesson mocks base method.
-func (m *MockStore) GetInvoicesByLesson(arg0 context.Context, arg1 int64) ([]db.Invoice, error) {
+func (m *MockStore) GetInvoicesByLesson(arg0 context.Context, arg1 int64) ([]*db.Invoice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetInvoicesByLesson", arg0, arg1)
-	ret0, _ := ret[0].([]db.Invoice)
+	ret0, _ := ret[0].([]*db.Invoice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -477,10 +477,10 @@ func (mr *MockStoreMockRecorder) GetInvoicesByLesson(arg0, arg1 any) *gomock.Cal
 }
 
 // GetInvoicesByStudent mocks base method.
-func (m *MockStore) GetInvoicesByStudent(arg0 context.Context, arg1 int64) ([]db.Invoice, error) {
+func (m *MockStore) GetInvoicesByStudent(arg0 context.Context, arg1 int64) ([]*db.Invoice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetInvoicesByStudent", arg0, arg1)
-	ret0, _ := ret[0].([]db.Invoice)
+	ret0, _ := ret[0].([]*db.Invoice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -492,10 +492,10 @@ func (mr *MockStoreMockRecorder) GetInvoicesByStudent(arg0, arg1 any) *gomock.Ca
 }
 
 // GetLesson mocks base method.
-func (m *MockStore) GetLesson(arg0 context.Context, arg1 int64) (db.Lesson, error) {
+func (m *MockStore) GetLesson(arg0 context.Context, arg1 int64) (*db.Lesson, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLesson", arg0, arg1)
-	ret0, _ := ret[0].(db.Lesson)
+	ret0, _ := ret[0].(*db.Lesson)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -507,10 +507,10 @@ func (mr *MockStoreMockRecorder) GetLesson(arg0, arg1 any) *gomock.Call {
 }
 
 // GetLessonLocation mocks base method.
-func (m *MockStore) GetLessonLocation(arg0 context.Context, arg1 int64) (db.LessonLocation, error) {
+func (m *MockStore) GetLessonLocation(arg0 context.Context, arg1 int64) (*db.LessonLocation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLessonLocation", arg0, arg1)
-	ret0, _ := ret[0].(db.LessonLocation)
+	ret0, _ := ret[0].(*db.LessonLocation)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -522,10 +522,10 @@ func (mr *MockStoreMockRecorder) GetLessonLocation(arg0, arg1 any) *gomock.Call 
 }
 
 // GetLessonSubject mocks base method.
-func (m *MockStore) GetLessonSubject(arg0 context.Context, arg1 int64) (db.LessonSubject, error) {
+func (m *MockStore) GetLessonSubject(arg0 context.Context, arg1 int64) (*db.LessonSubject, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLessonSubject", arg0, arg1)
-	ret0, _ := ret[0].(db.LessonSubject)
+	ret0, _ := ret[0].(*db.LessonSubject)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -552,10 +552,10 @@ func (mr *MockStoreMockRecorder) GetLessonWithInvoicesTx(arg0, arg1 any) *gomock
 }
 
 // GetPayment mocks base method.
-func (m *MockStore) GetPayment(arg0 context.Context, arg1 int64) (db.Payment, error) {
+func (m *MockStore) GetPayment(arg0 context.Context, arg1 int64) (*db.Payment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPayment", arg0, arg1)
-	ret0, _ := ret[0].(db.Payment)
+	ret0, _ := ret[0].(*db.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -567,10 +567,10 @@ func (mr *MockStoreMockRecorder) GetPayment(arg0, arg1 any) *gomock.Call {
 }
 
 // GetPaymentMethod mocks base method.
-func (m *MockStore) GetPaymentMethod(arg0 context.Context, arg1 int64) (db.PaymentMethod, error) {
+func (m *MockStore) GetPaymentMethod(arg0 context.Context, arg1 int64) (*db.PaymentMethod, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPaymentMethod", arg0, arg1)
-	ret0, _ := ret[0].(db.PaymentMethod)
+	ret0, _ := ret[0].(*db.PaymentMethod)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -582,10 +582,10 @@ func (mr *MockStoreMockRecorder) GetPaymentMethod(arg0, arg1 any) *gomock.Call {
 }
 
 // GetPayments mocks base method.
-func (m *MockStore) GetPayments(arg0 context.Context, arg1 int64) ([]db.Payment, error) {
+func (m *MockStore) GetPayments(arg0 context.Context, arg1 int64) ([]*db.Payment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPayments", arg0, arg1)
-	ret0, _ := ret[0].([]db.Payment)
+	ret0, _ := ret[0].([]*db.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -597,10 +597,10 @@ func (mr *MockStoreMockRecorder) GetPayments(arg0, arg1 any) *gomock.Call {
 }
 
 // GetReceipt mocks base method.
-func (m *MockStore) GetReceipt(arg0 context.Context, arg1 int64) (db.Receipt, error) {
+func (m *MockStore) GetReceipt(arg0 context.Context, arg1 int64) (*db.Receipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetReceipt", arg0, arg1)
-	ret0, _ := ret[0].(db.Receipt)
+	ret0, _ := ret[0].(*db.Receipt)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -627,10 +627,10 @@ func (mr *MockStoreMockRecorder) GetReceiptWithPaymentsTx(arg0, arg1 any) *gomoc
 }
 
 // GetReceiptsByStudent mocks base method.
-func (m *MockStore) GetReceiptsByStudent(arg0 context.Context, arg1 db.GetReceiptsByStudentParams) ([]db.Receipt, error) {
+func (m *MockStore) GetReceiptsByStudent(arg0 context.Context, arg1 db.GetReceiptsByStudentParams) ([]*db.Receipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetReceiptsByStudent", arg0, arg1)
-	ret0, _ := ret[0].([]db.Receipt)
+	ret0, _ := ret[0].([]*db.Receipt)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -657,10 +657,10 @@ func (mr *MockStoreMockRecorder) GetReceiptsWithPaymentsByStudentTx(arg0, arg1, 
 }
 
 // GetStudent mocks base method.
-func (m *MockStore) GetStudent(arg0 context.Context, arg1 int64) (db.Student, error) {
+func (m *MockStore) GetStudent(arg0 context.Context, arg1 int64) (*db.Student, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetStudent", arg0, arg1)
-	ret0, _ := ret[0].(db.Student)
+	ret0, _ := ret[0].(*db.Student)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -672,10 +672,10 @@ func (mr *MockStoreMockRecorder) GetStudent(arg0, arg1 any) *gomock.Call {
 }
 
 // ListColleges mocks base method.
-func (m *MockStore) ListColleges(arg0 context.Context, arg1 db.ListCollegesParams) ([]db.College, error) {
+func (m *MockStore) ListColleges(arg0 context.Context, arg1 db.ListCollegesParams) ([]*db.College, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListColleges", arg0, arg1)
-	ret0, _ := ret[0].([]db.College)
+	ret0, _ := ret[0].([]*db.College)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -687,10 +687,10 @@ func (mr *MockStoreMockRecorder) ListColleges(arg0, arg1 any) *gomock.Call {
 }
 
 // ListFunnels mocks base method.
-func (m *MockStore) ListFunnels(arg0 context.Context, arg1 db.ListFunnelsParams) ([]db.Funnel, error) {
+func (m *MockStore) ListFunnels(arg0 context.Context, arg1 db.ListFunnelsParams) ([]*db.Funnel, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListFunnels", arg0, arg1)
-	ret0, _ := ret[0].([]db.Funnel)
+	ret0, _ := ret[0].([]*db.Funnel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -702,10 +702,10 @@ func (mr *MockStoreMockRecorder) ListFunnels(arg0, arg1 any) *gomock.Call {
 }
 
 // ListInvoices mocks base method.
-func (m *MockStore) ListInvoices(arg0 context.Context, arg1 db.ListInvoicesParams) ([]db.Invoice, error) {
+func (m *MockStore) ListInvoices(arg0 context.Context, arg1 db.ListInvoicesParams) ([]*db.Invoice, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListInvoices", arg0, arg1)
-	ret0, _ := ret[0].([]db.Invoice)
+	ret0, _ := ret[0].([]*db.Invoice)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -717,10 +717,10 @@ func (mr *MockStoreMockRecorder) ListInvoices(arg0, arg1 any) *gomock.Call {
 }
 
 // ListLessonLocations mocks base method.
-func (m *MockStore) ListLessonLocations(arg0 context.Context, arg1 db.ListLessonLocationsParams) ([]db.LessonLocation, error) {
+func (m *MockStore) ListLessonLocations(arg0 context.Context, arg1 db.ListLessonLocationsParams) ([]*db.LessonLocation, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListLessonLocations", arg0, arg1)
-	ret0, _ := ret[0].([]db.LessonLocation)
+	ret0, _ := ret[0].([]*db.LessonLocation)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -732,10 +732,10 @@ func (mr *MockStoreMockRecorder) ListLessonLocations(arg0, arg1 any) *gomock.Cal
 }
 
 // ListLessonSubjects mocks base method.
-func (m *MockStore) ListLessonSubjects(arg0 context.Context, arg1 db.ListLessonSubjectsParams) ([]db.LessonSubject, error) {
+func (m *MockStore) ListLessonSubjects(arg0 context.Context, arg1 db.ListLessonSubjectsParams) ([]*db.LessonSubject, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListLessonSubjects", arg0, arg1)
-	ret0, _ := ret[0].([]db.LessonSubject)
+	ret0, _ := ret[0].([]*db.LessonSubject)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -747,10 +747,10 @@ func (mr *MockStoreMockRecorder) ListLessonSubjects(arg0, arg1 any) *gomock.Call
 }
 
 // ListLessons mocks base method.
-func (m *MockStore) ListLessons(arg0 context.Context, arg1 db.ListLessonsParams) ([]db.Lesson, error) {
+func (m *MockStore) ListLessons(arg0 context.Context, arg1 db.ListLessonsParams) ([]*db.Lesson, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListLessons", arg0, arg1)
-	ret0, _ := ret[0].([]db.Lesson)
+	ret0, _ := ret[0].([]*db.Lesson)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -762,10 +762,10 @@ func (mr *MockStoreMockRecorder) ListLessons(arg0, arg1 any) *gomock.Call {
 }
 
 // ListPaymentMethods mocks base method.
-func (m *MockStore) ListPaymentMethods(arg0 context.Context, arg1 db.ListPaymentMethodsParams) ([]db.PaymentMethod, error) {
+func (m *MockStore) ListPaymentMethods(arg0 context.Context, arg1 db.ListPaymentMethodsParams) ([]*db.PaymentMethod, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPaymentMethods", arg0, arg1)
-	ret0, _ := ret[0].([]db.PaymentMethod)
+	ret0, _ := ret[0].([]*db.PaymentMethod)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -777,10 +777,10 @@ func (mr *MockStoreMockRecorder) ListPaymentMethods(arg0, arg1 any) *gomock.Call
 }
 
 // ListPayments mocks base method.
-func (m *MockStore) ListPayments(arg0 context.Context, arg1 db.ListPaymentsParams) ([]db.Payment, error) {
+func (m *MockStore) ListPayments(arg0 context.Context, arg1 db.ListPaymentsParams) ([]*db.Payment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPayments", arg0, arg1)
-	ret0, _ := ret[0].([]db.Payment)
+	ret0, _ := ret[0].([]*db.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -792,10 +792,10 @@ func (mr *MockStoreMockRecorder) ListPayments(arg0, arg1 any) *gomock.Call {
 }
 
 // ListReceipts mocks base method.
-func (m *MockStore) ListReceipts(arg0 context.Context, arg1 db.ListReceiptsParams) ([]db.Receipt, error) {
+func (m *MockStore) ListReceipts(arg0 context.Context, arg1 db.ListReceiptsParams) ([]*db.Receipt, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListReceipts", arg0, arg1)
-	ret0, _ := ret[0].([]db.Receipt)
+	ret0, _ := ret[0].([]*db.Receipt)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -807,10 +807,10 @@ func (mr *MockStoreMockRecorder) ListReceipts(arg0, arg1 any) *gomock.Call {
 }
 
 // ListStudents mocks base method.
-func (m *MockStore) ListStudents(arg0 context.Context, arg1 db.ListStudentsParams) ([]db.Student, error) {
+func (m *MockStore) ListStudents(arg0 context.Context, arg1 db.ListStudentsParams) ([]*db.Student, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListStudents", arg0, arg1)
-	ret0, _ := ret[0].([]db.Student)
+	ret0, _ := ret[0].([]*db.Student)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -11,15 +11,15 @@ import (
 )
 
 // createRandomLesson tests adding a new random lesson to the database, and returns the Lesson data type.
-func createRandomLesson(t *testing.T) Lesson {
-	lessonLocation := createRandomLessonLocation(t)
-	lessonSubject := createRandomLessonSubject(t)
+func createRandomLesson(t *testing.T) *Lesson {
+	lessonLocation := createRandomReferenceStruct(t, ReferenceLessonLocation)
+	lessonSubject := createRandomReferenceStruct(t, ReferenceLessonSubject)
 
 	arg := CreateLessonParams{
 		LessonDatetime: util.RandomDatetime(),
 		Duration:       util.RandomLessonDuration(),
-		LocationID:     lessonLocation.LocationID,
-		SubjectID:      lessonSubject.SubjectID,
+		LocationID:     lessonLocation.GetID(),
+		SubjectID:      lessonSubject.GetID(),
 		Notes:          sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 
@@ -58,15 +58,15 @@ func TestGetLesson(t *testing.T) {
 
 func TestUpdateLesson(t *testing.T) {
 	lesson1 := createRandomLesson(t)
-	lessonLocation := createRandomLessonLocation(t)
-	lessonSubject := createRandomLessonSubject(t)
+	lessonLocation := createRandomReferenceStruct(t, ReferenceLessonLocation)
+	lessonSubject := createRandomReferenceStruct(t, ReferenceLessonSubject)
 
 	arg := UpdateLessonParams{
 		LessonID:       lesson1.LessonID,
 		LessonDatetime: util.RandomDatetime(),
 		Duration:       util.RandomLessonDuration(),
-		LocationID:     lessonLocation.LocationID,
-		SubjectID:      lessonSubject.SubjectID,
+		LocationID:     lessonLocation.GetID(),
+		SubjectID:      lessonSubject.GetID(),
 		Notes:          sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 	err := testQueries.UpdateLesson(context.Background(), arg)

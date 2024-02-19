@@ -43,6 +43,5 @@ func requireBodyMatchStruct(t *testing.T, body *bytes.Buffer, obj interface{}) {
 
 	jsonObjData, err := json.Marshal(obj)
 	require.NoError(t, err)
-
 	require.Equal(t, string(jsonObjData), string(jsonBodyData))
 }

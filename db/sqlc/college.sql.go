@@ -18,11 +18,11 @@ INSERT INTO colleges (
 RETURNING college_id, name
 `
 
-func (q *Queries) CreateCollege(ctx context.Context, name string) (College, error) {
+func (q *Queries) CreateCollege(ctx context.Context, name string) (*College, error) {
 	row := q.db.QueryRowContext(ctx, createCollege, name)
 	var i College
 	err := row.Scan(&i.CollegeID, &i.Name)
-	return i, err
+	return &i, err
 }
 
 const deleteCollege = `-- name: DeleteCollege :exec
@@ -40,11 +40,11 @@ SELECT college_id, name FROM colleges
 WHERE college_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetCollege(ctx context.Context, collegeID int64) (College, error) {
+func (q *Queries) GetCollege(ctx context.Context, collegeID int64) (*College, error) {
 	row := q.db.QueryRowContext(ctx, getCollege, collegeID)
 	var i College
 	err := row.Scan(&i.CollegeID, &i.Name)
-	return i, err
+	return &i, err
 }
 
 const listColleges = `-- name: ListColleges :many
@@ -59,19 +59,19 @@ type ListCollegesParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListColleges(ctx context.Context, arg ListCollegesParams) ([]College, error) {
+func (q *Queries) ListColleges(ctx context.Context, arg ListCollegesParams) ([]*College, error) {
 	rows, err := q.db.QueryContext(ctx, listColleges, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []College{}
+	items := []*College{}
 	for rows.Next() {
 		var i College
 		if err := rows.Scan(&i.CollegeID, &i.Name); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

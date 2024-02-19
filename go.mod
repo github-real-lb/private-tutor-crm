@@ -1,6 +1,6 @@
 module github.com/github-real-lb/tutor-management-web
 
-go 1.22
+go 1.22.0
 
 require (
 	github.com/gin-gonic/gin v1.9.1
