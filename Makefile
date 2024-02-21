@@ -28,4 +28,7 @@ server:
 mock:
 	mockgen -destination db/mock/store.go -package mockdb  github.com/github-real-lb/tutor-management-web/db/sqlc Store
 
-.PHONY: postgrs start createdb  dropdb migrateup migratedown sqlc test server mock
+mockery:
+	mockery --output db/mocks --filename store.go --outpkg mocks  --dir db/sqlc --name Store --structname MockStore
+
+.PHONY: postgrs start createdb  dropdb migrateup migratedown sqlc test server mock mockery

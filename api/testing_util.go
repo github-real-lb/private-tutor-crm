@@ -10,14 +10,25 @@ import (
 
 	mockdb "github.com/github-real-lb/tutor-management-web/db/mock"
 	db "github.com/github-real-lb/tutor-management-web/db/sqlc"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
+type testCaseType string
+
+const (
+	statusOK      testCaseType = "Test OK"
+	notFound      testCaseType = "Test Not Found"
+	internalError testCaseType = "Test Internal Server Error"
+	invalidID     testCaseType = "Test Invalid ID"
+)
+
 // getTestCase used as a single test case for the get record API
-type getTestCase struct {
-	name          string // name of test
-	id            int64  // record id to test
+type testCaseGet struct {
+	name          testCaseType
+	id            int64 // record id to test
 	buildStub     func(store *mockdb.MockStore)
+	sendRequest   func(t *testing.T, store db.Store) *httptest.ResponseRecorder
 	checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
 }
 
@@ -43,5 +54,5 @@ func requireBodyMatchStruct(t *testing.T, body *bytes.Buffer, obj interface{}) {
 
 	jsonObjData, err := json.Marshal(obj)
 	require.NoError(t, err)
-	require.Equal(t, string(jsonObjData), string(jsonBodyData))
+	assert.Equal(t, string(jsonObjData), string(jsonBodyData))
 }

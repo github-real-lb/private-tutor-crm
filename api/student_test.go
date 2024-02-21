@@ -20,7 +20,7 @@ func TestGetStudentAPI(t *testing.T) {
 	testCases := getStudentTestCases(student)
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(string(tc.name), func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
@@ -54,11 +54,11 @@ func randomStudent() *db.Student {
 }
 
 // getStudentTestCases generate a collection of tests for the getStudent API
-func getStudentTestCases(student *db.Student) []getTestCase {
-	var testCases []getTestCase
+func getStudentTestCases(student *db.Student) []testCaseGet {
+	var testCases []testCaseGet
 
 	// StatusOK API response test case
-	testCases = append(testCases, getTestCase{
+	testCases = append(testCases, testCaseGet{
 		name: "OK",
 		id:   student.StudentID,
 		buildStub: func(store *mockdb.MockStore) {
@@ -74,7 +74,7 @@ func getStudentTestCases(student *db.Student) []getTestCase {
 	})
 
 	// Record Not Found API response test case
-	testCases = append(testCases, getTestCase{
+	testCases = append(testCases, testCaseGet{
 		name: "NotFound",
 		id:   student.StudentID,
 		buildStub: func(store *mockdb.MockStore) {
@@ -89,7 +89,7 @@ func getStudentTestCases(student *db.Student) []getTestCase {
 	})
 
 	// Server Internal Error API response test case
-	testCases = append(testCases, getTestCase{
+	testCases = append(testCases, testCaseGet{
 		name: "InternalError",
 		id:   student.StudentID,
 		buildStub: func(store *mockdb.MockStore) {
@@ -104,7 +104,7 @@ func getStudentTestCases(student *db.Student) []getTestCase {
 	})
 
 	// Invalid ID API response test case
-	testCases = append(testCases, getTestCase{
+	testCases = append(testCases, testCaseGet{
 		name: "InvalidID",
 		id:   0,
 		buildStub: func(store *mockdb.MockStore) {
@@ -119,63 +119,3 @@ func getStudentTestCases(student *db.Student) []getTestCase {
 
 	return testCases
 }
-
-// testCases := []struct {
-// 	name          string
-// 	studentID     int64
-// 	buildStubs    func(store *mockdb.MockStore)
-// 	checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
-// }{
-// 	{
-// 		name:      "OK",
-// 		studentID: student.StudentID,
-// 		buildStubs: func(store *mockdb.MockStore) {
-// 			store.EXPECT().
-// 				GetStudent(gomock.Any(), student.StudentID).
-// 				Times(1).
-// 				Return(student, nil)
-// 		},
-// 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-// 			require.Equal(t, http.StatusOK, recorder.Code)
-// 			requireBodyMatchStruct(t, recorder.Body, student)
-// 		},
-// 	},
-// 	{
-// 		name:      "NotFound",
-// 		studentID: student.StudentID,
-// 		buildStubs: func(store *mockdb.MockStore) {
-// 			store.EXPECT().
-// 				GetStudent(gomock.Any(), student.StudentID).
-// 				Times(1).
-// 				Return(db.Student{}, sql.ErrNoRows)
-// 		},
-// 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-// 			require.Equal(t, http.StatusNotFound, recorder.Code)
-// 		},
-// 	},
-// 	{
-// 		name:      "InternalError",
-// 		studentID: student.StudentID,
-// 		buildStubs: func(store *mockdb.MockStore) {
-// 			store.EXPECT().
-// 				GetStudent(gomock.Any(), student.StudentID).
-// 				Times(1).
-// 				Return(db.Student{}, sql.ErrConnDone)
-// 		},
-// 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-// 			require.Equal(t, http.StatusInternalServerError, recorder.Code)
-// 		},
-// 	},
-// 	{
-// 		name:      "InvalidID",
-// 		studentID: 0,
-// 		buildStubs: func(store *mockdb.MockStore) {
-// 			store.EXPECT().
-// 				GetStudent(gomock.Any(), gomock.Any()).
-// 				Times(0)
-// 		},
-// 		checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
-// 			require.Equal(t, http.StatusBadRequest, recorder.Code)
-// 		},
-// 	},
-// }
