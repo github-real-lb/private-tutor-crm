@@ -14,6 +14,14 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
+// getTestCase used as a single test case for the get record API
+type testCaseGet1 struct {
+	name          string
+	id            int64 // record id to test
+	buildStub     func(store *mockdb.MockStore)
+	checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
+}
+
 func TestGetStudentAPI(t *testing.T) {
 	student := randomStudent()
 
@@ -54,11 +62,11 @@ func randomStudent() *db.Student {
 }
 
 // getStudentTestCases generate a collection of tests for the getStudent API
-func getStudentTestCases(student *db.Student) []testCaseGet {
-	var testCases []testCaseGet
+func getStudentTestCases(student *db.Student) []testCaseGet1 {
+	var testCases []testCaseGet1
 
 	// StatusOK API response test case
-	testCases = append(testCases, testCaseGet{
+	testCases = append(testCases, testCaseGet1{
 		name: "OK",
 		id:   student.StudentID,
 		buildStub: func(store *mockdb.MockStore) {
@@ -74,7 +82,7 @@ func getStudentTestCases(student *db.Student) []testCaseGet {
 	})
 
 	// Record Not Found API response test case
-	testCases = append(testCases, testCaseGet{
+	testCases = append(testCases, testCaseGet1{
 		name: "NotFound",
 		id:   student.StudentID,
 		buildStub: func(store *mockdb.MockStore) {
@@ -89,7 +97,7 @@ func getStudentTestCases(student *db.Student) []testCaseGet {
 	})
 
 	// Server Internal Error API response test case
-	testCases = append(testCases, testCaseGet{
+	testCases = append(testCases, testCaseGet1{
 		name: "InternalError",
 		id:   student.StudentID,
 		buildStub: func(store *mockdb.MockStore) {
@@ -104,7 +112,7 @@ func getStudentTestCases(student *db.Student) []testCaseGet {
 	})
 
 	// Invalid ID API response test case
-	testCases = append(testCases, testCaseGet{
+	testCases = append(testCases, testCaseGet1{
 		name: "InvalidID",
 		id:   0,
 		buildStub: func(store *mockdb.MockStore) {
