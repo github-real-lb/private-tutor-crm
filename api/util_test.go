@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/github-real-lb/tutor-management-web/db/mocks"
@@ -13,22 +14,33 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// getTestCase used as a single test case for the get record API
-type testCaseGet struct {
-	name          string
-	httpMethod    string
-	url           string
+// testCase used as a single test case for APIs
+type testCase struct {
+	name          string      // name of test
+	httpMethod    string      // http.Method for the http.Request
+	url           string      // url for the http.Request
+	body          interface{} // the json body for the http.Request
 	buildStub     func(mockStore *mocks.MockStore)
 	checkResponse func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder)
 }
 
 // sendRequestToTestServer start test server and send the test request
-func (tc *testCaseGet) sendRequestToServer(t *testing.T, mockStore *mocks.MockStore) *httptest.ResponseRecorder {
+func (tc *testCase) sendRequestToServer(t *testing.T, mockStore *mocks.MockStore) *httptest.ResponseRecorder {
 	// start test server and send request
 	server := NewServer(mockStore)
 	recorder := httptest.NewRecorder()
 
-	request, err := http.NewRequest(tc.httpMethod, tc.url, nil)
+	var reader io.Reader = nil
+
+	// creating new reader with arguments passed
+	if tc.body != nil {
+		jsonData, err := json.Marshal(tc.body)
+		require.NoError(t, err)
+
+		reader = strings.NewReader(string(jsonData))
+	}
+
+	request, err := http.NewRequest(tc.httpMethod, tc.url, reader)
 	require.NoError(t, err)
 
 	server.router.ServeHTTP(recorder, request)
