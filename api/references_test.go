@@ -1,11 +1,8 @@
 package api
 
 import (
-	"bytes"
 	"database/sql"
-	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -16,23 +13,12 @@ import (
 	"github.com/github-real-lb/tutor-management-web/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 )
 
-// getTestCase used as a single test case for the get record API
-type testCaseGet struct {
-	name          string
-	httpMethod    string
-	url           string
-	id            int64 // record id to test
-	buildStub     func(mockStore *mocks.MockStore)
-	checkResponse func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder)
-}
-
-func TestGetAPI(t *testing.T) {
+func TestGetReferenceAPI(t *testing.T) {
 	for key := range db.ReferenceStructMap {
 		t.Run(string(key), func(t *testing.T) {
-			testCases := testCasesGetBuilder(key)
+			testCases := testCasesGetReferenceBuilder(key)
 			for _, tc := range testCases {
 				t.Run(tc.name, func(t *testing.T) {
 					// start mock db and build the GetStudent stub
@@ -62,7 +48,7 @@ func randomReferenceStruct(key db.ReferenceStructName) db.ReferenceStruct {
 	return ref
 }
 
-func testCasesGetBuilder(name db.ReferenceStructName) []testCaseGet {
+func testCasesGetReferenceBuilder(name db.ReferenceStructName) []testCaseGet {
 	var testCases []testCaseGet
 
 	ref := randomReferenceStruct(name)
@@ -76,9 +62,8 @@ func testCasesGetBuilder(name db.ReferenceStructName) []testCaseGet {
 		name:       "OK",
 		httpMethod: http.MethodGet,
 		url:        url,
-		id:         id,
 		buildStub: func(mockStore *mocks.MockStore) {
-			mockStore.On(methodName, mock.Anything, ref.GetID()).
+			mockStore.On(methodName, mock.Anything, id).
 				Return(ref, nil).
 				Once()
 		},
@@ -94,9 +79,8 @@ func testCasesGetBuilder(name db.ReferenceStructName) []testCaseGet {
 		name:       "Not Found",
 		httpMethod: http.MethodGet,
 		url:        url,
-		id:         id,
 		buildStub: func(mockStore *mocks.MockStore) {
-			mockStore.On(methodName, mock.Anything, ref.GetID()).
+			mockStore.On(methodName, mock.Anything, id).
 				Return(db.ReferenceStructMap[ref.GetReferenceStructName()], sql.ErrNoRows).
 				Once()
 		},
@@ -111,9 +95,8 @@ func testCasesGetBuilder(name db.ReferenceStructName) []testCaseGet {
 		name:       "Internal Error",
 		httpMethod: http.MethodGet,
 		url:        url,
-		id:         id,
 		buildStub: func(mockStore *mocks.MockStore) {
-			mockStore.On(methodName, mock.Anything, ref.GetID()).
+			mockStore.On(methodName, mock.Anything, id).
 				Return(db.ReferenceStructMap[ref.GetReferenceStructName()], sql.ErrConnDone).
 				Once()
 		},
@@ -123,12 +106,11 @@ func testCasesGetBuilder(name db.ReferenceStructName) []testCaseGet {
 		},
 	})
 
-	// create a test case for Invalid ID response
+	// create a test case for Invalid ID response by passing id=0
 	testCases = append(testCases, testCaseGet{
 		name:       "Invalid ID",
 		httpMethod: http.MethodGet,
 		url:        fmt.Sprintf("/%ss/%d", strings.ToLower(string(name)), 0),
-		id:         0,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
 		},
@@ -140,29 +122,4 @@ func testCasesGetBuilder(name db.ReferenceStructName) []testCaseGet {
 	})
 
 	return testCases
-}
-
-// sendRequestToTestServer start test server and send the test request
-func (tc *testCaseGet) sendRequestToServer(t *testing.T, mockStore *mocks.MockStore) *httptest.ResponseRecorder {
-	// start test server and send request
-	server := NewServer(mockStore)
-	recorder := httptest.NewRecorder()
-
-	request, err := http.NewRequest(tc.httpMethod, tc.url, nil)
-	require.NoError(t, err)
-
-	server.router.ServeHTTP(recorder, request)
-
-	return recorder
-}
-
-// requireBodyMatchStruct asserts that a JSON httptest.ResponseRecorder.Body
-// equal to a Struct object.
-func requireBodyMatchStruct(t *testing.T, body *bytes.Buffer, obj interface{}) {
-	jsonBodyData, err := io.ReadAll(body)
-	require.NoError(t, err)
-
-	jsonObjData, err := json.Marshal(obj)
-	require.NoError(t, err)
-	assert.Equal(t, string(jsonObjData), string(jsonBodyData))
 }
