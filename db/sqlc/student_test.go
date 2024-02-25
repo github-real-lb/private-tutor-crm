@@ -80,7 +80,7 @@ func TestUpdateStudent(t *testing.T) {
 	funnel := createRandomFunnel(t)
 
 	arg := UpdateStudentParams{
-		StudentID:   -1, //student1.StudentID,
+		StudentID:   student1.StudentID,
 		FirstName:   util.RandomName(),
 		LastName:    util.RandomName(),
 		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
