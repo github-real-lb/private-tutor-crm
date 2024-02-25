@@ -31,7 +31,7 @@ type CreateStudentParams struct {
 	Notes       sql.NullString  `json:"notes"`
 }
 
-func (q *Queries) CreateStudent(ctx context.Context, arg CreateStudentParams) (*Student, error) {
+func (q *Queries) CreateStudent(ctx context.Context, arg CreateStudentParams) (Student, error) {
 	row := q.db.QueryRowContext(ctx, createStudent,
 		arg.FirstName,
 		arg.LastName,
@@ -57,7 +57,7 @@ func (q *Queries) CreateStudent(ctx context.Context, arg CreateStudentParams) (*
 		&i.Notes,
 		&i.CreatedAt,
 	)
-	return &i, err
+	return i, err
 }
 
 const deleteStudent = `-- name: DeleteStudent :exec
@@ -75,7 +75,7 @@ SELECT student_id, first_name, last_name, email, phone_number, address, college_
 WHERE student_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetStudent(ctx context.Context, studentID int64) (*Student, error) {
+func (q *Queries) GetStudent(ctx context.Context, studentID int64) (Student, error) {
 	row := q.db.QueryRowContext(ctx, getStudent, studentID)
 	var i Student
 	err := row.Scan(
@@ -91,7 +91,7 @@ func (q *Queries) GetStudent(ctx context.Context, studentID int64) (*Student, er
 		&i.Notes,
 		&i.CreatedAt,
 	)
-	return &i, err
+	return i, err
 }
 
 const listStudents = `-- name: ListStudents :many
@@ -106,13 +106,13 @@ type ListStudentsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListStudents(ctx context.Context, arg ListStudentsParams) ([]*Student, error) {
+func (q *Queries) ListStudents(ctx context.Context, arg ListStudentsParams) ([]Student, error) {
 	rows, err := q.db.QueryContext(ctx, listStudents, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Student{}
+	items := []Student{}
 	for rows.Next() {
 		var i Student
 		if err := rows.Scan(
@@ -130,7 +130,7 @@ func (q *Queries) ListStudents(ctx context.Context, arg ListStudentsParams) ([]*
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

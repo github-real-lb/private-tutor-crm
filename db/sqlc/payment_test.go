@@ -12,15 +12,15 @@ import (
 )
 
 // createRandomPayment adds a new random payment, and returns the Payment data type.
-func createRandomPayment(t *testing.T) *Payment {
+func createRandomPayment(t *testing.T) Payment {
 	receipt := createRandomReceipt(t)
-	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
+	paymentMethod := createRandomPaymentMethod(t)
 
 	arg := CreatePaymentParams{
 		ReceiptID:       receipt.ReceiptID,
 		PaymentDatetime: util.RandomDatetime(),
 		Amount:          util.RandomPaymentAmount(),
-		PaymentMethodID: paymentMethod.GetID(),
+		PaymentMethodID: paymentMethod.PaymentMethodID,
 	}
 
 	payment, err := testQueries.CreatePayment(context.Background(), arg)
@@ -42,14 +42,14 @@ func createRandomPayments(t *testing.T, n int) Payments {
 	var payments Payments
 
 	receipt := createRandomReceipt(t)
-	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
+	paymentMethod := createRandomPaymentMethod(t)
 
 	for i := 0; i < n; i++ {
 		arg := CreatePaymentParams{
 			ReceiptID:       receipt.ReceiptID,
 			PaymentDatetime: util.RandomDatetime(),
 			Amount:          util.RandomPaymentAmount(),
-			PaymentMethodID: paymentMethod.GetID(),
+			PaymentMethodID: paymentMethod.PaymentMethodID,
 		}
 
 		payment, err := testQueries.CreatePayment(context.Background(), arg)
@@ -115,14 +115,14 @@ func TestGetPayments(t *testing.T) {
 func TestUpdatePayment(t *testing.T) {
 	payment1 := createRandomPayment(t)
 	receipt := createRandomReceipt(t)
-	paymentMethod := createRandomReferenceStruct(t, ReferencePaymentMethod)
+	paymentMethod := createRandomPaymentMethod(t)
 
 	arg := UpdatePaymentParams{
 		PaymentID:       payment1.PaymentID,
 		ReceiptID:       receipt.ReceiptID,
 		PaymentDatetime: util.RandomDatetime(),
 		Amount:          util.RandomPaymentAmount(),
-		PaymentMethodID: paymentMethod.GetID(),
+		PaymentMethodID: paymentMethod.PaymentMethodID,
 	}
 	err := testQueries.UpdatePayment(context.Background(), arg)
 	require.NoError(t, err)

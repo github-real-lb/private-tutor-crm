@@ -32,22 +32,22 @@ func NewServer(store db.Store) *Server {
 	router.PUT("/funnels", server.updateFunnel)
 
 	// adding the lesson locations HTTP handlers to the router
-	router.POST("/lessonlocations", server.createLessonLocation)
-	router.GET("/lessonlocations/:id", server.getLessonLocation)
-	router.GET("/lessonlocations", server.listLessonLocations)
-	router.PUT("/lessonlocations", server.updateLessonLocation)
+	router.POST("/lesson_locations", server.createLessonLocation)
+	router.GET("/lesson_locations/:id", server.getLessonLocation)
+	router.GET("/lesson_locations", server.listLessonLocations)
+	router.PUT("/lesson_locations", server.updateLessonLocation)
 
 	// adding the lesson subjects HTTP handlers to the router
-	router.POST("/lessonsubjects", server.createLessonSubject)
-	router.GET("/lessonsubjects/:id", server.getLessonSubject)
-	router.GET("/lessonsubjects", server.listLessonSubjects)
-	router.PUT("/lessonsubjects", server.updateLessonSubject)
+	router.POST("/lesson_subjects", server.createLessonSubject)
+	router.GET("/lesson_subjects/:id", server.getLessonSubject)
+	router.GET("/lesson_subjects", server.listLessonSubjects)
+	router.PUT("/lesson_subjects", server.updateLessonSubject)
 
 	// adding the funnels HTTP handlers to the router
-	router.POST("/paymentmethods", server.createPaymentMethod)
-	router.GET("/paymentmethods/:id", server.getPaymentMethod)
-	router.GET("/paymentmethods", server.listPaymentMethods)
-	router.PUT("/paymentmethods", server.updatePaymentMethod)
+	router.POST("/payment_methods", server.createPaymentMethod)
+	router.GET("/payment_methods/:id", server.getPaymentMethod)
+	router.GET("/payment_methods", server.listPaymentMethods)
+	router.PUT("/payment_methods", server.updatePaymentMethod)
 
 	// adding the students HTTP handlers to the router
 	router.POST("/students", server.createStudent)
@@ -63,10 +63,10 @@ func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
 
-func errorResonse(err error) gin.H {
+func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
 
-func okResonse(s string) gin.H {
+func okResponse(s string) gin.H {
 	return gin.H{"message": s}
 }

@@ -27,7 +27,7 @@ type CreateReceiptParams struct {
 	Notes           sql.NullString `json:"notes"`
 }
 
-func (q *Queries) CreateReceipt(ctx context.Context, arg CreateReceiptParams) (*Receipt, error) {
+func (q *Queries) CreateReceipt(ctx context.Context, arg CreateReceiptParams) (Receipt, error) {
 	row := q.db.QueryRowContext(ctx, createReceipt,
 		arg.StudentID,
 		arg.ReceiptDatetime,
@@ -42,7 +42,7 @@ func (q *Queries) CreateReceipt(ctx context.Context, arg CreateReceiptParams) (*
 		&i.Amount,
 		&i.Notes,
 	)
-	return &i, err
+	return i, err
 }
 
 const deleteReceipt = `-- name: DeleteReceipt :exec
@@ -60,7 +60,7 @@ SELECT receipt_id, student_id, receipt_datetime, amount, notes FROM receipts
 WHERE receipt_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetReceipt(ctx context.Context, receiptID int64) (*Receipt, error) {
+func (q *Queries) GetReceipt(ctx context.Context, receiptID int64) (Receipt, error) {
 	row := q.db.QueryRowContext(ctx, getReceipt, receiptID)
 	var i Receipt
 	err := row.Scan(
@@ -70,7 +70,7 @@ func (q *Queries) GetReceipt(ctx context.Context, receiptID int64) (*Receipt, er
 		&i.Amount,
 		&i.Notes,
 	)
-	return &i, err
+	return i, err
 }
 
 const getReceiptsByStudent = `-- name: GetReceiptsByStudent :many
@@ -87,13 +87,13 @@ type GetReceiptsByStudentParams struct {
 	Offset    int32 `json:"offset"`
 }
 
-func (q *Queries) GetReceiptsByStudent(ctx context.Context, arg GetReceiptsByStudentParams) ([]*Receipt, error) {
+func (q *Queries) GetReceiptsByStudent(ctx context.Context, arg GetReceiptsByStudentParams) ([]Receipt, error) {
 	rows, err := q.db.QueryContext(ctx, getReceiptsByStudent, arg.StudentID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Receipt{}
+	items := []Receipt{}
 	for rows.Next() {
 		var i Receipt
 		if err := rows.Scan(
@@ -105,7 +105,7 @@ func (q *Queries) GetReceiptsByStudent(ctx context.Context, arg GetReceiptsByStu
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -128,13 +128,13 @@ type ListReceiptsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListReceipts(ctx context.Context, arg ListReceiptsParams) ([]*Receipt, error) {
+func (q *Queries) ListReceipts(ctx context.Context, arg ListReceiptsParams) ([]Receipt, error) {
 	rows, err := q.db.QueryContext(ctx, listReceipts, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Receipt{}
+	items := []Receipt{}
 	for rows.Next() {
 		var i Receipt
 		if err := rows.Scan(
@@ -146,7 +146,7 @@ func (q *Queries) ListReceipts(ctx context.Context, arg ListReceiptsParams) ([]*
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

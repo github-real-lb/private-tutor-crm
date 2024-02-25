@@ -16,14 +16,14 @@ func (server *Server) createLessonLocation(ctx *gin.Context) {
 	var req createLessonLocationRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	college, err := server.store.CreateLessonLocation(ctx, req.Name)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -38,7 +38,7 @@ func (server *Server) getLessonLocation(ctx *gin.Context) {
 	var req getLessonLocationRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -46,11 +46,11 @@ func (server *Server) getLessonLocation(ctx *gin.Context) {
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -66,7 +66,7 @@ func (server *Server) listLessonLocations(ctx *gin.Context) {
 	var req listLessonLocationsRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -78,7 +78,7 @@ func (server *Server) listLessonLocations(ctx *gin.Context) {
 	colleges, err := server.store.ListLessonLocations(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -86,29 +86,29 @@ func (server *Server) listLessonLocations(ctx *gin.Context) {
 }
 
 type updateLessonLocationRequest struct {
-	LessonLocationID int64  `json:"student_id" binding:"required"`
-	Name             string `json:"name" binding:"required"`
+	LocationID int64  `json:"location_id" binding:"required"`
+	Name       string `json:"name" binding:"required"`
 }
 
 func (server *Server) updateLessonLocation(ctx *gin.Context) {
 	var req updateLessonLocationRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	arg := db.UpdateLessonLocationParams{
-		LocationID: req.LessonLocationID,
+		LocationID: req.LocationID,
 		Name:       req.Name,
 	}
 
 	err := server.store.UpdateLessonLocation(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, okResonse("LessonLocation updated successfully"))
+	ctx.JSON(http.StatusOK, okResponse("LessonLocation updated successfully"))
 }

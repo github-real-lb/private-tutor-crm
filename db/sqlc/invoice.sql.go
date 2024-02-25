@@ -31,7 +31,7 @@ type CreateInvoiceParams struct {
 	Notes           sql.NullString `json:"notes"`
 }
 
-func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (*Invoice, error) {
+func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (Invoice, error) {
 	row := q.db.QueryRowContext(ctx, createInvoice,
 		arg.StudentID,
 		arg.LessonID,
@@ -54,7 +54,7 @@ func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (*
 		&i.Amount,
 		&i.Notes,
 	)
-	return &i, err
+	return i, err
 }
 
 const deleteInvoice = `-- name: DeleteInvoice :exec
@@ -82,7 +82,7 @@ SELECT invoice_id, student_id, lesson_id, invoice_datetime, hourly_fee, duration
 WHERE invoice_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetInvoice(ctx context.Context, invoiceID int64) (*Invoice, error) {
+func (q *Queries) GetInvoice(ctx context.Context, invoiceID int64) (Invoice, error) {
 	row := q.db.QueryRowContext(ctx, getInvoice, invoiceID)
 	var i Invoice
 	err := row.Scan(
@@ -96,7 +96,7 @@ func (q *Queries) GetInvoice(ctx context.Context, invoiceID int64) (*Invoice, er
 		&i.Amount,
 		&i.Notes,
 	)
-	return &i, err
+	return i, err
 }
 
 const getInvoicesByLesson = `-- name: GetInvoicesByLesson :many
@@ -105,13 +105,13 @@ WHERE lesson_id = $1
 ORDER BY student_id
 `
 
-func (q *Queries) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([]*Invoice, error) {
+func (q *Queries) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([]Invoice, error) {
 	rows, err := q.db.QueryContext(ctx, getInvoicesByLesson, lessonID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Invoice{}
+	items := []Invoice{}
 	for rows.Next() {
 		var i Invoice
 		if err := rows.Scan(
@@ -127,7 +127,7 @@ func (q *Queries) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([]*I
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -144,13 +144,13 @@ WHERE student_id = $1
 ORDER BY invoice_datetime
 `
 
-func (q *Queries) GetInvoicesByStudent(ctx context.Context, studentID int64) ([]*Invoice, error) {
+func (q *Queries) GetInvoicesByStudent(ctx context.Context, studentID int64) ([]Invoice, error) {
 	rows, err := q.db.QueryContext(ctx, getInvoicesByStudent, studentID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Invoice{}
+	items := []Invoice{}
 	for rows.Next() {
 		var i Invoice
 		if err := rows.Scan(
@@ -166,7 +166,7 @@ func (q *Queries) GetInvoicesByStudent(ctx context.Context, studentID int64) ([]
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -189,13 +189,13 @@ type ListInvoicesParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListInvoices(ctx context.Context, arg ListInvoicesParams) ([]*Invoice, error) {
+func (q *Queries) ListInvoices(ctx context.Context, arg ListInvoicesParams) ([]Invoice, error) {
 	rows, err := q.db.QueryContext(ctx, listInvoices, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Invoice{}
+	items := []Invoice{}
 	for rows.Next() {
 		var i Invoice
 		if err := rows.Scan(
@@ -211,7 +211,7 @@ func (q *Queries) ListInvoices(ctx context.Context, arg ListInvoicesParams) ([]*
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

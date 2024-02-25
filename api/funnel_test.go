@@ -14,19 +14,19 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestStudentAPIs(t *testing.T) {
+func TestFunnelAPIs(t *testing.T) {
 	tests := tests{
-		"Test_createStudentAPI": createStudentTestCasesBuilder(),
-		"Test_getStudent":       getStudentTestCasesBuilder(),
-		"Test_listStudents":     listStudentsTestCasesBuilder(),
-		"Test_updateStudent":    updateStudentTestCasesBuilder(),
+		"Test_createFunnelAPI": createFunnelTestCasesBuilder(),
+		"Test_getFunnel":       getFunnelTestCasesBuilder(),
+		"Test_listFunnels":     listFunnelsTestCasesBuilder(),
+		"Test_updateFunnel":    updateFunnelTestCasesBuilder(),
 	}
 
 	for key, tcs := range tests {
 		t.Run(key, func(t *testing.T) {
 			for _, tc := range tcs {
 				t.Run(tc.name, func(t *testing.T) {
-					// start mock db and build the GetStudent stub
+					// start mock db and build the stub
 					mockStore := mocks.NewMockStore(t)
 					tc.buildStub(mockStore)
 
@@ -42,41 +42,28 @@ func TestStudentAPIs(t *testing.T) {
 	}
 }
 
-// randomStudent creates a new random Student struct.
-func randomStudent() db.Student {
-	return db.Student{
-		StudentID:   util.RandomInt64(1, 1000),
-		FirstName:   util.RandomName(),
-		LastName:    util.RandomName(),
-		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
-		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
-		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
-		CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
-		FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
-		HourlyFee:   sql.NullFloat64{Float64: util.RandomLessonHourlyFee(), Valid: true},
-		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
+// randomFunnel creates a new random Funnel struct.
+func randomFunnel() db.Funnel {
+	return db.Funnel{
+		FunnelID: util.RandomInt64(1, 1000),
+		Name:     util.RandomName(),
 	}
 }
 
-// createStudentTestCasesBuilder creates a slice of test cases for the createStudent API
-func createStudentTestCasesBuilder() testCases {
+// createFunnelTestCasesBuilder creates a slice of test cases for the createFunnel API
+func createFunnelTestCasesBuilder() testCases {
 	var testCases testCases
 
-	student := randomStudent()
-	arg := db.CreateStudentParams{
-		FirstName:   student.FirstName,
-		LastName:    student.LastName,
-		Email:       student.Email,
-		PhoneNumber: student.PhoneNumber,
-		Address:     student.Address,
-		CollegeID:   student.CollegeID,
-		FunnelID:    student.FunnelID,
-		HourlyFee:   student.HourlyFee,
-		Notes:       student.Notes,
+	funnel := randomFunnel()
+
+	arg := struct {
+		Name string `json:"name"`
+	}{
+		Name: funnel.Name,
 	}
 
-	methodName := "CreateStudent"
-	url := "/students"
+	methodName := "CreateFunnel"
+	url := "/funnels"
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{
@@ -85,13 +72,13 @@ func createStudentTestCasesBuilder() testCases {
 		url:        url,
 		body:       arg,
 		buildStub: func(mockStore *mocks.MockStore) {
-			mockStore.On(methodName, mock.Anything, arg).
-				Return(student, nil).
+			mockStore.On(methodName, mock.Anything, funnel.Name).
+				Return(funnel, nil).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
 			assert.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, student)
+			requireBodyMatchStruct(t, recorder.Body, funnel)
 
 		},
 	})
@@ -104,7 +91,7 @@ func createStudentTestCasesBuilder() testCases {
 		body:       arg,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).
-				Return(db.Student{}, sql.ErrConnDone).
+				Return(db.Funnel{}, sql.ErrConnDone).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -132,14 +119,14 @@ func createStudentTestCasesBuilder() testCases {
 	return testCases
 }
 
-// getStudentTestCasesBuilder creates a slice of test cases for the getStudent API
-func getStudentTestCasesBuilder() testCases {
+// getFunnelTestCasesBuilder creates a slice of test cases for the getFunnel API
+func getFunnelTestCasesBuilder() testCases {
 	var testCases testCases
 
-	student := randomStudent()
-	id := student.StudentID
-	methodName := "GetStudent"
-	url := fmt.Sprintf("/students/%d", id)
+	funnel := randomFunnel()
+	id := funnel.FunnelID
+	methodName := "GetFunnel"
+	url := fmt.Sprintf("/funnels/%d", id)
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{
@@ -149,12 +136,12 @@ func getStudentTestCasesBuilder() testCases {
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, id).
-				Return(student, nil).
+				Return(funnel, nil).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
 			assert.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, student)
+			requireBodyMatchStruct(t, recorder.Body, funnel)
 
 		},
 	})
@@ -167,7 +154,7 @@ func getStudentTestCasesBuilder() testCases {
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, id).
-				Return(db.Student{}, sql.ErrNoRows).
+				Return(db.Funnel{}, sql.ErrNoRows).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -183,7 +170,7 @@ func getStudentTestCasesBuilder() testCases {
 		url:        url,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).
-				Return(db.Student{}, sql.ErrConnDone).
+				Return(db.Funnel{}, sql.ErrConnDone).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -196,7 +183,7 @@ func getStudentTestCasesBuilder() testCases {
 	testCases = append(testCases, testCase{
 		name:       "Invalid ID",
 		httpMethod: http.MethodGet,
-		url:        "/students/0",
+		url:        "/funnels/0",
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
@@ -211,23 +198,23 @@ func getStudentTestCasesBuilder() testCases {
 	return testCases
 }
 
-// listStudentsTestCasesBuilder creates a slice of test cases for the listStudents API
-func listStudentsTestCasesBuilder() testCases {
+// listFunnelsTestCasesBuilder creates a slice of test cases for the listFunnels API
+func listFunnelsTestCasesBuilder() testCases {
 	var testCases testCases
 
 	n := 5
-	students := make([]db.Student, n)
+	funnels := make([]db.Funnel, n)
 	for i := 0; i < n; i++ {
-		students[i] = randomStudent()
+		funnels[i] = randomFunnel()
 	}
 
-	arg := db.ListStudentsParams{
+	arg := db.ListFunnelsParams{
 		Limit:  int32(n),
 		Offset: 0,
 	}
 
-	methodName := "ListStudents"
-	url := fmt.Sprintf("/students?page_id=%d&page_size=%d", 1, n)
+	methodName := "ListFunnels"
+	url := fmt.Sprintf("/funnels?page_id=%d&page_size=%d", 1, n)
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{
@@ -237,12 +224,12 @@ func listStudentsTestCasesBuilder() testCases {
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, arg).
-				Return(students, nil).
+				Return(funnels, nil).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
 			assert.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, students)
+			requireBodyMatchStruct(t, recorder.Body, funnels)
 
 		},
 	})
@@ -254,7 +241,7 @@ func listStudentsTestCasesBuilder() testCases {
 		url:        url,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).
-				Return([]db.Student{}, sql.ErrConnDone).
+				Return([]db.Funnel{}, sql.ErrConnDone).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -267,7 +254,7 @@ func listStudentsTestCasesBuilder() testCases {
 	testCases = append(testCases, testCase{
 		name:       "Invalid Page_ID Parameter",
 		httpMethod: http.MethodGet,
-		url:        fmt.Sprintf("/students?page_id=%d&page_size=%d", -1, n),
+		url:        fmt.Sprintf("/funnels?page_id=%d&page_size=%d", -1, n),
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
@@ -283,7 +270,7 @@ func listStudentsTestCasesBuilder() testCases {
 	testCases = append(testCases, testCase{
 		name:       "Invalid Page_Size Parameter",
 		httpMethod: http.MethodGet,
-		url:        fmt.Sprintf("/students?page_id=%d&page_size=%d", 1, 10000),
+		url:        fmt.Sprintf("/funnels?page_id=%d&page_size=%d", 1, 10000),
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
@@ -298,25 +285,17 @@ func listStudentsTestCasesBuilder() testCases {
 	return testCases
 }
 
-func updateStudentTestCasesBuilder() testCases {
+// updateFunnelTestCasesBuilder creates a slice of test cases for the updateFunnel API
+func updateFunnelTestCasesBuilder() testCases {
 	var testCases testCases
 
-	student := randomStudent()
-	arg := db.UpdateStudentParams{
-		StudentID:   student.StudentID,
-		FirstName:   student.FirstName,
-		LastName:    student.LastName,
-		Email:       student.Email,
-		PhoneNumber: student.PhoneNumber,
-		Address:     student.Address,
-		CollegeID:   student.CollegeID,
-		FunnelID:    student.FunnelID,
-		HourlyFee:   student.HourlyFee,
-		Notes:       student.Notes,
+	arg := db.UpdateFunnelParams{
+		FunnelID: util.RandomInt64(1, 1000),
+		Name:     util.RandomName(),
 	}
 
-	methodName := "UpdateStudent"
-	url := "/students"
+	methodName := "UpdateFunnel"
+	url := "/funnels"
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{

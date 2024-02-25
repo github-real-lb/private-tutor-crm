@@ -24,7 +24,7 @@ func (server *Server) createStudent(ctx *gin.Context) {
 	var req createStudentRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -43,7 +43,7 @@ func (server *Server) createStudent(ctx *gin.Context) {
 	student, err := server.store.CreateStudent(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -58,18 +58,18 @@ func (server *Server) getStudent(ctx *gin.Context) {
 	var req getStudentRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	student, err := server.store.GetStudent(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -85,7 +85,7 @@ func (server *Server) listStudents(ctx *gin.Context) {
 	var req listStudentsRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -96,7 +96,7 @@ func (server *Server) listStudents(ctx *gin.Context) {
 
 	students, err := server.store.ListStudents(ctx, arg)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -120,7 +120,7 @@ func (server *Server) updateStudent(ctx *gin.Context) {
 	var req updateStudentRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -139,9 +139,9 @@ func (server *Server) updateStudent(ctx *gin.Context) {
 
 	err := server.store.UpdateStudent(ctx, arg)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, okResonse("Student updated successfully"))
+	ctx.JSON(http.StatusOK, okResponse("Student updated successfully"))
 }

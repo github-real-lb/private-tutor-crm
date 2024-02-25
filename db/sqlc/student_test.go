@@ -11,7 +11,7 @@ import (
 )
 
 // createRandomStudent tests adding a new random student to the database, and returns the Student data type.
-func createRandomStudent(t *testing.T) *Student {
+func createRandomStudent(t *testing.T) Student {
 	college, err := testQueries.CreateCollege(context.Background(), util.RandomName())
 	require.NoError(t, err)
 	require.NotEmpty(t, college)
@@ -76,18 +76,18 @@ func TestGetStudent(t *testing.T) {
 
 func TestUpdateStudent(t *testing.T) {
 	student1 := createRandomStudent(t)
-	college := createRandomReferenceStruct(t, ReferenceCollege)
-	funnel := createRandomReferenceStruct(t, ReferenceFunnel)
+	college := createRandomCollege(t)
+	funnel := createRandomFunnel(t)
 
 	arg := UpdateStudentParams{
-		StudentID:   student1.StudentID,
+		StudentID:   -1, //student1.StudentID,
 		FirstName:   util.RandomName(),
 		LastName:    util.RandomName(),
 		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
 		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
 		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
-		CollegeID:   sql.NullInt64{Int64: college.GetID(), Valid: true},
-		FunnelID:    sql.NullInt64{Int64: funnel.GetID(), Valid: true},
+		CollegeID:   sql.NullInt64{Int64: college.CollegeID, Valid: true},
+		FunnelID:    sql.NullInt64{Int64: funnel.FunnelID, Valid: true},
 		HourlyFee:   sql.NullFloat64{Float64: util.RandomLessonHourlyFee(), Valid: true},
 		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}

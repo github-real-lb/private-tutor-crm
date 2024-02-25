@@ -14,19 +14,19 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestStudentAPIs(t *testing.T) {
+func TestPaymentMethodAPIs(t *testing.T) {
 	tests := tests{
-		"Test_createStudentAPI": createStudentTestCasesBuilder(),
-		"Test_getStudent":       getStudentTestCasesBuilder(),
-		"Test_listStudents":     listStudentsTestCasesBuilder(),
-		"Test_updateStudent":    updateStudentTestCasesBuilder(),
+		"Test_createPaymentMethodAPI": createPaymentMethodTestCasesBuilder(),
+		"Test_getPaymentMethod":       getPaymentMethodTestCasesBuilder(),
+		"Test_listPaymentMethods":     listPaymentMethodsTestCasesBuilder(),
+		"Test_updatePaymentMethods":   updatePaymentMethodTestCasesBuilder(),
 	}
 
 	for key, tcs := range tests {
 		t.Run(key, func(t *testing.T) {
 			for _, tc := range tcs {
 				t.Run(tc.name, func(t *testing.T) {
-					// start mock db and build the GetStudent stub
+					// start mock db and build the stub
 					mockStore := mocks.NewMockStore(t)
 					tc.buildStub(mockStore)
 
@@ -42,41 +42,28 @@ func TestStudentAPIs(t *testing.T) {
 	}
 }
 
-// randomStudent creates a new random Student struct.
-func randomStudent() db.Student {
-	return db.Student{
-		StudentID:   util.RandomInt64(1, 1000),
-		FirstName:   util.RandomName(),
-		LastName:    util.RandomName(),
-		Email:       sql.NullString{String: util.RandomEmail(), Valid: true},
-		PhoneNumber: sql.NullString{String: util.RandomPhoneNumber(), Valid: true},
-		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
-		CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
-		FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
-		HourlyFee:   sql.NullFloat64{Float64: util.RandomLessonHourlyFee(), Valid: true},
-		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
+// randomPaymentMethod creates a new random PaymentMethod struct.
+func randomPaymentMethod() db.PaymentMethod {
+	return db.PaymentMethod{
+		PaymentMethodID: util.RandomInt64(1, 1000),
+		Name:            util.RandomName(),
 	}
 }
 
-// createStudentTestCasesBuilder creates a slice of test cases for the createStudent API
-func createStudentTestCasesBuilder() testCases {
+// createPaymentMethodTestCasesBuilder creates a slice of test cases for the createPaymentMethod API
+func createPaymentMethodTestCasesBuilder() testCases {
 	var testCases testCases
 
-	student := randomStudent()
-	arg := db.CreateStudentParams{
-		FirstName:   student.FirstName,
-		LastName:    student.LastName,
-		Email:       student.Email,
-		PhoneNumber: student.PhoneNumber,
-		Address:     student.Address,
-		CollegeID:   student.CollegeID,
-		FunnelID:    student.FunnelID,
-		HourlyFee:   student.HourlyFee,
-		Notes:       student.Notes,
+	paymentMethod := randomPaymentMethod()
+
+	arg := struct {
+		Name string `json:"name"`
+	}{
+		Name: paymentMethod.Name,
 	}
 
-	methodName := "CreateStudent"
-	url := "/students"
+	methodName := "CreatePaymentMethod"
+	url := "/payment_methods"
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{
@@ -85,13 +72,13 @@ func createStudentTestCasesBuilder() testCases {
 		url:        url,
 		body:       arg,
 		buildStub: func(mockStore *mocks.MockStore) {
-			mockStore.On(methodName, mock.Anything, arg).
-				Return(student, nil).
+			mockStore.On(methodName, mock.Anything, paymentMethod.Name).
+				Return(paymentMethod, nil).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
 			assert.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, student)
+			requireBodyMatchStruct(t, recorder.Body, paymentMethod)
 
 		},
 	})
@@ -104,7 +91,7 @@ func createStudentTestCasesBuilder() testCases {
 		body:       arg,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).
-				Return(db.Student{}, sql.ErrConnDone).
+				Return(db.PaymentMethod{}, sql.ErrConnDone).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -132,14 +119,14 @@ func createStudentTestCasesBuilder() testCases {
 	return testCases
 }
 
-// getStudentTestCasesBuilder creates a slice of test cases for the getStudent API
-func getStudentTestCasesBuilder() testCases {
+// getPaymentMethodTestCasesBuilder creates a slice of test cases for the getPaymentMethod API
+func getPaymentMethodTestCasesBuilder() testCases {
 	var testCases testCases
 
-	student := randomStudent()
-	id := student.StudentID
-	methodName := "GetStudent"
-	url := fmt.Sprintf("/students/%d", id)
+	paymentMethod := randomPaymentMethod()
+	id := paymentMethod.PaymentMethodID
+	methodName := "GetPaymentMethod"
+	url := fmt.Sprintf("/payment_methods/%d", id)
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{
@@ -149,12 +136,12 @@ func getStudentTestCasesBuilder() testCases {
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, id).
-				Return(student, nil).
+				Return(paymentMethod, nil).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
 			assert.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, student)
+			requireBodyMatchStruct(t, recorder.Body, paymentMethod)
 
 		},
 	})
@@ -167,7 +154,7 @@ func getStudentTestCasesBuilder() testCases {
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, id).
-				Return(db.Student{}, sql.ErrNoRows).
+				Return(db.PaymentMethod{}, sql.ErrNoRows).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -183,7 +170,7 @@ func getStudentTestCasesBuilder() testCases {
 		url:        url,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).
-				Return(db.Student{}, sql.ErrConnDone).
+				Return(db.PaymentMethod{}, sql.ErrConnDone).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -196,7 +183,7 @@ func getStudentTestCasesBuilder() testCases {
 	testCases = append(testCases, testCase{
 		name:       "Invalid ID",
 		httpMethod: http.MethodGet,
-		url:        "/students/0",
+		url:        "/payment_methods/0",
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
@@ -211,23 +198,23 @@ func getStudentTestCasesBuilder() testCases {
 	return testCases
 }
 
-// listStudentsTestCasesBuilder creates a slice of test cases for the listStudents API
-func listStudentsTestCasesBuilder() testCases {
+// listPaymentMethodsTestCasesBuilder creates a slice of test cases for the listPaymentMethods API
+func listPaymentMethodsTestCasesBuilder() testCases {
 	var testCases testCases
 
 	n := 5
-	students := make([]db.Student, n)
+	paymentMethods := make([]db.PaymentMethod, n)
 	for i := 0; i < n; i++ {
-		students[i] = randomStudent()
+		paymentMethods[i] = randomPaymentMethod()
 	}
 
-	arg := db.ListStudentsParams{
+	arg := db.ListPaymentMethodsParams{
 		Limit:  int32(n),
 		Offset: 0,
 	}
 
-	methodName := "ListStudents"
-	url := fmt.Sprintf("/students?page_id=%d&page_size=%d", 1, n)
+	methodName := "ListPaymentMethods"
+	url := fmt.Sprintf("/payment_methods?page_id=%d&page_size=%d", 1, n)
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{
@@ -237,12 +224,12 @@ func listStudentsTestCasesBuilder() testCases {
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, arg).
-				Return(students, nil).
+				Return(paymentMethods, nil).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
 			assert.Equal(t, http.StatusOK, recorder.Code)
-			requireBodyMatchStruct(t, recorder.Body, students)
+			requireBodyMatchStruct(t, recorder.Body, paymentMethods)
 
 		},
 	})
@@ -254,7 +241,7 @@ func listStudentsTestCasesBuilder() testCases {
 		url:        url,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).
-				Return([]db.Student{}, sql.ErrConnDone).
+				Return([]db.PaymentMethod{}, sql.ErrConnDone).
 				Once()
 		},
 		checkResponse: func(t *testing.T, mockStore *mocks.MockStore, recorder *httptest.ResponseRecorder) {
@@ -267,7 +254,7 @@ func listStudentsTestCasesBuilder() testCases {
 	testCases = append(testCases, testCase{
 		name:       "Invalid Page_ID Parameter",
 		httpMethod: http.MethodGet,
-		url:        fmt.Sprintf("/students?page_id=%d&page_size=%d", -1, n),
+		url:        fmt.Sprintf("/payment_methods?page_id=%d&page_size=%d", -1, n),
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
@@ -283,7 +270,7 @@ func listStudentsTestCasesBuilder() testCases {
 	testCases = append(testCases, testCase{
 		name:       "Invalid Page_Size Parameter",
 		httpMethod: http.MethodGet,
-		url:        fmt.Sprintf("/students?page_id=%d&page_size=%d", 1, 10000),
+		url:        fmt.Sprintf("/payment_methods?page_id=%d&page_size=%d", 1, 10000),
 		body:       nil,
 		buildStub: func(mockStore *mocks.MockStore) {
 			mockStore.On(methodName, mock.Anything, mock.Anything).Times(0)
@@ -298,25 +285,17 @@ func listStudentsTestCasesBuilder() testCases {
 	return testCases
 }
 
-func updateStudentTestCasesBuilder() testCases {
+// updatePaymentMethodTestCasesBuilder creates a slice of test cases for the updatePaymentMethod API
+func updatePaymentMethodTestCasesBuilder() testCases {
 	var testCases testCases
 
-	student := randomStudent()
-	arg := db.UpdateStudentParams{
-		StudentID:   student.StudentID,
-		FirstName:   student.FirstName,
-		LastName:    student.LastName,
-		Email:       student.Email,
-		PhoneNumber: student.PhoneNumber,
-		Address:     student.Address,
-		CollegeID:   student.CollegeID,
-		FunnelID:    student.FunnelID,
-		HourlyFee:   student.HourlyFee,
-		Notes:       student.Notes,
+	arg := db.UpdatePaymentMethodParams{
+		PaymentMethodID: util.RandomInt64(1, 1000),
+		Name:            util.RandomName(),
 	}
 
-	methodName := "UpdateStudent"
-	url := "/students"
+	methodName := "UpdatePaymentMethod"
+	url := "/payment_methods"
 
 	// create a test case for StatusOK response
 	testCases = append(testCases, testCase{

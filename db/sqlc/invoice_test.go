@@ -12,7 +12,7 @@ import (
 )
 
 // createRandomInvoice tests adding a new random invoice to the database, and returns the Invoice data type.
-func createRandomInvoice(t *testing.T) *Invoice {
+func createRandomInvoice(t *testing.T) Invoice {
 	student := createRandomStudent(t)
 	lesson := createRandomLesson(t)
 

@@ -11,7 +11,7 @@ import (
 )
 
 // createRandomReceipt adds a new random receipt to the database, and returns the Receipt data type.
-func createRandomReceipt(t *testing.T) *Receipt {
+func createRandomReceipt(t *testing.T) Receipt {
 	student := createRandomStudent(t)
 
 	arg := CreateReceiptParams{

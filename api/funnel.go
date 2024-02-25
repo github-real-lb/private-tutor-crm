@@ -16,14 +16,14 @@ func (server *Server) createFunnel(ctx *gin.Context) {
 	var req createFunnelRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	college, err := server.store.CreateFunnel(ctx, req.Name)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -38,7 +38,7 @@ func (server *Server) getFunnel(ctx *gin.Context) {
 	var req getFunnelRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -46,11 +46,11 @@ func (server *Server) getFunnel(ctx *gin.Context) {
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -66,7 +66,7 @@ func (server *Server) listFunnels(ctx *gin.Context) {
 	var req listFunnelsRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -78,7 +78,7 @@ func (server *Server) listFunnels(ctx *gin.Context) {
 	colleges, err := server.store.ListFunnels(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -86,7 +86,7 @@ func (server *Server) listFunnels(ctx *gin.Context) {
 }
 
 type updateFunnelRequest struct {
-	FunnelID int64  `json:"student_id" binding:"required"`
+	FunnelID int64  `json:"funnel_id" binding:"required"`
 	Name     string `json:"name" binding:"required"`
 }
 
@@ -94,7 +94,7 @@ func (server *Server) updateFunnel(ctx *gin.Context) {
 	var req updateFunnelRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -106,9 +106,9 @@ func (server *Server) updateFunnel(ctx *gin.Context) {
 	err := server.store.UpdateFunnel(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, okResonse("Funnel updated successfully"))
+	ctx.JSON(http.StatusOK, okResponse("Funnel updated successfully"))
 }

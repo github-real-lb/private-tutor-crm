@@ -15,24 +15,22 @@ type MockStore struct {
 }
 
 // CreateCollege provides a mock function with given fields: ctx, name
-func (_m *MockStore) CreateCollege(ctx context.Context, name string) (*db.College, error) {
+func (_m *MockStore) CreateCollege(ctx context.Context, name string) (db.College, error) {
 	ret := _m.Called(ctx, name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateCollege")
 	}
 
-	var r0 *db.College
+	var r0 db.College
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*db.College, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (db.College, error)); ok {
 		return rf(ctx, name)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *db.College); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) db.College); ok {
 		r0 = rf(ctx, name)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.College)
-		}
+		r0 = ret.Get(0).(db.College)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
@@ -45,24 +43,22 @@ func (_m *MockStore) CreateCollege(ctx context.Context, name string) (*db.Colleg
 }
 
 // CreateFunnel provides a mock function with given fields: ctx, name
-func (_m *MockStore) CreateFunnel(ctx context.Context, name string) (*db.Funnel, error) {
+func (_m *MockStore) CreateFunnel(ctx context.Context, name string) (db.Funnel, error) {
 	ret := _m.Called(ctx, name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateFunnel")
 	}
 
-	var r0 *db.Funnel
+	var r0 db.Funnel
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*db.Funnel, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (db.Funnel, error)); ok {
 		return rf(ctx, name)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *db.Funnel); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) db.Funnel); ok {
 		r0 = rf(ctx, name)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Funnel)
-		}
+		r0 = ret.Get(0).(db.Funnel)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
@@ -75,24 +71,22 @@ func (_m *MockStore) CreateFunnel(ctx context.Context, name string) (*db.Funnel,
 }
 
 // CreateInvoice provides a mock function with given fields: ctx, arg
-func (_m *MockStore) CreateInvoice(ctx context.Context, arg db.CreateInvoiceParams) (*db.Invoice, error) {
+func (_m *MockStore) CreateInvoice(ctx context.Context, arg db.CreateInvoiceParams) (db.Invoice, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateInvoice")
 	}
 
-	var r0 *db.Invoice
+	var r0 db.Invoice
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateInvoiceParams) (*db.Invoice, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateInvoiceParams) (db.Invoice, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateInvoiceParams) *db.Invoice); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateInvoiceParams) db.Invoice); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Invoice)
-		}
+		r0 = ret.Get(0).(db.Invoice)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, db.CreateInvoiceParams) error); ok {
@@ -105,24 +99,22 @@ func (_m *MockStore) CreateInvoice(ctx context.Context, arg db.CreateInvoicePara
 }
 
 // CreateLesson provides a mock function with given fields: ctx, arg
-func (_m *MockStore) CreateLesson(ctx context.Context, arg db.CreateLessonParams) (*db.Lesson, error) {
+func (_m *MockStore) CreateLesson(ctx context.Context, arg db.CreateLessonParams) (db.Lesson, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateLesson")
 	}
 
-	var r0 *db.Lesson
+	var r0 db.Lesson
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateLessonParams) (*db.Lesson, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateLessonParams) (db.Lesson, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateLessonParams) *db.Lesson); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateLessonParams) db.Lesson); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Lesson)
-		}
+		r0 = ret.Get(0).(db.Lesson)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, db.CreateLessonParams) error); ok {
@@ -135,24 +127,22 @@ func (_m *MockStore) CreateLesson(ctx context.Context, arg db.CreateLessonParams
 }
 
 // CreateLessonLocation provides a mock function with given fields: ctx, name
-func (_m *MockStore) CreateLessonLocation(ctx context.Context, name string) (*db.LessonLocation, error) {
+func (_m *MockStore) CreateLessonLocation(ctx context.Context, name string) (db.LessonLocation, error) {
 	ret := _m.Called(ctx, name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateLessonLocation")
 	}
 
-	var r0 *db.LessonLocation
+	var r0 db.LessonLocation
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*db.LessonLocation, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (db.LessonLocation, error)); ok {
 		return rf(ctx, name)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *db.LessonLocation); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) db.LessonLocation); ok {
 		r0 = rf(ctx, name)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.LessonLocation)
-		}
+		r0 = ret.Get(0).(db.LessonLocation)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
@@ -165,24 +155,22 @@ func (_m *MockStore) CreateLessonLocation(ctx context.Context, name string) (*db
 }
 
 // CreateLessonSubject provides a mock function with given fields: ctx, name
-func (_m *MockStore) CreateLessonSubject(ctx context.Context, name string) (*db.LessonSubject, error) {
+func (_m *MockStore) CreateLessonSubject(ctx context.Context, name string) (db.LessonSubject, error) {
 	ret := _m.Called(ctx, name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateLessonSubject")
 	}
 
-	var r0 *db.LessonSubject
+	var r0 db.LessonSubject
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*db.LessonSubject, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (db.LessonSubject, error)); ok {
 		return rf(ctx, name)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *db.LessonSubject); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) db.LessonSubject); ok {
 		r0 = rf(ctx, name)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.LessonSubject)
-		}
+		r0 = ret.Get(0).(db.LessonSubject)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
@@ -223,24 +211,22 @@ func (_m *MockStore) CreateLessonWithInvoicesTx(ctx context.Context, arg db.Crea
 }
 
 // CreatePayment provides a mock function with given fields: ctx, arg
-func (_m *MockStore) CreatePayment(ctx context.Context, arg db.CreatePaymentParams) (*db.Payment, error) {
+func (_m *MockStore) CreatePayment(ctx context.Context, arg db.CreatePaymentParams) (db.Payment, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreatePayment")
 	}
 
-	var r0 *db.Payment
+	var r0 db.Payment
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreatePaymentParams) (*db.Payment, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreatePaymentParams) (db.Payment, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreatePaymentParams) *db.Payment); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreatePaymentParams) db.Payment); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Payment)
-		}
+		r0 = ret.Get(0).(db.Payment)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, db.CreatePaymentParams) error); ok {
@@ -253,24 +239,22 @@ func (_m *MockStore) CreatePayment(ctx context.Context, arg db.CreatePaymentPara
 }
 
 // CreatePaymentMethod provides a mock function with given fields: ctx, name
-func (_m *MockStore) CreatePaymentMethod(ctx context.Context, name string) (*db.PaymentMethod, error) {
+func (_m *MockStore) CreatePaymentMethod(ctx context.Context, name string) (db.PaymentMethod, error) {
 	ret := _m.Called(ctx, name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreatePaymentMethod")
 	}
 
-	var r0 *db.PaymentMethod
+	var r0 db.PaymentMethod
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) (*db.PaymentMethod, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) (db.PaymentMethod, error)); ok {
 		return rf(ctx, name)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string) *db.PaymentMethod); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, string) db.PaymentMethod); ok {
 		r0 = rf(ctx, name)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.PaymentMethod)
-		}
+		r0 = ret.Get(0).(db.PaymentMethod)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
@@ -283,24 +267,22 @@ func (_m *MockStore) CreatePaymentMethod(ctx context.Context, name string) (*db.
 }
 
 // CreateReceipt provides a mock function with given fields: ctx, arg
-func (_m *MockStore) CreateReceipt(ctx context.Context, arg db.CreateReceiptParams) (*db.Receipt, error) {
+func (_m *MockStore) CreateReceipt(ctx context.Context, arg db.CreateReceiptParams) (db.Receipt, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateReceipt")
 	}
 
-	var r0 *db.Receipt
+	var r0 db.Receipt
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateReceiptParams) (*db.Receipt, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateReceiptParams) (db.Receipt, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateReceiptParams) *db.Receipt); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateReceiptParams) db.Receipt); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Receipt)
-		}
+		r0 = ret.Get(0).(db.Receipt)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, db.CreateReceiptParams) error); ok {
@@ -341,24 +323,22 @@ func (_m *MockStore) CreateReceiptWithPaymentsTx(ctx context.Context, arg db.Cre
 }
 
 // CreateStudent provides a mock function with given fields: ctx, arg
-func (_m *MockStore) CreateStudent(ctx context.Context, arg db.CreateStudentParams) (*db.Student, error) {
+func (_m *MockStore) CreateStudent(ctx context.Context, arg db.CreateStudentParams) (db.Student, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateStudent")
 	}
 
-	var r0 *db.Student
+	var r0 db.Student
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateStudentParams) (*db.Student, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateStudentParams) (db.Student, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.CreateStudentParams) *db.Student); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.CreateStudentParams) db.Student); ok {
 		r0 = rf(ctx, arg)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Student)
-		}
+		r0 = ret.Get(0).(db.Student)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, db.CreateStudentParams) error); ok {
@@ -623,24 +603,22 @@ func (_m *MockStore) DeleteStudent(ctx context.Context, studentID int64) error {
 }
 
 // GetCollege provides a mock function with given fields: ctx, collegeID
-func (_m *MockStore) GetCollege(ctx context.Context, collegeID int64) (*db.College, error) {
+func (_m *MockStore) GetCollege(ctx context.Context, collegeID int64) (db.College, error) {
 	ret := _m.Called(ctx, collegeID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetCollege")
 	}
 
-	var r0 *db.College
+	var r0 db.College
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.College, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.College, error)); ok {
 		return rf(ctx, collegeID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.College); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.College); ok {
 		r0 = rf(ctx, collegeID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.College)
-		}
+		r0 = ret.Get(0).(db.College)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -653,24 +631,22 @@ func (_m *MockStore) GetCollege(ctx context.Context, collegeID int64) (*db.Colle
 }
 
 // GetFunnel provides a mock function with given fields: ctx, funnelID
-func (_m *MockStore) GetFunnel(ctx context.Context, funnelID int64) (*db.Funnel, error) {
+func (_m *MockStore) GetFunnel(ctx context.Context, funnelID int64) (db.Funnel, error) {
 	ret := _m.Called(ctx, funnelID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetFunnel")
 	}
 
-	var r0 *db.Funnel
+	var r0 db.Funnel
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.Funnel, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.Funnel, error)); ok {
 		return rf(ctx, funnelID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.Funnel); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.Funnel); ok {
 		r0 = rf(ctx, funnelID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Funnel)
-		}
+		r0 = ret.Get(0).(db.Funnel)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -683,24 +659,22 @@ func (_m *MockStore) GetFunnel(ctx context.Context, funnelID int64) (*db.Funnel,
 }
 
 // GetInvoice provides a mock function with given fields: ctx, invoiceID
-func (_m *MockStore) GetInvoice(ctx context.Context, invoiceID int64) (*db.Invoice, error) {
+func (_m *MockStore) GetInvoice(ctx context.Context, invoiceID int64) (db.Invoice, error) {
 	ret := _m.Called(ctx, invoiceID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetInvoice")
 	}
 
-	var r0 *db.Invoice
+	var r0 db.Invoice
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.Invoice, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.Invoice, error)); ok {
 		return rf(ctx, invoiceID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.Invoice); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.Invoice); ok {
 		r0 = rf(ctx, invoiceID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Invoice)
-		}
+		r0 = ret.Get(0).(db.Invoice)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -713,23 +687,23 @@ func (_m *MockStore) GetInvoice(ctx context.Context, invoiceID int64) (*db.Invoi
 }
 
 // GetInvoicesByLesson provides a mock function with given fields: ctx, lessonID
-func (_m *MockStore) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([]*db.Invoice, error) {
+func (_m *MockStore) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([]db.Invoice, error) {
 	ret := _m.Called(ctx, lessonID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetInvoicesByLesson")
 	}
 
-	var r0 []*db.Invoice
+	var r0 []db.Invoice
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*db.Invoice, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]db.Invoice, error)); ok {
 		return rf(ctx, lessonID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) []*db.Invoice); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []db.Invoice); ok {
 		r0 = rf(ctx, lessonID)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Invoice)
+			r0 = ret.Get(0).([]db.Invoice)
 		}
 	}
 
@@ -743,23 +717,23 @@ func (_m *MockStore) GetInvoicesByLesson(ctx context.Context, lessonID int64) ([
 }
 
 // GetInvoicesByStudent provides a mock function with given fields: ctx, studentID
-func (_m *MockStore) GetInvoicesByStudent(ctx context.Context, studentID int64) ([]*db.Invoice, error) {
+func (_m *MockStore) GetInvoicesByStudent(ctx context.Context, studentID int64) ([]db.Invoice, error) {
 	ret := _m.Called(ctx, studentID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetInvoicesByStudent")
 	}
 
-	var r0 []*db.Invoice
+	var r0 []db.Invoice
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*db.Invoice, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]db.Invoice, error)); ok {
 		return rf(ctx, studentID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) []*db.Invoice); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []db.Invoice); ok {
 		r0 = rf(ctx, studentID)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Invoice)
+			r0 = ret.Get(0).([]db.Invoice)
 		}
 	}
 
@@ -773,24 +747,22 @@ func (_m *MockStore) GetInvoicesByStudent(ctx context.Context, studentID int64) 
 }
 
 // GetLesson provides a mock function with given fields: ctx, lessonID
-func (_m *MockStore) GetLesson(ctx context.Context, lessonID int64) (*db.Lesson, error) {
+func (_m *MockStore) GetLesson(ctx context.Context, lessonID int64) (db.Lesson, error) {
 	ret := _m.Called(ctx, lessonID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetLesson")
 	}
 
-	var r0 *db.Lesson
+	var r0 db.Lesson
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.Lesson, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.Lesson, error)); ok {
 		return rf(ctx, lessonID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.Lesson); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.Lesson); ok {
 		r0 = rf(ctx, lessonID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Lesson)
-		}
+		r0 = ret.Get(0).(db.Lesson)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -803,24 +775,22 @@ func (_m *MockStore) GetLesson(ctx context.Context, lessonID int64) (*db.Lesson,
 }
 
 // GetLessonLocation provides a mock function with given fields: ctx, locationID
-func (_m *MockStore) GetLessonLocation(ctx context.Context, locationID int64) (*db.LessonLocation, error) {
+func (_m *MockStore) GetLessonLocation(ctx context.Context, locationID int64) (db.LessonLocation, error) {
 	ret := _m.Called(ctx, locationID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetLessonLocation")
 	}
 
-	var r0 *db.LessonLocation
+	var r0 db.LessonLocation
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.LessonLocation, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.LessonLocation, error)); ok {
 		return rf(ctx, locationID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.LessonLocation); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.LessonLocation); ok {
 		r0 = rf(ctx, locationID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.LessonLocation)
-		}
+		r0 = ret.Get(0).(db.LessonLocation)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -833,24 +803,22 @@ func (_m *MockStore) GetLessonLocation(ctx context.Context, locationID int64) (*
 }
 
 // GetLessonSubject provides a mock function with given fields: ctx, subjectID
-func (_m *MockStore) GetLessonSubject(ctx context.Context, subjectID int64) (*db.LessonSubject, error) {
+func (_m *MockStore) GetLessonSubject(ctx context.Context, subjectID int64) (db.LessonSubject, error) {
 	ret := _m.Called(ctx, subjectID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetLessonSubject")
 	}
 
-	var r0 *db.LessonSubject
+	var r0 db.LessonSubject
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.LessonSubject, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.LessonSubject, error)); ok {
 		return rf(ctx, subjectID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.LessonSubject); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.LessonSubject); ok {
 		r0 = rf(ctx, subjectID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.LessonSubject)
-		}
+		r0 = ret.Get(0).(db.LessonSubject)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -891,24 +859,22 @@ func (_m *MockStore) GetLessonWithInvoicesTx(ctx context.Context, lessonID int64
 }
 
 // GetPayment provides a mock function with given fields: ctx, paymentID
-func (_m *MockStore) GetPayment(ctx context.Context, paymentID int64) (*db.Payment, error) {
+func (_m *MockStore) GetPayment(ctx context.Context, paymentID int64) (db.Payment, error) {
 	ret := _m.Called(ctx, paymentID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetPayment")
 	}
 
-	var r0 *db.Payment
+	var r0 db.Payment
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.Payment, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.Payment, error)); ok {
 		return rf(ctx, paymentID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.Payment); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.Payment); ok {
 		r0 = rf(ctx, paymentID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Payment)
-		}
+		r0 = ret.Get(0).(db.Payment)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -921,24 +887,22 @@ func (_m *MockStore) GetPayment(ctx context.Context, paymentID int64) (*db.Payme
 }
 
 // GetPaymentMethod provides a mock function with given fields: ctx, paymentMethodID
-func (_m *MockStore) GetPaymentMethod(ctx context.Context, paymentMethodID int64) (*db.PaymentMethod, error) {
+func (_m *MockStore) GetPaymentMethod(ctx context.Context, paymentMethodID int64) (db.PaymentMethod, error) {
 	ret := _m.Called(ctx, paymentMethodID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetPaymentMethod")
 	}
 
-	var r0 *db.PaymentMethod
+	var r0 db.PaymentMethod
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.PaymentMethod, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.PaymentMethod, error)); ok {
 		return rf(ctx, paymentMethodID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.PaymentMethod); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.PaymentMethod); ok {
 		r0 = rf(ctx, paymentMethodID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.PaymentMethod)
-		}
+		r0 = ret.Get(0).(db.PaymentMethod)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -951,23 +915,23 @@ func (_m *MockStore) GetPaymentMethod(ctx context.Context, paymentMethodID int64
 }
 
 // GetPayments provides a mock function with given fields: ctx, receiptID
-func (_m *MockStore) GetPayments(ctx context.Context, receiptID int64) ([]*db.Payment, error) {
+func (_m *MockStore) GetPayments(ctx context.Context, receiptID int64) ([]db.Payment, error) {
 	ret := _m.Called(ctx, receiptID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetPayments")
 	}
 
-	var r0 []*db.Payment
+	var r0 []db.Payment
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]*db.Payment, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) ([]db.Payment, error)); ok {
 		return rf(ctx, receiptID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) []*db.Payment); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) []db.Payment); ok {
 		r0 = rf(ctx, receiptID)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Payment)
+			r0 = ret.Get(0).([]db.Payment)
 		}
 	}
 
@@ -981,24 +945,22 @@ func (_m *MockStore) GetPayments(ctx context.Context, receiptID int64) ([]*db.Pa
 }
 
 // GetReceipt provides a mock function with given fields: ctx, receiptID
-func (_m *MockStore) GetReceipt(ctx context.Context, receiptID int64) (*db.Receipt, error) {
+func (_m *MockStore) GetReceipt(ctx context.Context, receiptID int64) (db.Receipt, error) {
 	ret := _m.Called(ctx, receiptID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetReceipt")
 	}
 
-	var r0 *db.Receipt
+	var r0 db.Receipt
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.Receipt, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.Receipt, error)); ok {
 		return rf(ctx, receiptID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.Receipt); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.Receipt); ok {
 		r0 = rf(ctx, receiptID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Receipt)
-		}
+		r0 = ret.Get(0).(db.Receipt)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -1039,23 +1001,23 @@ func (_m *MockStore) GetReceiptWithPaymentsTx(ctx context.Context, receiptID int
 }
 
 // GetReceiptsByStudent provides a mock function with given fields: ctx, arg
-func (_m *MockStore) GetReceiptsByStudent(ctx context.Context, arg db.GetReceiptsByStudentParams) ([]*db.Receipt, error) {
+func (_m *MockStore) GetReceiptsByStudent(ctx context.Context, arg db.GetReceiptsByStudentParams) ([]db.Receipt, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetReceiptsByStudent")
 	}
 
-	var r0 []*db.Receipt
+	var r0 []db.Receipt
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.GetReceiptsByStudentParams) ([]*db.Receipt, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.GetReceiptsByStudentParams) ([]db.Receipt, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.GetReceiptsByStudentParams) []*db.Receipt); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.GetReceiptsByStudentParams) []db.Receipt); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Receipt)
+			r0 = ret.Get(0).([]db.Receipt)
 		}
 	}
 
@@ -1097,24 +1059,22 @@ func (_m *MockStore) GetReceiptsWithPaymentsByStudentTx(ctx context.Context, stu
 }
 
 // GetStudent provides a mock function with given fields: ctx, studentID
-func (_m *MockStore) GetStudent(ctx context.Context, studentID int64) (*db.Student, error) {
+func (_m *MockStore) GetStudent(ctx context.Context, studentID int64) (db.Student, error) {
 	ret := _m.Called(ctx, studentID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetStudent")
 	}
 
-	var r0 *db.Student
+	var r0 db.Student
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, int64) (*db.Student, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) (db.Student, error)); ok {
 		return rf(ctx, studentID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, int64) *db.Student); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int64) db.Student); ok {
 		r0 = rf(ctx, studentID)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*db.Student)
-		}
+		r0 = ret.Get(0).(db.Student)
 	}
 
 	if rf, ok := ret.Get(1).(func(context.Context, int64) error); ok {
@@ -1127,23 +1087,23 @@ func (_m *MockStore) GetStudent(ctx context.Context, studentID int64) (*db.Stude
 }
 
 // ListColleges provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListColleges(ctx context.Context, arg db.ListCollegesParams) ([]*db.College, error) {
+func (_m *MockStore) ListColleges(ctx context.Context, arg db.ListCollegesParams) ([]db.College, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListColleges")
 	}
 
-	var r0 []*db.College
+	var r0 []db.College
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListCollegesParams) ([]*db.College, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListCollegesParams) ([]db.College, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListCollegesParams) []*db.College); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListCollegesParams) []db.College); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.College)
+			r0 = ret.Get(0).([]db.College)
 		}
 	}
 
@@ -1157,23 +1117,23 @@ func (_m *MockStore) ListColleges(ctx context.Context, arg db.ListCollegesParams
 }
 
 // ListFunnels provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListFunnels(ctx context.Context, arg db.ListFunnelsParams) ([]*db.Funnel, error) {
+func (_m *MockStore) ListFunnels(ctx context.Context, arg db.ListFunnelsParams) ([]db.Funnel, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListFunnels")
 	}
 
-	var r0 []*db.Funnel
+	var r0 []db.Funnel
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListFunnelsParams) ([]*db.Funnel, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListFunnelsParams) ([]db.Funnel, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListFunnelsParams) []*db.Funnel); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListFunnelsParams) []db.Funnel); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Funnel)
+			r0 = ret.Get(0).([]db.Funnel)
 		}
 	}
 
@@ -1187,23 +1147,23 @@ func (_m *MockStore) ListFunnels(ctx context.Context, arg db.ListFunnelsParams) 
 }
 
 // ListInvoices provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListInvoices(ctx context.Context, arg db.ListInvoicesParams) ([]*db.Invoice, error) {
+func (_m *MockStore) ListInvoices(ctx context.Context, arg db.ListInvoicesParams) ([]db.Invoice, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListInvoices")
 	}
 
-	var r0 []*db.Invoice
+	var r0 []db.Invoice
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListInvoicesParams) ([]*db.Invoice, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListInvoicesParams) ([]db.Invoice, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListInvoicesParams) []*db.Invoice); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListInvoicesParams) []db.Invoice); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Invoice)
+			r0 = ret.Get(0).([]db.Invoice)
 		}
 	}
 
@@ -1217,23 +1177,23 @@ func (_m *MockStore) ListInvoices(ctx context.Context, arg db.ListInvoicesParams
 }
 
 // ListLessonLocations provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListLessonLocations(ctx context.Context, arg db.ListLessonLocationsParams) ([]*db.LessonLocation, error) {
+func (_m *MockStore) ListLessonLocations(ctx context.Context, arg db.ListLessonLocationsParams) ([]db.LessonLocation, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListLessonLocations")
 	}
 
-	var r0 []*db.LessonLocation
+	var r0 []db.LessonLocation
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonLocationsParams) ([]*db.LessonLocation, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonLocationsParams) ([]db.LessonLocation, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonLocationsParams) []*db.LessonLocation); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonLocationsParams) []db.LessonLocation); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.LessonLocation)
+			r0 = ret.Get(0).([]db.LessonLocation)
 		}
 	}
 
@@ -1247,23 +1207,23 @@ func (_m *MockStore) ListLessonLocations(ctx context.Context, arg db.ListLessonL
 }
 
 // ListLessonSubjects provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListLessonSubjects(ctx context.Context, arg db.ListLessonSubjectsParams) ([]*db.LessonSubject, error) {
+func (_m *MockStore) ListLessonSubjects(ctx context.Context, arg db.ListLessonSubjectsParams) ([]db.LessonSubject, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListLessonSubjects")
 	}
 
-	var r0 []*db.LessonSubject
+	var r0 []db.LessonSubject
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonSubjectsParams) ([]*db.LessonSubject, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonSubjectsParams) ([]db.LessonSubject, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonSubjectsParams) []*db.LessonSubject); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonSubjectsParams) []db.LessonSubject); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.LessonSubject)
+			r0 = ret.Get(0).([]db.LessonSubject)
 		}
 	}
 
@@ -1277,23 +1237,23 @@ func (_m *MockStore) ListLessonSubjects(ctx context.Context, arg db.ListLessonSu
 }
 
 // ListLessons provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListLessons(ctx context.Context, arg db.ListLessonsParams) ([]*db.Lesson, error) {
+func (_m *MockStore) ListLessons(ctx context.Context, arg db.ListLessonsParams) ([]db.Lesson, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListLessons")
 	}
 
-	var r0 []*db.Lesson
+	var r0 []db.Lesson
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonsParams) ([]*db.Lesson, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonsParams) ([]db.Lesson, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonsParams) []*db.Lesson); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListLessonsParams) []db.Lesson); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Lesson)
+			r0 = ret.Get(0).([]db.Lesson)
 		}
 	}
 
@@ -1307,23 +1267,23 @@ func (_m *MockStore) ListLessons(ctx context.Context, arg db.ListLessonsParams) 
 }
 
 // ListPaymentMethods provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListPaymentMethods(ctx context.Context, arg db.ListPaymentMethodsParams) ([]*db.PaymentMethod, error) {
+func (_m *MockStore) ListPaymentMethods(ctx context.Context, arg db.ListPaymentMethodsParams) ([]db.PaymentMethod, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListPaymentMethods")
 	}
 
-	var r0 []*db.PaymentMethod
+	var r0 []db.PaymentMethod
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentMethodsParams) ([]*db.PaymentMethod, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentMethodsParams) ([]db.PaymentMethod, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentMethodsParams) []*db.PaymentMethod); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentMethodsParams) []db.PaymentMethod); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.PaymentMethod)
+			r0 = ret.Get(0).([]db.PaymentMethod)
 		}
 	}
 
@@ -1337,23 +1297,23 @@ func (_m *MockStore) ListPaymentMethods(ctx context.Context, arg db.ListPaymentM
 }
 
 // ListPayments provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListPayments(ctx context.Context, arg db.ListPaymentsParams) ([]*db.Payment, error) {
+func (_m *MockStore) ListPayments(ctx context.Context, arg db.ListPaymentsParams) ([]db.Payment, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListPayments")
 	}
 
-	var r0 []*db.Payment
+	var r0 []db.Payment
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentsParams) ([]*db.Payment, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentsParams) ([]db.Payment, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentsParams) []*db.Payment); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListPaymentsParams) []db.Payment); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Payment)
+			r0 = ret.Get(0).([]db.Payment)
 		}
 	}
 
@@ -1367,23 +1327,23 @@ func (_m *MockStore) ListPayments(ctx context.Context, arg db.ListPaymentsParams
 }
 
 // ListReceipts provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListReceipts(ctx context.Context, arg db.ListReceiptsParams) ([]*db.Receipt, error) {
+func (_m *MockStore) ListReceipts(ctx context.Context, arg db.ListReceiptsParams) ([]db.Receipt, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListReceipts")
 	}
 
-	var r0 []*db.Receipt
+	var r0 []db.Receipt
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListReceiptsParams) ([]*db.Receipt, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListReceiptsParams) ([]db.Receipt, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListReceiptsParams) []*db.Receipt); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListReceiptsParams) []db.Receipt); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Receipt)
+			r0 = ret.Get(0).([]db.Receipt)
 		}
 	}
 
@@ -1397,23 +1357,23 @@ func (_m *MockStore) ListReceipts(ctx context.Context, arg db.ListReceiptsParams
 }
 
 // ListStudents provides a mock function with given fields: ctx, arg
-func (_m *MockStore) ListStudents(ctx context.Context, arg db.ListStudentsParams) ([]*db.Student, error) {
+func (_m *MockStore) ListStudents(ctx context.Context, arg db.ListStudentsParams) ([]db.Student, error) {
 	ret := _m.Called(ctx, arg)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ListStudents")
 	}
 
-	var r0 []*db.Student
+	var r0 []db.Student
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListStudentsParams) ([]*db.Student, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListStudentsParams) ([]db.Student, error)); ok {
 		return rf(ctx, arg)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, db.ListStudentsParams) []*db.Student); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, db.ListStudentsParams) []db.Student); ok {
 		r0 = rf(ctx, arg)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*db.Student)
+			r0 = ret.Get(0).([]db.Student)
 		}
 	}
 

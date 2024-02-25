@@ -18,11 +18,11 @@ INSERT INTO payment_methods (
 RETURNING payment_method_id, name
 `
 
-func (q *Queries) CreatePaymentMethod(ctx context.Context, name string) (*PaymentMethod, error) {
+func (q *Queries) CreatePaymentMethod(ctx context.Context, name string) (PaymentMethod, error) {
 	row := q.db.QueryRowContext(ctx, createPaymentMethod, name)
 	var i PaymentMethod
 	err := row.Scan(&i.PaymentMethodID, &i.Name)
-	return &i, err
+	return i, err
 }
 
 const deletePaymentMethod = `-- name: DeletePaymentMethod :exec
@@ -40,11 +40,11 @@ SELECT payment_method_id, name FROM payment_methods
 WHERE payment_method_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetPaymentMethod(ctx context.Context, paymentMethodID int64) (*PaymentMethod, error) {
+func (q *Queries) GetPaymentMethod(ctx context.Context, paymentMethodID int64) (PaymentMethod, error) {
 	row := q.db.QueryRowContext(ctx, getPaymentMethod, paymentMethodID)
 	var i PaymentMethod
 	err := row.Scan(&i.PaymentMethodID, &i.Name)
-	return &i, err
+	return i, err
 }
 
 const listPaymentMethods = `-- name: ListPaymentMethods :many
@@ -59,19 +59,19 @@ type ListPaymentMethodsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListPaymentMethods(ctx context.Context, arg ListPaymentMethodsParams) ([]*PaymentMethod, error) {
+func (q *Queries) ListPaymentMethods(ctx context.Context, arg ListPaymentMethodsParams) ([]PaymentMethod, error) {
 	rows, err := q.db.QueryContext(ctx, listPaymentMethods, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*PaymentMethod{}
+	items := []PaymentMethod{}
 	for rows.Next() {
 		var i PaymentMethod
 		if err := rows.Scan(&i.PaymentMethodID, &i.Name); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

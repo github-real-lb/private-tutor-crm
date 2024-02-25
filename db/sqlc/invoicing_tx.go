@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type Invoices []*Invoice
+type Invoices []Invoice
 
 // Implement the sort.Interface methods for the Invoices type
 func (inv Invoices) Len() int           { return len(inv) }
 func (inv Invoices) Swap(i, j int)      { inv[i], inv[j] = inv[j], inv[i] }
 func (inv Invoices) Less(i, j int) bool { return inv[i].InvoiceDatetime.Before(inv[j].InvoiceDatetime) }
 
-type Lessons []*Lesson
+type Lessons []Lesson
 
 // Implement the sort.Interface methods for the Lessons type
 func (l Lessons) Len() int           { return len(l) }
@@ -22,7 +22,7 @@ func (l Lessons) Less(i, j int) bool { return l[i].LessonDatetime.Before(l[j].Le
 
 // LessonWithInvoices is used for a single lesson and all the Invoices issued for participating students.
 type LessonWithInvoices struct {
-	Lesson   *Lesson  `json:"lesson"`
+	Lesson   Lesson   `json:"lesson"`
 	Invoices Invoices `json:"invoices"`
 }
 

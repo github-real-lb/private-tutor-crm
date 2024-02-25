@@ -26,7 +26,7 @@ type CreatePaymentParams struct {
 	PaymentMethodID int64     `json:"payment_method_id"`
 }
 
-func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (*Payment, error) {
+func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error) {
 	row := q.db.QueryRowContext(ctx, createPayment,
 		arg.ReceiptID,
 		arg.PaymentDatetime,
@@ -41,7 +41,7 @@ func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (*
 		&i.Amount,
 		&i.PaymentMethodID,
 	)
-	return &i, err
+	return i, err
 }
 
 const deletePayment = `-- name: DeletePayment :exec
@@ -69,7 +69,7 @@ SELECT payment_id, receipt_id, payment_datetime, amount, payment_method_id FROM 
 WHERE payment_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetPayment(ctx context.Context, paymentID int64) (*Payment, error) {
+func (q *Queries) GetPayment(ctx context.Context, paymentID int64) (Payment, error) {
 	row := q.db.QueryRowContext(ctx, getPayment, paymentID)
 	var i Payment
 	err := row.Scan(
@@ -79,7 +79,7 @@ func (q *Queries) GetPayment(ctx context.Context, paymentID int64) (*Payment, er
 		&i.Amount,
 		&i.PaymentMethodID,
 	)
-	return &i, err
+	return i, err
 }
 
 const getPayments = `-- name: GetPayments :many
@@ -88,13 +88,13 @@ WHERE receipt_id = $1
 ORDER BY receipt_id, payment_datetime
 `
 
-func (q *Queries) GetPayments(ctx context.Context, receiptID int64) ([]*Payment, error) {
+func (q *Queries) GetPayments(ctx context.Context, receiptID int64) ([]Payment, error) {
 	rows, err := q.db.QueryContext(ctx, getPayments, receiptID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Payment{}
+	items := []Payment{}
 	for rows.Next() {
 		var i Payment
 		if err := rows.Scan(
@@ -106,7 +106,7 @@ func (q *Queries) GetPayments(ctx context.Context, receiptID int64) ([]*Payment,
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err
@@ -129,13 +129,13 @@ type ListPaymentsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListPayments(ctx context.Context, arg ListPaymentsParams) ([]*Payment, error) {
+func (q *Queries) ListPayments(ctx context.Context, arg ListPaymentsParams) ([]Payment, error) {
 	rows, err := q.db.QueryContext(ctx, listPayments, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Payment{}
+	items := []Payment{}
 	for rows.Next() {
 		var i Payment
 		if err := rows.Scan(
@@ -147,7 +147,7 @@ func (q *Queries) ListPayments(ctx context.Context, arg ListPaymentsParams) ([]*
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

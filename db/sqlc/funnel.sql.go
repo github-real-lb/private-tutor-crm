@@ -18,11 +18,11 @@ INSERT INTO funnels (
 RETURNING funnel_id, name
 `
 
-func (q *Queries) CreateFunnel(ctx context.Context, name string) (*Funnel, error) {
+func (q *Queries) CreateFunnel(ctx context.Context, name string) (Funnel, error) {
 	row := q.db.QueryRowContext(ctx, createFunnel, name)
 	var i Funnel
 	err := row.Scan(&i.FunnelID, &i.Name)
-	return &i, err
+	return i, err
 }
 
 const deleteFunnel = `-- name: DeleteFunnel :exec
@@ -40,11 +40,11 @@ SELECT funnel_id, name FROM funnels
 WHERE funnel_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetFunnel(ctx context.Context, funnelID int64) (*Funnel, error) {
+func (q *Queries) GetFunnel(ctx context.Context, funnelID int64) (Funnel, error) {
 	row := q.db.QueryRowContext(ctx, getFunnel, funnelID)
 	var i Funnel
 	err := row.Scan(&i.FunnelID, &i.Name)
-	return &i, err
+	return i, err
 }
 
 const listFunnels = `-- name: ListFunnels :many
@@ -59,19 +59,19 @@ type ListFunnelsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListFunnels(ctx context.Context, arg ListFunnelsParams) ([]*Funnel, error) {
+func (q *Queries) ListFunnels(ctx context.Context, arg ListFunnelsParams) ([]Funnel, error) {
 	rows, err := q.db.QueryContext(ctx, listFunnels, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*Funnel{}
+	items := []Funnel{}
 	for rows.Next() {
 		var i Funnel
 		if err := rows.Scan(&i.FunnelID, &i.Name); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

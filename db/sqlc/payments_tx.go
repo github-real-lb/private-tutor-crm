@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type Payments []*Payment
+type Payments []Payment
 
 // Implement the sort.Interface methods for the Payments type
 func (p Payments) Len() int           { return len(p) }
 func (p Payments) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
 func (p Payments) Less(i, j int) bool { return p[i].PaymentDatetime.Before(p[j].PaymentDatetime) }
 
-type Receipts []*Receipt
+type Receipts []Receipt
 
 // Implement the sort.Interface methods for the Receipts type
 func (r Receipts) Len() int           { return len(r) }
@@ -22,7 +22,7 @@ func (r Receipts) Less(i, j int) bool { return r[i].ReceiptDatetime.Before(r[j].
 
 // ReceiptPayments is used for a single receipt and all its payments.
 type ReceiptWithPayments struct {
-	Receipt  *Receipt `json:"receipt"`
+	Receipt  Receipt  `json:"receipt"`
 	Payments Payments `json:"payments"`
 }
 

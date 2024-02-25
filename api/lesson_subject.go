@@ -16,14 +16,14 @@ func (server *Server) createLessonSubject(ctx *gin.Context) {
 	var req createLessonSubjectRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	college, err := server.store.CreateLessonSubject(ctx, req.Name)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -38,7 +38,7 @@ func (server *Server) getLessonSubject(ctx *gin.Context) {
 	var req getLessonSubjectRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -46,11 +46,11 @@ func (server *Server) getLessonSubject(ctx *gin.Context) {
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -66,7 +66,7 @@ func (server *Server) listLessonSubjects(ctx *gin.Context) {
 	var req listLessonSubjectsRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -78,7 +78,7 @@ func (server *Server) listLessonSubjects(ctx *gin.Context) {
 	colleges, err := server.store.ListLessonSubjects(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -86,29 +86,29 @@ func (server *Server) listLessonSubjects(ctx *gin.Context) {
 }
 
 type updateLessonSubjectRequest struct {
-	LessonSubjectID int64  `json:"student_id" binding:"required"`
-	Name            string `json:"name" binding:"required"`
+	SubjectID int64  `json:"subject_id" binding:"required"`
+	Name      string `json:"name" binding:"required"`
 }
 
 func (server *Server) updateLessonSubject(ctx *gin.Context) {
 	var req updateLessonSubjectRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	arg := db.UpdateLessonSubjectParams{
-		SubjectID: req.LessonSubjectID,
+		SubjectID: req.SubjectID,
 		Name:      req.Name,
 	}
 
 	err := server.store.UpdateLessonSubject(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, okResonse("LessonSubject updated successfully"))
+	ctx.JSON(http.StatusOK, okResponse("LessonSubject updated successfully"))
 }

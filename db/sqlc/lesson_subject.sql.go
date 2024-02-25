@@ -18,11 +18,11 @@ INSERT INTO lesson_subjects (
 RETURNING subject_id, name
 `
 
-func (q *Queries) CreateLessonSubject(ctx context.Context, name string) (*LessonSubject, error) {
+func (q *Queries) CreateLessonSubject(ctx context.Context, name string) (LessonSubject, error) {
 	row := q.db.QueryRowContext(ctx, createLessonSubject, name)
 	var i LessonSubject
 	err := row.Scan(&i.SubjectID, &i.Name)
-	return &i, err
+	return i, err
 }
 
 const deleteLessonSubject = `-- name: DeleteLessonSubject :exec
@@ -40,11 +40,11 @@ SELECT subject_id, name FROM lesson_subjects
 WHERE subject_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetLessonSubject(ctx context.Context, subjectID int64) (*LessonSubject, error) {
+func (q *Queries) GetLessonSubject(ctx context.Context, subjectID int64) (LessonSubject, error) {
 	row := q.db.QueryRowContext(ctx, getLessonSubject, subjectID)
 	var i LessonSubject
 	err := row.Scan(&i.SubjectID, &i.Name)
-	return &i, err
+	return i, err
 }
 
 const listLessonSubjects = `-- name: ListLessonSubjects :many
@@ -59,19 +59,19 @@ type ListLessonSubjectsParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListLessonSubjects(ctx context.Context, arg ListLessonSubjectsParams) ([]*LessonSubject, error) {
+func (q *Queries) ListLessonSubjects(ctx context.Context, arg ListLessonSubjectsParams) ([]LessonSubject, error) {
 	rows, err := q.db.QueryContext(ctx, listLessonSubjects, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []*LessonSubject{}
+	items := []LessonSubject{}
 	for rows.Next() {
 		var i LessonSubject
 		if err := rows.Scan(&i.SubjectID, &i.Name); err != nil {
 			return nil, err
 		}
-		items = append(items, &i)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

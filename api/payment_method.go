@@ -16,14 +16,14 @@ func (server *Server) createPaymentMethod(ctx *gin.Context) {
 	var req createPaymentMethodRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	college, err := server.store.CreatePaymentMethod(ctx, req.Name)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -38,7 +38,7 @@ func (server *Server) getPaymentMethod(ctx *gin.Context) {
 	var req getPaymentMethodRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -46,11 +46,11 @@ func (server *Server) getPaymentMethod(ctx *gin.Context) {
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -66,7 +66,7 @@ func (server *Server) listPaymentMethods(ctx *gin.Context) {
 	var req listPaymentMethodsRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -78,7 +78,7 @@ func (server *Server) listPaymentMethods(ctx *gin.Context) {
 	colleges, err := server.store.ListPaymentMethods(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -86,7 +86,7 @@ func (server *Server) listPaymentMethods(ctx *gin.Context) {
 }
 
 type updatePaymentMethodRequest struct {
-	PaymentMethodID int64  `json:"student_id" binding:"required"`
+	PaymentMethodID int64  `json:"payment_method_id" binding:"required"`
 	Name            string `json:"name" binding:"required"`
 }
 
@@ -94,7 +94,7 @@ func (server *Server) updatePaymentMethod(ctx *gin.Context) {
 	var req updatePaymentMethodRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -106,9 +106,9 @@ func (server *Server) updatePaymentMethod(ctx *gin.Context) {
 	err := server.store.UpdatePaymentMethod(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, okResonse("PaymentMethod updated successfully"))
+	ctx.JSON(http.StatusOK, okResponse("PaymentMethod updated successfully"))
 }

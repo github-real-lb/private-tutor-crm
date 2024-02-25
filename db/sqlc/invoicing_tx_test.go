@@ -16,20 +16,20 @@ func createRandomLessonWithInvoicesTx(t *testing.T, n int) LessonWithInvoices {
 	store := NewStore(testDB)
 
 	// create 'n' students
-	var students []*Student
+	var students []Student
 	for i := 0; i < n; i++ {
 		students = append(students, createRandomStudent(t))
 	}
 
 	// create random location and subject for lesson
-	location := createRandomReferenceStruct(t, ReferenceLessonLocation)
-	subject := createRandomReferenceStruct(t, ReferenceLessonSubject)
+	location := createRandomLessonLocation(t)
+	subject := createRandomLessonSubject(t)
 
 	arg := CreateLessonTxParams{
 		LessonDatetime: util.RandomDatetime(),
 		Duration:       util.RandomLessonDuration(),
-		LocationID:     location.GetID(),
-		SubjectID:      subject.GetID(),
+		LocationID:     location.LocationID,
+		SubjectID:      subject.SubjectID,
 		Notes:          sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 

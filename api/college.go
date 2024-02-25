@@ -16,14 +16,14 @@ func (server *Server) createCollege(ctx *gin.Context) {
 	var req createCollegeRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
 	college, err := server.store.CreateCollege(ctx, req.Name)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -38,7 +38,7 @@ func (server *Server) getCollege(ctx *gin.Context) {
 	var req getCollegeRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -46,11 +46,11 @@ func (server *Server) getCollege(ctx *gin.Context) {
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResonse(err))
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
 
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -66,7 +66,7 @@ func (server *Server) listColleges(ctx *gin.Context) {
 	var req listCollegesRequest
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -78,7 +78,7 @@ func (server *Server) listColleges(ctx *gin.Context) {
 	colleges, err := server.store.ListColleges(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
@@ -86,7 +86,7 @@ func (server *Server) listColleges(ctx *gin.Context) {
 }
 
 type updateCollegeRequest struct {
-	CollegeID int64  `json:"student_id" binding:"required"`
+	CollegeID int64  `json:"college_id" binding:"required"`
 	Name      string `json:"name" binding:"required"`
 }
 
@@ -94,7 +94,7 @@ func (server *Server) updateCollege(ctx *gin.Context) {
 	var req updateCollegeRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResonse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
@@ -106,9 +106,9 @@ func (server *Server) updateCollege(ctx *gin.Context) {
 	err := server.store.UpdateCollege(ctx, arg)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResonse(err))
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, okResonse("College updated successfully"))
+	ctx.JSON(http.StatusOK, okResponse("College updated successfully"))
 }
