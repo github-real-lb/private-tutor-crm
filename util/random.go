@@ -17,23 +17,25 @@ func init() {
 }
 
 // RandomInt generates a random integer between min and max.
+// requirements: min >= 0, max > min. In case of error returns 0.
 func RandomInt64(min, max int64) int64 {
+	if min < 0 || max < 0 || max <= min {
+		return 0
+	}
+
 	return min + r.Int63n(max-min+1)
 }
 
 // RandomFloat64 generates a random decimal between min and max.
+// requirements: min >= 0, max > min. In case of error returns 0.00.
 func RandomFloat64(min, max float64) float64 {
-	var i int64 = 0
-	if delta := max - min; delta >= 1.0 {
-		i = r.Int63n(int64(delta))
+	if min < 0.00 || max < 0.00 || max <= min {
+		return 0.00
 	}
 
-	f := r.Float64()
-	if n := min + float64(i) + f; n > max {
-		return max
-	} else {
-		return n
-	}
+	n := RandomInt64(int64(min*100), int64(max*100))
+
+	return float64(n) / 100
 }
 
 // RandomString generates a random string of lenght n.
@@ -63,12 +65,12 @@ func RandomName() string {
 	return RandomString(8)
 }
 
-// RandomName generates a random e-mail
+// RandomName generates a random e-mail of 10 characters followed by @gmail.com
 func RandomEmail() string {
 	return fmt.Sprint(RandomString(10), "@gmail.com")
 }
 
-// RandomPhoneNumber generates a random phone number
+// RandomPhoneNumber generates a random phone number in the format +000 0000-0000
 func RandomPhoneNumber() string {
 	return fmt.Sprintf("+%d %d-%d",
 		RandomInt64(100, 999),
@@ -87,9 +89,9 @@ func RandomAddress() string {
 		RandomString(8))
 }
 
-// RandomHourlyFee generates a random hourly fee between 85.0 to 300.0
+// RandomHourlyFee generates a random hourly fee between 85.00 to 300.00
 func RandomHourlyFee() float64 {
-	return RandomFloat64(85.0, 300.0)
+	return RandomFloat64(85.00, 300.00)
 }
 
 // RandomNote generates a random note
@@ -104,22 +106,17 @@ func RandomLessonDuration() int64 {
 	return RandomInt64(30, 240)
 }
 
-// RandomLessonHourlyFee returns random float64 between 85.0 and 300.0
-func RandomLessonHourlyFee() float64 {
-	return RandomFloat64(85.0, 300.0)
-}
-
-// RandomDiscount generates a random discount % between 0.0 (0%) to 0.30 (30%)
+// RandomDiscount generates a random discount % between 0.00 (0%) to 0.30 (30%)
 func RandomDiscount() float64 {
-	return RandomFloat64(0.0, 0.30)
+	return RandomFloat64(0.00, 0.30)
 }
 
-// RandomInvoiceAmount returns random float64 between 85.0 and 1200.0
+// RandomInvoiceAmount returns random float64 between 85.00 and 1200.00
 func RandomInvoiceAmount() float64 {
-	return RandomFloat64(85.0, 1200.0)
+	return RandomFloat64(85.00, 1200.00)
 }
 
-// RandomPaymentAmount returns random float64 between 85.0 and 1200.0
+// RandomPaymentAmount returns random float64 between 85.00 and 1200.00
 func RandomPaymentAmount() float64 {
-	return RandomFloat64(85.0, 1200.0)
+	return RandomFloat64(85.00, 1200.00)
 }

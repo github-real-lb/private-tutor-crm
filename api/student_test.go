@@ -53,7 +53,7 @@ func randomStudent() db.Student {
 		Address:     sql.NullString{String: util.RandomAddress(), Valid: true},
 		CollegeID:   sql.NullInt64{Int64: 0, Valid: false},
 		FunnelID:    sql.NullInt64{Int64: 0, Valid: false},
-		HourlyFee:   sql.NullFloat64{Float64: util.RandomLessonHourlyFee(), Valid: true},
+		HourlyFee:   sql.NullFloat64{Float64: util.RandomHourlyFee(), Valid: true},
 		Notes:       sql.NullString{String: util.RandomNote(), Valid: true},
 	}
 }
